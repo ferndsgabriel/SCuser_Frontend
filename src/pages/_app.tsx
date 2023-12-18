@@ -10,7 +10,6 @@ import Head from "next/head";
 
 NProgress.configure({
   showSpinner: true,
-  trickleRate: 0.1,
   trickleSpeed: 300,
 });
 Router.events.on("routeChangeStart", (url)=>{
