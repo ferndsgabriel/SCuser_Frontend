@@ -1,0 +1,85 @@
+.container{
+    width: 100%;
+    max-width: 768px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 3.6rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.4rem;  
+    img{
+      width: 100%;
+      margin: 0 auto;
+      max-width: 640px;
+    }
+  .form {
+      display: flex;
+      align-items: center;
+      gap: 1.6rem;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+    }
+    /* parte de cadastro */
+    .inputsRow {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      grid-template-rows: repeat(2,1fr);
+      width: 100%;
+      gap: 1.6rem;
+    }
+    .othersOptions{
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+        .link{
+          font-size: 1.6rem;
+          font-weight: bold;
+          display: flex;
+          align-self: flex-start;
+          transition: color .5s ease;
+          &:hover{
+              color: var(--Primary-normal);
+          }
+          &:focus{
+            color: var(--Primary-normal);
+          }
+      }
+    }
+
+.checkboxArea{
+  width: 100%;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+    &:hover{
+      color: var(--Primary-normal);
+    }
+    &:focus{
+      color: var(--Primary-normal);
+    }
+  a{
+    font-weight: bold;
+      &:hover{
+        color: var(--Primary-normal);
+      }
+      &:focus{
+        color: var(--Primary-normal);
+      }
+    }
+  }
+}
+.termos{
+  width: 90%;
+  margin: auto;
+  
+}
+@media (max-width:500px){
+    .termos{
+      width: 96%;
+      margin: auto;
+    }
+}
+
+

@@ -1,0 +1,237 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    
+  }
+
+:root{
+  --White: #ffff;
+  --Black: #000;
+  --Black-light: rgba(0, 0, 0, 0.281);
+  --Primary-normal: #405971;
+  --Primary-dark: #161F28;
+  --Error: #f14a4a;
+  --Sucess: #51AB7B;
+  --Light: #ebeaea;
+  --Transparente: rgba(172, 172, 172, 0.137);
+}
+
+button, a, input {
+  cursor: pointer;
+  font-size: 1.6rem;
+  border: none;
+  background-color: transparent;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  color: var(--Primary-dark);
+}
+
+
+html{
+  font: 400 1rem  -apple-system, BlinkMacSystemFont,
+  'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 62.5%;
+}
+  
+body{
+    p, i, span, b{
+      font-size: 1.6rem;
+    }
+    h1{
+      font-size: 2.6rem;
+      text-transform: uppercase;
+    }
+    h2{
+      font-size: 2.2rem;
+    }
+    h3{
+      font-size: 2rem;
+    }
+    svg{
+      color: var(--Primary-normal);
+      font-size: 1.8rem;
+    }
+}
+
+  select, option{
+    background-color: var(--Primary-normal);
+    border: none;
+    color: var(--White);
+    border-radius: 5px;
+    padding: 0.4rem;
+    outline: none;
+    &:focus{
+      border: 2px solid var(--Primary-dark);
+    }
+  }
+
+
+  ::-webkit-scrollbar{
+    width: 1.2rem;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: var(--Primary-normal);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--White);
+    border: solid 1px rgb(168, 168, 168);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--Light);
+  }
+  //scoolbar
+
+  ::selection{
+    background-color: var(--Primary-dark);
+    color: var(--White);
+  }
+  input:-webkit-autofill {
+    /* Defina os estilos que você deseja aplicar quando o campo estiver preenchido automaticamente */
+    background-color: transparent;
+    
+  }
+
+
+  
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: var(--Primary-normal);
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+#nprogress .spinner {
+  display: block;
+  position: fixed;
+  z-index: 1031;
+  top: 4px;
+  right: 4px;
+}
+
+#nprogress .spinner-icon {
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border: solid 2px transparent;
+  border-top-color: var(--Primary-normal);
+  border-left-color: var(--Primary-normal);
+  border-radius: 50%;
+}
+
+
+//------------------ modal styles 
+.modal{
+  position: absolute;
+  width: 100%;
+  max-width: 40rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 4px 4px 20px var(--Primary-dark);
+  .modalContainer{
+    background-color: var(--White);
+    border-radius: 5px;
+    .beforeButtons{
+      padding: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      .selectsHoursArea{
+        display: flex;
+        width: 100%;
+        gap: 1.6rem;
+        .selectsArea{
+          display: flex;
+          gap: 0.4rem;
+          flex: 1;
+          select{
+            width: 100%;
+          }
+        }
+      }
+      .modalCheckboxArea{
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        input{
+          margin-top: 0.2rem;
+        }
+      }
+      .inputModal{
+        background-color: var(--Light);
+        padding: 1.2rem;
+        border-radius: 2px;
+        &::placeholder{
+          color: var(--Primary-normal);
+        }
+      }
+    }
+    .buttonsModal{
+      background-color: var(--Light);
+      padding: 2.4rem 1.6rem;
+      display: flex;
+      gap: 1.6rem;
+      justify-content: end;
+      border-radius: 5px;
+      button{
+        background-color: var(--Primary-normal);
+        color: var(--White);
+        padding: 0.8rem 1.2rem;
+        border-radius: 5px;
+        border: 1px rgb(185, 185, 185) solid;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        &:focus{
+          border: solid 2px var(--Primary-dark);
+        }
+        &:disabled{
+          opacity: 0.5;
+        }
+        &:not(:disabled)::before{
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background-color: var(--Primary-dark);
+          transition: all 1s;
+        }
+      }
+      button:hover::before{
+        left: 0%;
+      }
+      button:hover{
+        span{
+          z-index: 999;
+          color: var(--White);
+        }
+      }
+
+      .true{
+        background-color: var(--Primary-normal);
+        color: var(--White);
+
+      }
+      .false{
+        background-color: var(--White);
+        color: var(--Primary-dark);
+      }
+    }
+  }
+}

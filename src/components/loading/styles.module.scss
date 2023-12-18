@@ -1,0 +1,33 @@
+.container{
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    max-width: 600px;
+    margin: auto;
+
+    .conteudo{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;     
+        svg{
+            color: var(--Primary-normal);
+            font-size: 24px;
+            animation: animate 1s infinite;
+        }
+    }
+}
+
+@keyframes animate{
+    0%{
+        transform: rotate(0deg);
+    }
+
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+

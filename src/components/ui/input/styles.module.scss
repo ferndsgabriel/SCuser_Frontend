@@ -1,0 +1,45 @@
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 48px;
+  background-color: var(--Primary-normal);
+  border-radius: 5px;
+  border: none;
+  padding: 6px;
+  outline: 2px var(--Primary-dark) solid;
+  justify-content: space-between;
+  align-items: center;
+  outline: none;
+
+  &:focus-within {
+    border: solid 2px var(--Primary-dark);
+  }
+
+  .input {
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    color: var(--White);
+    width: 96%;
+
+    &::placeholder {
+      color: var(--Light);
+    }
+
+    &:focus {
+      outline: none;  
+    }
+
+    &:-webkit-autofill {
+      transition: background-color 9999999999999999999999s, color 9999999999999999999999s;
+    }
+  }
+
+  .buttonEyes {
+    svg {
+      color: var(--Light);
+      font-size: 1.6rem;
+    }
+  }
+}

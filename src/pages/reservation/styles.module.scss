@@ -1,0 +1,145 @@
+
+.container{
+    width: 100%;
+    max-width: 768px;
+    margin: auto;
+    padding: 3.6rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;  
+    .calendarContainer{
+        width: 100%;
+        max-width: 64rem;
+        margin: 0 auto;
+        box-shadow: 5px 10px 10px #40597177;
+        border-radius: 5px;
+        overflow: hidden;
+        .dateInfo{
+            color: var(--White);
+            padding: 1.2rem;
+            font-size: 1.8rem;
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            background-color: var(--Primary-normal);
+            button{
+                svg{
+                    color: var(--White);
+                    font-size: 2.4rem;
+                }
+                display: flex;
+                &:disabled{
+                    cursor: not-allowed;
+                    svg{
+                        color: var(--Transparente);
+                    }
+                }
+            }
+        }
+        .calendarArea{
+            width: 100%;
+            thead{
+                width: 100%;
+                tr{
+                    padding: 1.6rem;
+                    display: grid;
+                    grid-template-columns: repeat(7,1fr);
+                    th{
+                        font-weight: normal;
+                        font-size: 1.2rem;
+                    }
+                }
+            }
+            tbody{
+                width: 100%;
+                background-color: var(--White);
+                aspect-ratio: 1/1;
+                tr{
+                    width: 100%;
+                    display: grid;
+                    grid-template-columns: repeat(7,1fr);
+                    padding: 0.4rem;
+                    td{
+                        width: 100%;
+                        padding: 0.2rem;
+                        button{
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 100%;
+                            border-radius: 2px;
+                            aspect-ratio: 1/0.5;
+                            padding: 0.4rem;
+                            &:hover{
+                                background-color: var(--Transparente);
+                                
+                            }
+                            &:disabled{
+                                cursor: not-allowed;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .legends{
+            background-color: var(--White);
+            display: flex;
+            justify-content: space-between;
+            padding: 1.2rem;
+        }
+    }
+
+    
+    .myReservations{
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        margin-top: 2.4rem;
+        .allCards{
+            display: grid;
+            grid-template-columns:(1fr);
+            gap: 1.2rem;
+            article{
+                display: flex;
+                justify-content: space-between;
+                padding: 1.6rem;
+                border-radius: 4px;
+                align-items: center;
+                color: var(--White);
+                .buttons{
+                    display: flex;
+                    align-items: center;
+                    gap: 1.2rem;
+                    button{
+                        transition: transform .5s ease;
+                        svg{
+                            color: var(--White);
+                        }
+                        &:hover{
+                            transform: scale(1.2);
+                        }
+                    }
+                }
+            }
+            .cardTrue{
+                background-color: var(--Sucess);
+            }
+            .cardNull{
+                background-color: var(--Primary-normal);
+            }
+        }
+    }
+}
+.modalGuest{
+    padding: 0;
+}
+@media (min-width:768px){
+    .container{      
+        .myReservations{
+            .allCards{
+                grid-template-columns:repeat(2,1fr);
+            }
+        }
+    }
+}

@@ -1,0 +1,92 @@
+.container{
+    width: 100%;
+    max-width: 768px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 3.6rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.4rem;  
+    img{
+        width: 100%;
+        margin: 0 auto;
+        max-width: 640px;
+    }
+    .form {
+        display: flex;
+        align-items: center;
+        gap: 1.6rem;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+    }
+    a{
+        font-weight: bold;
+        transition: color .5s ease;
+        &:hover{
+            color: var(--Primary-normal);
+        }
+        &:focus{
+            color: var(--Primary-normal);
+        }
+    }
+}
+.modal{
+    width: 100%;
+    max-width: 768px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 3.6rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.4rem;
+    position: relative;  
+    .buttonclose{
+        position: absolute;
+        right: 0;
+        top: 0;
+        svg{
+            color: var(--Primary-normal);
+            transition: transform 1s ease;
+            }    
+            &:hover{
+                svg{
+                    transform: scale(1.4);
+                }
+            
+        }
+    }
+    img{
+        width: 100%;
+        margin: 0 auto;
+        max-width: 640px;
+    }  
+    .formmodal{
+        display: flex;
+        align-items: center;
+        gap: 1.6rem;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .buttonsOthersRecovery{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            .buttonLink{
+                font-weight: bold;
+                transition: color .5s ease;
+                &:hover{
+                        color: var(--Primary-normal);
+                    }
+                &:focus{
+                    color: var(--Primary-normal);
+                }
+            }
+    }
+}
+
+

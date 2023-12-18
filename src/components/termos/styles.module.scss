@@ -1,0 +1,51 @@
+.container{
+    height: 100vh;
+    margin: auto;
+    background-color: var(--White);
+    padding: 0.8rem;
+    border-top: 2rem solid var(--White);
+    position: relative;
+    color: var(--Primary-dark);
+    button{
+        position: absolute;
+        height: 4rem;
+        width: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;        
+        top: -2rem;
+        right: 0;
+        svg{
+            font-size: 2rem;
+            transition: transform .3s ease-in-out;
+        }
+
+        &:hover{
+            svg{
+                transform: scale(1.4);
+            }
+        }
+    }
+    .textoArea{
+        height: 96%;
+        overflow: scroll;
+        margin-top: 1.6rem;
+        overflow-x: hidden;
+        padding: 0.8rem;
+        h1{
+            margin-bottom: 1.2rem;
+        }
+        h2{
+            margin-top: 0.8rem;
+        }
+
+        ul{
+            padding: 0.4rem;
+            list-style: none;
+            margin-left: 0.4rem;
+            li{
+                font-size: 1.4rem;
+            }
+        }
+    }
+}
