@@ -5,10 +5,10 @@ import { canSSRAuth } from "../../utils/canSSRAuth";
 import { SetupApiClient } from "../../services/api";
 import styles from "./styles.module.scss";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineUnorderedList } from "react-icons/ai";
-import Modal from "react-modal";
 import { toast } from "react-toastify";
 import {formatDate, formatHours} from "../../utils/formatted";
 import { AddGuest } from "../../components/modal/Addguest";
+import { Gmodal } from "../../components/myModal";
 
 type MyReservationsProps = {
   date: number;
@@ -37,7 +37,6 @@ export default function Reservation({ myReservations, allReservations }: Calenda
   const [allReservationsList, setAllReservationsList] = useState(allReservations || null);
   const [loading, setLoading] = useState(true);
   const setupApi = SetupApiClient();
-  Modal.setAppElement('#__next');
   const [calendar, setCalendar] = useState([]);
   const monthNow = new Date().getMonth();
   const yearNow = new Date().getFullYear();
@@ -81,14 +80,12 @@ export default function Reservation({ myReservations, allReservations }: Calenda
         setAllReservationsList(response2.data);
         setLoading(false);
     }catch(err){
-        console.log('Erro ao obter dados do servidor');
         setTimeout(refreshDate, 500);
     }
   }
   useEffect(()=>{
     refreshDate();
   },[]);
-
 
   // -----------------------Passar para o formato data minhas datas number --------------------------/////////
 
@@ -495,13 +492,9 @@ useEffect(() => {
 
       </main>
       {/* ------------------ modal wait list -------- */}
-      <Modal isOpen={isOpenWait}
-      onRequestClose={closeModalWait}
-      className='modal'
-      style={{overlay:{
-          backgroundColor: 'rgba(0, 0, 0, 0.3)'
-        }}}>
-          <div className="modalContainer">
+      <Gmodal isOpen={isOpenWait}
+      onClose={closeModalWait}
+      className='modal'>
             <div className="beforeButtons">
                 <h3>Lista de espera</h3>
                 <p>Você gostaria de se inscrever na lista de espera? Em caso de cancelamento da reserva, você será notificado por meio de SMS e e-mail.</p>
@@ -511,15 +504,11 @@ useEffect(() => {
                 <button className='true' onClick={handleAwait} autoFocus={true}><span>Entrar</span></button>
                 <button onClick={closeModalWait} className='false'><span>Cancelar</span></button>      
             </div>
-          </div>
-      </Modal>
+      </Gmodal>
     {/* ------------------ modal create reservation -------- */}
-      <Modal isOpen={isOpenCreateReservation}
-      onRequestClose={closeModalCreateReservation}
-      className='modal'
-      style={{overlay:{
-          backgroundColor: 'rgba(0, 0, 0, 0.3)'
-          }}}>
+      <Gmodal isOpen={isOpenCreateReservation}
+      onClose={closeModalCreateReservation}
+      className='modal'>
           <div className="modalContainer">
             <div className="beforeButtons">
                 <h3>Criar reserva</h3>
@@ -556,15 +545,12 @@ useEffect(() => {
                 <button onClick={closeModalCreateReservation} className='false'><span>Cancelar</span></button>      
             </div>
           </div>
-      </Modal>
+      </Gmodal>
 
       {/* ------------------ modal delete resevation -------- */}
-      <Modal isOpen={isOpenDeleteReservation}
-      onRequestClose={closeModalDeleteReservation}
-      className='modal'
-      style={{overlay:{
-          backgroundColor: 'rgba(0, 0, 0, 0.3)'
-          }}}>
+      <Gmodal isOpen={isOpenDeleteReservation}
+      onClose={closeModalDeleteReservation}
+      className='modal'>
           <div className="modalContainer">
             <div className="beforeButtons">
                 <h3>Cancelar reserva</h3>
@@ -577,41 +563,37 @@ useEffect(() => {
                 <button onClick={closeModalDeleteReservation} className='false'><span>não</span></button>      
             </div>
           </div>
-      </Modal>
+      </Gmodal>
 
       {/* ------------------ modal guest -------- */}
-      <Modal isOpen={isOpenGuestReservation}
-      onRequestClose={closeModalGuest}
-      className={styles.modalGuest}
-      style={{overlay:{
-          backgroundColor: 'rgba(0, 0, 0, 0.3)'
-          }}}>
+      <Gmodal isOpen={isOpenGuestReservation}
+      onClose={closeModalGuest}
+      className={styles.modalGuest}>
             <AddGuest id={reservation_id} guest={guest} closeModal={closeModalGuest}/>
-      </Modal>
+      </Gmodal>
     </>
   );
 }
-
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
   try {
     const SetupApi = SetupApiClient(ctx);
     const response1 = await SetupApi.get("/myreservations");
     const response2 = await SetupApi.get("/allreservations");
-
-    return {
-      props: {
-        myReservations: response1.data,
-        allReservations: response2.data
-      }
-    };
-  } catch (error) {
-    console.error("Error fetching data from the API:", error.message);
-    return {
-      props: {
-        myReservations: [],
-        allReservations: []
-      }
-    };
-  }
+      return {
+          props: {
+            myReservations: response1.data,
+            allReservations: response2.data
+          }
+      };
+  } 
+  catch (error) {
+  console.error('Erro ao obter dados da api');
+      return {
+          props: {
+            myReservations: [],
+            allReservations: []
+          },
+      };
+  }   
 });

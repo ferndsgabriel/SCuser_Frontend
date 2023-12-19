@@ -10,9 +10,8 @@ import { canSSRAuth } from "../../utils/canSSRAuth";
 import { SetupApiClient } from "../../services/api";
 import { toast } from "react-toastify";
 import zxcvbn from 'zxcvbn';
-import Modal from "react-modal";
 import { Loading } from "../../components/loading";
-
+import { Gmodal } from "../../components/myModal";
 
 
 type UserPropsItens = {
@@ -41,16 +40,17 @@ interface UserInterface{
 }
 
 export default function Settings({userProps}: UserInterface){
-Modal.setAppElement('#__next');
+
 
 const [userDate, setUserDate] = useState(userProps || null);
 const [inputPass, setInputPass] = useState(false);
 const [oldPass, setOldPass] = useState ('');
 const [newPass, setNewPass] = useState ('');
-const [isOpen, setIsOpen] = useState (false);
+const [isOpen, setIsOpen] = useState (true);
 const [inputDelete, setInputDelete] = useState ('');
 const [loading, setLoading ] = useState(true);
 const [check, setCheckBox] = useState (false);
+
 
 async function refreshDate(){
     try{
@@ -59,7 +59,8 @@ async function refreshDate(){
         setUserDate(response.data)
         setLoading(false);
     }catch(err){
-        console.log('Erro ao obter dados do servidor');
+    
+        ('Erro ao obter dados do servidor');
         setTimeout(refreshDate, 500);
     }
 }
@@ -205,12 +206,9 @@ async function handleDeleteAccount(e:FormEvent){
             </span>
         </main>
 
-        <Modal isOpen={isOpen}
-            onRequestClose={closeModal}
-            className='modal'
-            style={{overlay:{
-                backgroundColor: 'rgba(0, 0, 0, 0.3)'
-                }}}>
+        <Gmodal isOpen={isOpen}
+            onClose={closeModal}
+            className="modal">
                 <form className="modalContainer" onSubmit={handleDeleteAccount}>
                 <div className="beforeButtons">
                     <h3>Excluir conta</h3>
@@ -230,7 +228,7 @@ async function handleDeleteAccount(e:FormEvent){
                     <button onClick={closeModal}  className='false'><span>Cancelar</span></button>      
                 </div>
                 </form>
-            </Modal>
+            </Gmodal>
         </>
     )
 }

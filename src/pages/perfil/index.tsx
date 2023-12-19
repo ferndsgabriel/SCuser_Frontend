@@ -8,10 +8,10 @@ import { SetupApiClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { useState, ChangeEvent, useEffect, FormEvent} from "react";
 import style from "./styles.module.scss";
-import Modal from "react-modal";
 import {isMobilePhone } from 'validator';
 import { Loading } from "../../components/loading";
 import InputMask from 'react-input-mask';
+import { Gmodal } from "../../components/myModal";
 
 
   type userProps = {
@@ -39,7 +39,6 @@ import InputMask from 'react-input-mask';
   }
 
 export default function Perfil({userDate}:userPropsInterface){
-  Modal.setAppElement('#__next');
   const apiClient = SetupApiClient();
   const [details,setDetails] = useState(userDate || null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -211,10 +210,8 @@ export default function Perfil({userDate}:userPropsInterface){
         </section>
       </main>
 
-      <Modal style={{overlay:{
-        backgroundColor: 'rgba(0, 0, 0, 0.3)'
-        }}}isOpen={isOpenDeletePhoto}
-        onRequestClose={closeModalPhotoDelete}
+      <Gmodal isOpen={isOpenDeletePhoto}
+        onClose={closeModalPhotoDelete}
         className='modal'>
         <div className='modalContainer'>
           <div className='beforeButtons'>
@@ -226,12 +223,10 @@ export default function Perfil({userDate}:userPropsInterface){
             <button onClick={closeModalPhotoDelete}  className='false'><span>Não</span></button>
           </div>
           </div>
-        </Modal>
+        </Gmodal>
 
-      <Modal style={{overlay:{
-        backgroundColor: 'rgba(0, 0, 0, 0.3)'
-        }}}isOpen={isOpenPhone}
-        onRequestClose={closeModalPhone}
+      <Gmodal isOpen={isOpenPhone}
+        onClose={closeModalPhone}
         className='modal'>
         <form className='modalContainer' onSubmit={changePhone}>   
           <div className="beforeButtons">
@@ -250,7 +245,7 @@ export default function Perfil({userDate}:userPropsInterface){
             <button className='false' onClick={closeModalPhone}><span>Cancelar</span></button>
           </div>
         </form>
-        </Modal>
+        </Gmodal>
     </>
   )
 }

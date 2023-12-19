@@ -7,14 +7,13 @@ import { canSSRGuest } from "../../utils/canSSRGuest";
 import { useState, FormEvent } from "react";
 import { SetupApiClient } from "../../services/api";
 import { toast } from "react-toastify";
-import Modal from "react-modal";
 import {AiFillCloseCircle} from 'react-icons/ai';
 import zxcvbn from 'zxcvbn';
 import Router from "next/router";
 import {isMobilePhone } from 'validator';
+import { Gmodal } from "../../components/myModal";
 
 export default function Recovery(){
-Modal.setAppElement('#__next');
 
 const [phone_number, setPhone_number] = useState ('');
 const [isOpen, setIsOpen] = useState (false);
@@ -118,13 +117,9 @@ async function handleGetEmail(){
                 </Link>
         </main>
 
-        <Modal isOpen={isOpen}
-        onRequestClose={closeModal}
-        className={style.modal}
-        style={{overlay:{
-            backgroundColor: 'rgba(255, 255, 255, 1)'
-            }}}>
-
+        <Gmodal isOpen={isOpen}
+        onClose={closeModal}
+        className={style.modal}>
         <div className={style.modal}>
             <button  className={style.buttonclose} onClick={closeModal}>
                 <AiFillCloseCircle size={30}/>
@@ -147,9 +142,8 @@ async function handleGetEmail(){
                     Reenviar código  
                 </button>
             </article>
-            
         </div>   
-        </Modal>
+        </Gmodal>
         </>
     )
 }

@@ -7,8 +7,6 @@ import { toast } from "react-toastify";
 import { SetupApiClient } from "../../../services/api";
 import { onlyString } from "../../../utils/formatted";
 
-
-
 interface guestProps {
     id:string,
     guest:string,
