@@ -110,7 +110,7 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
       toast.warning('Por favor, insira todas as informações necessárias.');
       return;
     }
-    if (!onlyString(name) || !onlyString(lastname)){
+    if (!onlyString(name.trim()) || !onlyString(lastname.trim())){
       toast.warning('Por favor, insira um nome válido.');
       return;
     }
@@ -139,11 +139,12 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
 
     let data = {
       email:email.trim(),
-      name, 
+      name:name.trim(), 
+      lastname:lastname.trim(),
       apartament_id,
       cpf,
       pass, 
-      lastname, phone_number
+      phone_number
     };
 
     await singUp(data);

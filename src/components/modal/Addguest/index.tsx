@@ -43,7 +43,7 @@ export const AddGuest = ({id, guest, closeModal}:guestProps)=>{
             return;
         }
 
-        if (!onlyString(inputName)){
+        if (!onlyString(inputName.trim())){
             toast.warning('Nome inválido.');
             return
         }
@@ -59,7 +59,7 @@ export const AddGuest = ({id, guest, closeModal}:guestProps)=>{
             return;
         }
         
-        const addGuest = `${inputName}    -    ${inputRG}.XXX-X`;
+        const addGuest = `${inputName.trim()}    -    ${inputRG}.XXX-X`;
         setList([...list, addGuest]);
         setInputName('');
         setInputRG('');
