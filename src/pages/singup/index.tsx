@@ -12,7 +12,7 @@ import zxcvbn from 'zxcvbn';
 import { canSSRGuest } from "../../utils/canSSRGuest";
 import { SetupApiClient } from "../../services/api";
 import { Loading } from "../../components/loading";
-import Modal from "react-modal";
+import { Gmodal } from "../../components/myModal";
 import Termos from "../../components/termos";
 import { onlyString } from "../../utils/formatted";
 
@@ -53,8 +53,6 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
   const [isOpen, setIsOpen] = useState (false);
   
 
-  
-Modal.setAppElement('#__next');
 
   async function refreshDate(){
     try{
@@ -227,12 +225,11 @@ Modal.setAppElement('#__next');
 
       </main>
 
-      <Modal onRequestClose={closedModal}
+      <Gmodal onClose={closedModal}
       isOpen={isOpen}
-      className={styles.termos}
-      style={{overlay:{
-        backgroundColor: 'rgba(0, 0, 0, 0.1)'
-        }}}><Termos buttonAction={closedModal}/></Modal>
+      className={styles.termos}>
+        <Termos buttonAction={closedModal}/>
+      </Gmodal>
     </>
   );
 }

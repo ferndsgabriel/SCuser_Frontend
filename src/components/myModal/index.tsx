@@ -29,8 +29,8 @@ export const Gmodal: React.FC<ModalProps> = ({ isOpen, onClose, children, classN
         return  window.removeEventListener('keydown', escClose);
     }
 
-
     window.addEventListener('keydown', escClose);
+
     return (
     <div className={styles.overlay} onClick={clickClose} ref={overlayRef}>
         <div className={className} ref={mainRef}>
