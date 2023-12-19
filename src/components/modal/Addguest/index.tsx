@@ -96,7 +96,7 @@ export const AddGuest = ({id, guest, closeModal}:guestProps)=>{
                     <form onSubmit={handleAdd} className={styles.form}>
                         <input placeholder="Digite o nome" value={inputName}
                         onChange={(e)=>setInputName(e.target.value)} autoFocus={true} ref={inputNameRef}/>
-                        <InputMask placeholder='Digite o RG' mask='99.999' value={inputRG}
+                        <InputMask placeholder='Digite o RG' type="tel"mask='99.999' value={inputRG}
                         onChange={(e)=>setInputRG(e.target.value)}/>
                         <button type="submit"><AiOutlinePlus /></button>
                     </form>

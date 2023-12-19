@@ -13,7 +13,7 @@ import { canSSRGuest } from "../../utils/canSSRGuest";
 import { SetupApiClient } from "../../services/api";
 import { Loading } from "../../components/loading";
 import { Gmodal } from "../../components/myModal";
-import Termos from "../../components/termos";
+import Termos from "../../components/modal/termos";
 import { onlyString } from "../../utils/formatted";
 
 type AptProps = {

@@ -1,8 +1,9 @@
 .container{
-    height: 100vh;
+    height: 95vh;
     margin: auto;
     background-color: var(--White);
     padding: 0.8rem;
+    padding-top: 4rem;
     border-top: 2rem solid var(--White);
     position: relative;
     color: var(--Primary-dark);
@@ -13,7 +14,7 @@
         display: flex;
         align-items: center;
         justify-content: center;        
-        top: -2rem;
+        top: 0rem;
         right: 0;
         svg{
             font-size: 2rem;
@@ -47,5 +48,11 @@
                 font-size: 1.4rem;
             }
         }
+    }
+}
+
+@media (min-width:768px){
+    .container{
+        height: 100vh;
     }
 }
