@@ -495,14 +495,16 @@ useEffect(() => {
       <Gmodal isOpen={isOpenWait}
       onClose={closeModalWait}
       className='modal'>
-            <div className="beforeButtons">
-                <h3>Lista de espera</h3>
-                <p>Você gostaria de se inscrever na lista de espera? Em caso de cancelamento da reserva, você será notificado por meio de SMS e e-mail.</p>
+            <div className="modalContainer">
+              <div className="beforeButtons">
+                  <h3>Lista de espera</h3>
+                  <p>Você gostaria de se inscrever na lista de espera? Em caso de cancelamento da reserva, você será notificado por meio de SMS e e-mail.</p>
 
-            </div>
-            <div className='buttonsModal'>
-                <button className='true' onClick={handleAwait} autoFocus={true}><span>Entrar</span></button>
-                <button onClick={closeModalWait} className='false'><span>Cancelar</span></button>      
+              </div>
+              <div className='buttonsModal'>
+                  <button className='true' onClick={handleAwait} autoFocus={true}><span>Entrar</span></button>
+                  <button onClick={closeModalWait} className='false'><span>Cancelar</span></button>      
+              </div>
             </div>
       </Gmodal>
     {/* ------------------ modal create reservation -------- */}
