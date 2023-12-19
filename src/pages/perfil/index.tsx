@@ -236,7 +236,7 @@ export default function Perfil({userDate}:userPropsInterface){
             placeholder="Exemplo:(11) 99999-9999"
             value={phone}
             onChange={(e)=>setPhone(e.target.value)}
-            mask={'(99)99999-9999'}
+            type="tel"mask={'(99)99999-9999'}
             autoFocus={true}/>
           </div>
 
