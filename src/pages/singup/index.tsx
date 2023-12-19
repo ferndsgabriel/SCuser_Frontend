@@ -118,11 +118,11 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
       toast.error("Por favor, insira um número de telefone válido.");
       return
     }
-    if (!isEmail(email)) {
+    if (!isEmail(email.trim())) {
       toast.error("E-mail inválido. Utilize um endereço do Gmail ou Hotmail.");
       return;
     }
-    if (!isEmailOfType(email)) {
+    if (!isEmailOfType(email.trim())) {
       toast.error("E-mail inválido. Utilize um endereço do Gmail ou Hotmail.");
       return;
     }
@@ -138,7 +138,7 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
     setLoading(true);
 
     let data = {
-      email, 
+      email:email.trim(),
       name, 
       apartament_id,
       cpf,
@@ -204,7 +204,7 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
 
               <Input value={phone_number} onChange={(e) => setPhone_number(e.target.value)} placeholder="Seu telefone:" type="tel"
               mask="(99)99999-9999"/>
-              <Input value={cpf} onChange={(e) => setCPF(e.target.value)} placeholder="Seu CPF:" type="text"
+              <Input value={cpf} onChange={(e) => setCPF(e.target.value)} placeholder="Seu CPF:" type="tel"
               mask="999.999.999-99"/>
               <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Seu email:" type="text" />
               <Input value={pass} onChange={(e) => setPass(e.target.value)} placeholder="Sua senha:" type="password" />

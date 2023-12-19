@@ -24,13 +24,13 @@ export default function Home(){
       toast.warning('Por favor, insira todas as suas informações.');
       return;
     }
-    if (!isEmail(email)){
+    if (!isEmail(email.trim())){
       toast.warning('Por favor, insira um e-mail válido.');
       return;
     }
     setLoading(true)
     let data = {
-      email,
+      email:email.trim(),
       pass
     };
     await singIn(data);
