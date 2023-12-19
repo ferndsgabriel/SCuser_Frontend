@@ -9,7 +9,6 @@
     max-width: 640px;
     display: flex;
     align-items: center;
-    justify-content: center;
     .addGuest{
         display: flex;
         flex-direction: column;
@@ -17,7 +16,7 @@
         color: var(--Primary-dark);
         background-color: var(--Light);
         width: 100%;
-        height: 80%;
+        height: 90%;
         margin: auto;
         border-top: 4.2rem solid var(--White);
         position: relative;
@@ -143,9 +142,9 @@
 }
 
 @media (min-width:768px){
-    .container{
-        height: 100%;
+    .container{  
         .addGuest{
+            height: 100%;
             .form{
                 grid-template-columns: repeat(3,1fr);
                 grid-template-rows: 1fr;
