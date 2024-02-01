@@ -66,7 +66,7 @@ export default function Perfil({userDate}:userPropsInterface){
     }
     else{
       try{
-        setImagePreview(`https://drive.google.com/uc?export=view&id=${details.photo}`);
+        setImagePreview(details.photo);
       }catch(err){
         setImagePreview(null);
       }
@@ -99,9 +99,9 @@ export default function Perfil({userDate}:userPropsInterface){
     setSpinnerPhoto(true);
     try{
       if (foto.type === "image/jpeg" || foto.type === "image/png" ){
-        const file = foto
+        const image = foto
         const data = new FormData();
-        data.append('file', file);
+        data.append('image', image);
         await apiClient.put('/photo', data);
         fetchUserDetails();
         window.location.reload();
