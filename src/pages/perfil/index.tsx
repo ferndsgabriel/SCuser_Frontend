@@ -61,17 +61,8 @@ export default function Perfil({userDate}:userPropsInterface){
 
   useEffect(()=>{
     fetchUserDetails();
-    if (details.photo == null ){
-      setImagePreview(null);
-    }
-    else{
-      try{
-        setImagePreview(details.photo);
-      }catch(err){
-        setImagePreview(null);
-      }
-    }
-  },[])
+  },[]);
+
   //-------------------------------------------------Deletar foto
   function openModalPhotoDelete() {
     setIsOpenDeletePhoto(true);
@@ -106,7 +97,6 @@ export default function Perfil({userDate}:userPropsInterface){
         fetchUserDetails();
         window.location.reload();
         setSpinnerPhoto(false);
-        
       }   
     }catch(error){
       toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
@@ -168,6 +158,7 @@ export default function Perfil({userDate}:userPropsInterface){
         <section className={style.sectionPhoto}>    
               <label className={style.circulo}>
                 <input type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} />
+                
                 {spinnerPhoto?(
                   <FaSpinner className={style.svgSpinner}/>
                 ):(
@@ -175,10 +166,13 @@ export default function Perfil({userDate}:userPropsInterface){
                 )}
 
                 <div className={style.perfilContainer}>
-                  <img src={imagePreview}/>
+                  {details.photo?(
+                    <img src={details.photo}/>
+                  ):(
+                    <HiPhotograph/>
+                  )}
                 </div>
-                
-                {imagePreview == null ? <HiPhotograph/> : null}
+
               </label>
             {details.photo?(
               <button onClick={openModalPhotoDelete} className={style.buttonPhoto}>
