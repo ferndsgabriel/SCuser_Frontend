@@ -1,16 +1,14 @@
 import Head from "next/head";
 import Header from "../../components/header";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { AiFillDelete} from "react-icons/ai";
 import { FaSpinner } from "react-icons/fa";
 import {HiPhotograph} from "react-icons/hi"
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { SetupApiClient } from "../../services/api";
 import { toast } from "react-toastify";
-import { useState, ChangeEvent, useEffect, FormEvent} from "react";
+import { useState, useEffect} from "react";
 import style from "./styles.module.scss";
-import {isMobilePhone } from 'validator';
 import { Loading } from "../../components/loading";
-import InputMask from 'react-input-mask';
 import { Gmodal } from "../../components/myModal";
 
 
@@ -43,8 +41,6 @@ export default function Perfil({userDate}:userPropsInterface){
   const [details,setDetails] = useState(userDate || null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isOpenDeletePhoto, setIsOpenDeletePhoto] = useState (false);
-  const [isOpenPhone, setIsOpenPhone] = useState (false);
-  const [phone, setPhone] = useState ('');
   const [isLoading, setIsLoading] = useState (true);
   const [spinnerPhoto, setSpinnerPhoto] = useState (false);
 
@@ -104,41 +100,6 @@ export default function Perfil({userDate}:userPropsInterface){
     setSpinnerPhoto(false); 
   }
 
-//------------------------------------------------- alterar telefone
-  function openModalPhone(){
-    setIsOpenPhone(true);
-  }
-
-  function closeModalPhone(){
-    setIsOpenPhone(false);
-    setPhone('');
-  }
-
-  async function changePhone(e:FormEvent){
-    e.preventDefault();
-    if (phone === ''){
-      return;
-    }
-    if (!isMobilePhone(phone)){
-      toast.warning('Por favor, insira um número válido.');
-      return;
-    }
-    if (phone === details.phone_number){
-      toast.warning('Digite um número diferente do atual.');
-      return;
-    }
-    try{
-      await apiClient.put('/phone',{
-        number:phone
-      })
-      toast.success('O número foi alterado com sucesso!');
-      fetchUserDetails();
-      closeModalPhone()
-    }
-    catch(error){
-      toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-    }
-  }
 //------------------------------------------------------------
 
   if (isLoading){
@@ -157,8 +118,7 @@ export default function Perfil({userDate}:userPropsInterface){
       <h1>Perfil</h1>
         <section className={style.sectionPhoto}>    
               <label className={style.circulo}>
-                <input type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} />
-                
+                <input type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} />          
                 {spinnerPhoto?(
                   <FaSpinner className={style.svgSpinner}/>
                 ):(
@@ -185,7 +145,6 @@ export default function Perfil({userDate}:userPropsInterface){
             <h2>Olá, {details.name} {details.lastname}</h2>    
             <article>
               <p>Telefone: {details.phone_number}</p>
-              <button className={style.phoneButton}onClick={openModalPhone} tabIndex={1}><AiFillEdit/></button>
             </article>
             
             <article>
@@ -219,27 +178,6 @@ export default function Perfil({userDate}:userPropsInterface){
           </div>
         </Gmodal>
 
-      <Gmodal isOpen={isOpenPhone}
-        onClose={closeModalPhone}
-        className='modal'>
-        <form className='modalContainer' onSubmit={changePhone}>   
-          <div className="beforeButtons">
-            <h3>Alterar telefone</h3>
-            <p>Digite seu novo número de telefone:</p>
-            <InputMask className='inputModal'
-            placeholder="Exemplo:(11) 99999-9999"
-            value={phone}
-            onChange={(e)=>setPhone(e.target.value)}
-            type="tel"mask={'(99)99999-9999'}
-            autoFocus={true}/>
-          </div>
-
-          <div className='buttonsModal'>
-            <button className='true' type='submit'><span>Alterar</span></button>
-            <button className='false' onClick={closeModalPhone}><span>Cancelar</span></button>
-          </div>
-        </form>
-        </Gmodal>
     </>
   )
 }

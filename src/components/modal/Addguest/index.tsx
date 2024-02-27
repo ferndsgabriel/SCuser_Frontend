@@ -49,7 +49,7 @@ export const AddGuest = ({id, guest, closeModal}:guestProps)=>{
         }
         const withMask = inputRG.replace(/\D/g, '');
             
-        if (withMask.length !== 5) {
+        if (withMask.length !== 4) {
             toast.warning('Por favor, insira exatamente 5 dígitos do RG.');
             return;
         }
@@ -59,7 +59,7 @@ export const AddGuest = ({id, guest, closeModal}:guestProps)=>{
             return;
         }
         
-        const addGuest = `${inputName.trim()}    -    ${inputRG}.XXX-X`;
+        const addGuest = `${inputName.trim()}    -    XX.XXX-${inputRG}`;
         setList([...list, addGuest]);
         setInputName('');
         setInputRG('');
@@ -96,7 +96,7 @@ export const AddGuest = ({id, guest, closeModal}:guestProps)=>{
                     <form onSubmit={handleAdd} className={styles.form}>
                         <input placeholder="Digite o nome" value={inputName}
                         onChange={(e)=>setInputName(e.target.value)} autoFocus={true} ref={inputNameRef}/>
-                        <InputMask placeholder='Digite o RG' type="tel"mask='99.999' value={inputRG}
+                        <InputMask placeholder='Os 4 últimos dígitos do RG' type="tel" mask='999-9' value={inputRG}
                         onChange={(e)=>setInputRG(e.target.value)}/>
                         <button type="submit"><AiOutlinePlus /></button>
                     </form>

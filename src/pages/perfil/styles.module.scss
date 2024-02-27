@@ -84,22 +84,6 @@
       justify-content: space-between;
       padding: 1.6rem;
       border-radius: 5px;
-
-      .phoneButton{
-        svg{
-          font-size: 1.8rem;
-          color: var(--White);
-          transition: all 0.2s ease;
-          
-
-          &:hover{
-            font-size: 2rem;
-          }
-          &:focus{
-            border: solid 2px var(--White);
-          }     
-        }
-      }
       p{
         color: var(--White);
         font-size: 1.6rem;
@@ -107,7 +91,6 @@
     }
   }
 }
-
 
 
 @keyframes spinner {

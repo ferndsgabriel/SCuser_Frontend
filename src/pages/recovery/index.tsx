@@ -109,7 +109,7 @@ async function handleGetEmail(){
                 <h1>Recuperar senha</h1>
                 <form className={style.form } onSubmit={handleCodigo}>    
                     <Input type="text" placeholder="Digite seu telefone:"
-                    autoFocus={true} value={phone_number} mask="(99)99999-9999"
+                    value={phone_number} mask="(99)99999-9999"
                     onChange={(e)=>setPhone_number(e.target.value)}/>
                     <Button type="submit">Enviar código</Button>
                 </form>
