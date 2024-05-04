@@ -49,6 +49,8 @@ export default function Reservation({ myReservations, allReservations }: Calenda
   const [isOpenDeleteReservation, setIsOpenDeleteReservation] = useState(false);
   const [isOpenGuestReservation, setIsOpenGuestReservation] = useState(false);
   const [guest, setGuest] = useState('');
+  const [googleCalendarLink, setGoogleCalendarLink] = useState('');
+  const [isOpenGoogleCalendar, setIsOpenGoogleCalendar] = useState(false);
 
   const [dateValue, setDateValue] = useState<number>(null);
   const [hoursStart, setHoursStart] = useState<number>(9);
@@ -359,9 +361,10 @@ useEffect(() => {
         finish: finish
       });
       toast.success('Reserva solicitada com sucesso.');
-      googleCalendar(start,finish,dateValue);
+      getLinkgoogleCalendar(start,finish,dateValue);
       closeModalCreateReservation();
       refreshDate();
+      openModalCalendar();
     }catch(error){
       toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
     }
@@ -411,7 +414,7 @@ useEffect(() => {
     refreshDate();
     setIsOpenGuestReservation(false);
   }
-  //------------------------------------------------------------------------------------------------------
+  //-----------------------------------------------//-----------------------------------------//
 
   function hourGoogleCalendar(hour:string){
     if (hour.length === 3){
@@ -435,7 +438,7 @@ useEffect(() => {
     return `${year}-${month}-${day}`;
   }
 
-  function googleCalendar(hourStart:string,hoursFinish:string, date:number) {
+  function getLinkgoogleCalendar(hourStart:string,hoursFinish:string, date:number) {
     const eventInit = new Date(`${dateGoogleCalendar(date)}T${hourGoogleCalendar(hourStart)}`);
     const eventFinish = new Date(`${dateGoogleCalendar(date)}T${hourGoogleCalendar(hoursFinish)}`);
     const title = 'Reserva do salão';
@@ -446,11 +449,25 @@ useEffect(() => {
     const dateFinishFormat = eventFinish.toISOString().replace(/-|:|\.\d+/g,"");
 
     const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE&dates';
-    const linkEvento = `${url}=${dateInitFormat}/${dateFinishFormat}&text=${encodeURIComponent(title)}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(local)}`;
+    const eventLink = `${url}=${dateInitFormat}/${dateFinishFormat}&text=${encodeURIComponent(title)}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(local)}`;
 
-    window.open(linkEvento);
+    setGoogleCalendarLink(eventLink);
   }
-  
+  //-----------------------------------------------//-----------------------------------------//
+  function openModalCalendar(){
+    setIsOpenGoogleCalendar(true);
+  }
+
+  function closeModalCalendar(){
+    setGoogleCalendarLink('');
+    setIsOpenGoogleCalendar(false);
+  }
+
+  function handleCalendar(){
+    window.open(googleCalendarLink);
+    closeModalCalendar();
+  }
+  //-----------------------------------------------//-----------------------------------------//
 
   if (loading){
     return(
@@ -592,6 +609,23 @@ useEffect(() => {
             </div>
           </div>
       </Gmodal>
+      
+      {/* ------------------ modal calendar -------- */}
+      <Gmodal isOpen={isOpenGoogleCalendar}
+      onClose={closeModalCalendar}
+      className='modal'>
+          <div className="modalContainer">
+            <div className="beforeButtons">
+                <h3>Sua reserva foi solicitada!</h3>
+                <p>Gostaria de salvar sua reserva no Google Calendar e receber notificações quando o evento estiver se aproximando?</p>
+            </div>
+            <div className='buttonsModal'>
+                <button className='true' onClick={handleCalendar} autoFocus={true}><span>Sim</span></button>
+                <button onClick={closeModalCalendar} className='false'><span>Não</span></button>      
+            </div>
+          </div>
+      </Gmodal>
+
 
       {/* ------------------ modal delete resevation -------- */}
       <Gmodal isOpen={isOpenDeleteReservation}
@@ -606,7 +640,7 @@ useEffect(() => {
             </div>
             <div className='buttonsModal'>
                 <button className='true' onClick={handleDeleteReservation} autoFocus={true}><span>Confirmar</span></button>
-                <button onClick={closeModalDeleteReservation} className='false'><span>não</span></button>      
+                <button onClick={closeModalDeleteReservation} className='false'><span>Não</span></button>      
             </div>
           </div>
       </Gmodal>
