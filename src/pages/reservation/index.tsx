@@ -224,8 +224,6 @@ useEffect(() => {
 }, [monthCalendar, myReservationsDateTrue, myReservationsDateNull, yearCalendar]);
 
 
-
-
   //---------------------- wait list and reservation ------------
   const addZero = (number:number) =>{
     if (number < 10){
@@ -322,7 +320,7 @@ useEffect(() => {
   };
 
   const hoursFinishLoop = () => {
-    let x = hoursStart + 1
+    let x = 10
     const finish = 22;
     let startHoursList = [];
 
@@ -347,14 +345,21 @@ useEffect(() => {
   };
 
   async function handleCreateReservation(){
+    const start = `${addZero(hoursStart)}${addZero(minutesStart)}`;
+    const finish = `${addZero(hoursFinish)}${addZero(minutesFinish)}`;
+    if (parseInt(finish) < parseInt(start)){
+      toast.warning('O horário de início da reserva não pode ser posterior ao término.');
+      return
+    }
     try{
       await setupApi.post('/reservations',{
         date:dateValue,
         cleaning:inputClean,
-        start:`${addZero(hoursStart)}${addZero(minutesStart)}`,
-        finish:`${addZero(hoursFinish)}${addZero(minutesFinish)}`
+        start:start,
+        finish: finish
       });
       toast.success('Reserva solicitada com sucesso.');
+      googleCalendar(start,finish,dateValue);
       closeModalCreateReservation();
       refreshDate();
     }catch(error){
@@ -405,6 +410,45 @@ useEffect(() => {
     setReservation_id('');
     refreshDate();
     setIsOpenGuestReservation(false);
+  }
+  //------------------------------------------------------------------------------------------------------
+
+  function hourGoogleCalendar(hour:string){
+    if (hour.length === 3){
+      const gotHour = hour.substring(0,1);
+      const gotMinutes = hour.substring(1,3);
+      return `${gotHour}:${gotMinutes}:00`
+    }
+    else{
+      const gotHour = hour.substring(0,2);
+      const gotMinutes = hour.substring(2,4);
+      return `${gotHour}:${gotMinutes}:00`
+    }
+  }
+
+  function dateGoogleCalendar(date:number){
+    const dateString = date.toString();
+    const year = dateString.substring(0,4);
+    const month = dateString.substring(4,6);
+    const day = dateString.substring(6,8);
+
+    return `${year}-${month}-${day}`;
+  }
+
+  function googleCalendar(hourStart:string,hoursFinish:string, date:number) {
+    const eventInit = new Date(`${dateGoogleCalendar(date)}T${hourGoogleCalendar(hourStart)}`);
+    const eventFinish = new Date(`${dateGoogleCalendar(date)}T${hourGoogleCalendar(hoursFinish)}`);
+    const title = 'Reserva do salão';
+    const description = '';
+    const local = '';
+
+    const dateInitFormat = eventInit .toISOString().replace(/-|:|\.\d+/g,"");
+    const dateFinishFormat = eventFinish.toISOString().replace(/-|:|\.\d+/g,"");
+
+    const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE&dates';
+    const linkEvento = `${url}=${dateInitFormat}/${dateFinishFormat}&text=${encodeURIComponent(title)}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(local)}`;
+
+    window.open(linkEvento);
   }
   
 
