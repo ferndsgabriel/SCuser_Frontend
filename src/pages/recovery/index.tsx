@@ -111,7 +111,7 @@ async function handleRecovery(e:FormEvent){
             <img src="SalãoCondoLight.svg"/>
 
             <form className={style.formmodal} onSubmit={handleRecovery}>
-                <Input type="text" autoFocus={true} placeholder="Digite o seu código:" value={cod} onChange={(e)=>setCod(e.target.value)}
+                <Input type="tel" autoFocus={true} placeholder="Digite o seu código:" value={cod} onChange={(e)=>setCod(e.target.value)}
                 />
                 <Input type="password" placeholder="Sua nova senha:" value={pass} onChange={(e)=>setPass(e.target.value)}/>
                 <Button type="submit">Alterar senha</Button>
