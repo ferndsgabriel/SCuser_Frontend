@@ -349,8 +349,8 @@ useEffect(() => {
   async function handleCreateReservation(){
     const start = `${addZero(hoursStart)}${addZero(minutesStart)}`;
     const finish = `${addZero(hoursFinish)}${addZero(minutesFinish)}`;
-    if (parseInt(finish) < parseInt(start)){
-      toast.warning('O horário de início da reserva não pode ser posterior ao término.');
+    if (parseInt(finish) <= parseInt(start)){
+      toast.warning('O horário de início da reserva não pode ser posterior ou igual ao término.');
       return
     }
     try{

@@ -4,7 +4,9 @@ import { singOut } from "../contexts/AuthContexts";
 
 
 //export const baseURL = "http://localhost:3333";
-export const baseURL = 'https://scbackend.vercel.app';
+export const baseURL = "https://api.salaocondo.site";
+//export const baseURL = 'https://scbackend.vercel.app';
+
 export const SetupApiClient = (ctx = undefined) =>{
     let cookies = parseCookies(ctx);
     const api = axios.create ({
