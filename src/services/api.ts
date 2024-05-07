@@ -3,8 +3,8 @@ import { parseCookies } from "nookies";
 import { singOut } from "../contexts/AuthContexts";
 
 
-//export const baseURL = "http://localhost:3333";
-export const baseURL = 'https://scbackend.vercel.app';
+export const baseURL = "https://loadbalancer-283940127.us-east-1.elb.amazonaws.com";
+//export const baseURL = 'https://scbackend.vercel.app';
 export const SetupApiClient = (ctx = undefined) =>{
     let cookies = parseCookies(ctx);
     const api = axios.create ({
