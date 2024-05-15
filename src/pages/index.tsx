@@ -8,6 +8,7 @@ import { AuthContext } from "../contexts/AuthContexts";
 import { isEmail } from 'validator';
 import { toast } from "react-toastify";
 import { canSSRGuest } from "../utils/canSSRGuest";
+import {Adsense} from '@ctrl/react-adsense';
 
 declare global {
     interface Window {
@@ -43,10 +44,6 @@ export default function Home() {
         setLoading(false);
     }
 
-    useEffect(() => {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-    }, []);
-
     return (
         <>
             <Head>
@@ -68,13 +65,13 @@ export default function Home() {
             </main>
 
             <div className={styles.adSense}>
-                <ins className="adsbygoogle"
-                    style={{ display: "block" }}
-                    data-ad-client="ca-pub-9165545721062643"
-                    data-ad-slot="2688570370"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true">
-                </ins>
+                <Adsense
+                    client="ca-pub-9165545721062643"
+                    slot="2688570370"
+                    style={{ display: 'block' }}
+                    layout="in-article"
+                    format="auto"
+                />
             </div>
         </>
     )
