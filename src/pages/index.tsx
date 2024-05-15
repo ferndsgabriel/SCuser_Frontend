@@ -44,7 +44,6 @@ export default function Home(){
     <Head>
         <title>
         SalãoCondo - Página inicial
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9165545721062643"></script>
         </title>
     </Head>
     <main className={styles.container}>
@@ -72,10 +71,10 @@ export default function Home(){
             Não tem uma conta? Cadastre-se
           </Link>
         </div>
-        <div className={styles.adSense}>
-          <AdSense1/> 
-        </div>
     </main>
+    <div className={styles.adSense}>
+          <AdSense1/> 
+    </div>
     </>
   )
 }
