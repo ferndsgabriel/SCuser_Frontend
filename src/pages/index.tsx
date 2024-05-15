@@ -8,7 +8,7 @@ import { AuthContext } from "../contexts/AuthContexts"
 import { isEmail } from 'validator';
 import { toast } from "react-toastify";
 import { canSSRGuest } from "../utils/canSSRGuest";
-import AdSense1 from "../components/googleAdSense/adSense1";
+import AdsComponent from "../components/googleAdSense/adSense1";
 
 export default function Home(){
 
@@ -72,9 +72,9 @@ export default function Home(){
           </Link>
         </div>
     </main>
-    
+
     <div className={styles.adSense}>
-          <AdSense1/> 
+      <AdsComponent />
     </div>
     </>
   )
