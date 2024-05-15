@@ -72,6 +72,7 @@ export default function Home(){
           </Link>
         </div>
     </main>
+    
     <div className={styles.adSense}>
           <AdSense1/> 
     </div>
