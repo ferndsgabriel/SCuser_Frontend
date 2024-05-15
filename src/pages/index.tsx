@@ -8,6 +8,7 @@ import { AuthContext } from "../contexts/AuthContexts"
 import { isEmail } from 'validator';
 import { toast } from "react-toastify";
 import { canSSRGuest } from "../utils/canSSRGuest";
+import AdSense1 from "../components/googleAdSense/adSense1";
 
 export default function Home(){
 
@@ -70,7 +71,9 @@ export default function Home(){
             Não tem uma conta? Cadastre-se
           </Link>
         </div>
-        
+        <div className={styles.adSense}>
+          <AdSense1/> 
+        </div>
     </main>
     </>
   )

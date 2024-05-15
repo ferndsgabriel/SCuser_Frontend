@@ -69,12 +69,17 @@
       }
     }
   }
+  .adSense{
+    width: 100%;
+    height: auto;
+  }
 }
+
 .termos{
   width: 90%;
   margin: auto;
-  
 }
+
 @media (max-width:500px){
     .termos{
       width: 96%;
