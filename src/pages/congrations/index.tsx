@@ -13,11 +13,11 @@ const { loading, setLoading } = useLoading();
       </Head>
       <main className={styles.container}>
         <h1>PARABÉNS!!</h1>
-        <h2> VOCÊ CONCLUÍU SEU CADASTRO. </h2>
+        <h2> VOCÊ CONCLUIU SEU CADASTRO. </h2>
 
         <img className={styles.Congrations} src="Congrations.png" alt="Congrations"/>
 
-        <p>Seus dados serão enviados ao administrador para validar seu cadastro, este processo demora de 1 a 2 dias..</p>
+        <p>Seus dados serão enviados ao administrador para validar seu cadastro. O processo de validação geralmente leva de 24 a 48 horas.</p>
         <Link href={"/"} className={styles.link}>Fazer login</Link>
       </main>
     </>
