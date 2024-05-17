@@ -33,7 +33,6 @@ Router.events.on('routeChangeError', () => NProgress.done());
         referrerPolicy="no-referrer"
         />
         <link rel="icon" href="Icon.svg"/>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9165545721062643"></script>
         <meta name="google-adsense-account" content="ca-pub-9165545721062643"></meta>
       </Head>
       <ToastContainer
