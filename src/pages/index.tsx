@@ -48,7 +48,6 @@ export default function Home() {
         <>
             <Head>
                 <title>SalãoCondo - Página inicial</title>
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9165545721062643"></script>
             </Head>
             <main className={styles.container}>
                 <img src="SalãoCondoLight.svg" alt="SalãoCondo Logo" />
