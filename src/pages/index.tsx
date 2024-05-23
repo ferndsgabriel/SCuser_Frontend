@@ -8,13 +8,6 @@ import { AuthContext } from "../contexts/AuthContexts";
 import { isEmail } from 'validator';
 import { toast } from "react-toastify";
 import { canSSRGuest } from "../utils/canSSRGuest";
-import {Adsense} from '@ctrl/react-adsense';
-
-declare global {
-    interface Window {
-        adsbygoogle?: any;
-    }
-}
 
 export default function Home() {
     const [email, setEmail] = useState('');
@@ -62,16 +55,6 @@ export default function Home() {
                     <Link href={"/singup"} className={styles.link}>Não tem uma conta? Cadastre-se</Link>
                 </div>
             </main>
-
-            <div className={styles.adSense}>
-                <Adsense
-                    client="ca-pub-9165545721062643"
-                    slot="2688570370"
-                    style={{ display: 'block' }}
-                    layout="in-article"
-                    format="auto"
-                />
-            </div>
         </>
     )
 }

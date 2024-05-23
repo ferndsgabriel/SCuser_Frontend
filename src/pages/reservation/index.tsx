@@ -441,7 +441,7 @@ useEffect(() => {
   function getLinkgoogleCalendar(hourStart:string,hoursFinish:string, date:number) {
     const eventInit = new Date(`${dateGoogleCalendar(date)}T${hourGoogleCalendar(hourStart)}`);
     const eventFinish = new Date(`${dateGoogleCalendar(date)}T${hourGoogleCalendar(hoursFinish)}`);
-    const title = 'Reserva do salão';
+    const title = 'Reserva solicitada - SalãoCondo';
     const description = '';
     const local = '';
 

@@ -179,8 +179,8 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
 
           <form className={styles.form} onSubmit={handleRegister}>
             <article className={styles.inputsRow}>
-              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Digite seu nome:" type="text" autoFocus={true} />
-              <Input value={lastname} onChange={(e) => setLastname(e.target.value)} placeholder="Seu sobrenome:" type="text" />
+              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu primeiro nome:" type="text" autoFocus={true} />
+              <Input value={lastname} onChange={(e) => setLastname(e.target.value)} placeholder="Seu último nome:" type="text" />
               <select value={selectTower} onChange={handleSelectTower} tabIndex={1}>
                 {optionsTowers.filter((item)=>item.apartment.length > 0)
                 .map((item, index)=>{
@@ -207,7 +207,7 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
               mask="(99)99999-9999"/>
               <Input value={cpf} onChange={(e) => setCPF(e.target.value)} placeholder="Seu CPF:" type="tel"
               mask="999.999.999-99"/>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Seu email:" type="text" />
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Seu e-mail:" type="text" />
               <Input value={pass} onChange={(e) => setPass(e.target.value)} placeholder="Sua senha:" type="password" />
               
               <div className={styles.checkboxArea}>
