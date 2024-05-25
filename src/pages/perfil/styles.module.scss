@@ -1,6 +1,6 @@
 .container{
   width: 100%;
-  max-width: 768px;
+  max-width: 1024px;
   margin: auto;
   padding: 3.6rem 0.8rem;
   display: flex;
@@ -14,7 +14,7 @@
     width: 100%;
     gap: 1.2rem;
         .circulo{
-          width: 18rem;
+          width: 24rem;
           aspect-ratio: 1/1;
           border-radius: 50%;
           overflow: hidden; 
@@ -25,8 +25,8 @@
           border: solid 1px var(--Primary-normal);
           img{  
             object-fit: cover; 
-            width: 22rem; 
-            height: 22rem;
+            width: 24rem;
+            width: 24rem;
           }
           svg{
             font-size: 8rem;

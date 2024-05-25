@@ -1,6 +1,6 @@
 .container{
     width: 100%;
-    max-width: 768px;
+    max-width: 1024px;
     min-height: 100vh;
     margin: auto;
     padding: 3.6rem 0.8rem;
@@ -11,7 +11,8 @@
     img{
         width: 100%;
         margin: 0 auto;
-        max-width: 640px;
+        max-width: 900px;
+        margin-bottom: 1.6rem;
     }
     .form {
         display: flex;
@@ -34,7 +35,7 @@
 }
 .modal{
     width: 100%;
-    max-width: 768px;
+    max-width: 1024px;
     min-height: 100vh;
     margin: auto;
     padding: 3.6rem 0.8rem;
@@ -62,7 +63,8 @@
     img{
         width: 100%;
         margin: 0 auto;
-        max-width: 640px;
+        max-width: 900px;
+        margin-bottom: 1.6rem;
     }  
     .formmodal{
         display: flex;
