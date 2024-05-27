@@ -635,7 +635,7 @@ useEffect(() => {
             <div className="beforeButtons">
                 <h3>Cancelar reserva</h3>
                 <p><b>Observação: </b>Cancelamentos de reservas aprovadas com menos de 2 dias de
-              antecedência da data do evento estão sujeitos a uma taxa de R$ 100,00.
+              antecedência da data do evento estão sujeitos a uma taxa de R$ 80,00.
               Deseja confirmar o cancelamento? </p>
             </div>
             <div className='buttonsModal'>
