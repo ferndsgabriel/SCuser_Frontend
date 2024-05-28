@@ -617,7 +617,7 @@ useEffect(() => {
           <div className="modalContainer">
             <div className="beforeButtons">
                 <h3>Sua reserva foi solicitada!</h3>
-                <p>Gostaria de salvar sua reserva no Google Calendar e receber notificações quando o evento estiver se aproximando?</p>
+                <p>Gostaria de salvar sua reserva no Google Agenda e receber notificações quando o evento estiver se aproximando?</p>
             </div>
             <div className='buttonsModal'>
                 <button className='true' onClick={handleCalendar} autoFocus={true}><span>Sim</span></button>
@@ -635,7 +635,7 @@ useEffect(() => {
             <div className="beforeButtons">
                 <h3>Cancelar reserva</h3>
                 <p><b>Observação: </b>Cancelamentos de reservas aprovadas com menos de 2 dias de
-              antecedência da data do evento estão sujeitos a uma taxa de R$ 80,00.
+              antecedência da data do evento estão sujeitos a uma taxa de R$ 100,00.
               Deseja confirmar o cancelamento? </p>
             </div>
             <div className='buttonsModal'>
