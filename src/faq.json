@@ -1,0 +1,28 @@
+{
+    "faq": [
+        {
+        "question": "Quais itens estão disponíveis para uso no salão de festas?",
+        "answers": [
+            "O salão de festas disponibiliza mesas, cadeiras, geladeira, microondas e churrasqueira para uso."
+        ]
+        },
+        {
+        "question": "Onde devo notificar a chegada de um novo convidado não cadastrado?",
+        "answers": [
+            "Você pode notificar pelo WhatsApp da Base de Segurança: 11 941095254 ou pelo Ramal 94."
+        ]
+        },
+        {
+        "question": "Onde posso entregar a chave do salão de festas?",
+        "answers": [
+            "As chaves podem ser entregues na Sala 10 - 2º Andar ou na Base de Segurança."
+        ]
+        },
+        {
+        "question": "Qual é o horário de funcionamento do salão de festas?",
+        "answers": [
+            "O salão de festas funciona das 08:00 às 22:00."
+        ]
+        }
+    ]
+}

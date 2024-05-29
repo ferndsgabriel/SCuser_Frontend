@@ -16,7 +16,7 @@
   --Error: #f14a4a;
   --Sucess: #51AB7B;
   --Light: #ebeaea;
-  --Transparente: rgba(172, 172, 172, 0.137);
+  --Transparente: rgba(65, 65, 65, 0.164);
 }
 
 button, a, input {
@@ -143,6 +143,7 @@ body{
   .modalContainer{
     background-color: var(--White);
     border-radius: 5px;
+
     .beforeButtons{
       padding: 1.6rem;
       display: flex;
@@ -177,7 +178,18 @@ body{
           color: var(--Primary-normal);
         }
       }
+      .textAreaModal{
+        background-color: var(--Light);
+        padding: 1.2rem;
+        border-radius: 2px;
+        resize: none;
+        height: 30rem;
+        &::placeholder{
+          color: var(--Primary-normal);
+        }
+      }
     }
+
     .buttonsModal{
       background-color: var(--Light);
       padding: 2.4rem 1.6rem;
