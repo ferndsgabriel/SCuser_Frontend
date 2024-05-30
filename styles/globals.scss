@@ -201,7 +201,7 @@ body{
 
 
   //------------------ button style
-  .buttonSlide{
+  .buttonSlide {
     display: inline-block;
     padding: 1.2rem 1.6rem;
     border-radius: 5px;
@@ -212,19 +212,24 @@ body{
     position: relative;
     overflow: hidden;
     z-index: 1;
+  
     &:focus {
       box-shadow: 2px 2px 4px var(--Light, 5%);
-    } 
+    }
+  
     &:disabled {
       cursor: not-allowed;
       opacity: 70%;
+  
       &:hover {
         color: var(--White);
+  
         &:before {
           width: 0%;
         }
       }
     }
+  
     &:after {
       content: '';
       position: absolute;
@@ -236,6 +241,7 @@ body{
       border-radius: 5px;
       z-index: -2;
     }
+  
     &:before {
       content: '';
       position: absolute;
@@ -248,10 +254,15 @@ body{
       border-radius: 5px;
       z-index: -1;
     }
-    &:hover {
-      color: var(--White);
-      &:before {
-        width: 100%;
+  
+    @media (min-width: 768px) {
+      &:hover {
+        color: var(--White);
+  
+        &:before {
+          width: 100%;
+        }
       }
     }
   }
+  
