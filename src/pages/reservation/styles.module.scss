@@ -41,12 +41,21 @@
                     text-transform: uppercase;
                     font-weight: 500;
                 }
-                svg{
-                    transition: all .2s ease-in-out;
+                button{
                     &:hover{
-                        transform: scale(1.2);
+                        svg{
+                            transform: scale(1.2);
+                        }
+                    }
+                    &:disabled{
+                        opacity: 0;
+                        cursor: not-allowed;
+                    }
+                    svg{
+                        transition: all .2s ease-in-out;
                     }
                 }
+
             }
             .calendarArea{
                 width: 100%;

@@ -492,9 +492,9 @@ useEffect(() => {
                 </tbody>
               </table>
               <article className={styles.legends}>
-                <p style={{color:"#51AB7B", fontSize:'1.2rem'}}>● Aprovada (minha)</p>
-                <p style={{color:'#405971', fontSize:'1.2rem'}}>● Em análise (minha)</p>
-                <p style={{color:'#f14a4a', fontSize:'1.2rem'}}>● Ocupada (outro)</p>
+                <p style={{color:"#51AB7B", fontSize:'1.2rem'}}>Aprovada (minha)</p>
+                <p style={{color:'#405971', fontSize:'1.2rem'}}>Em análise (minha)</p>
+                <p style={{color:'#f14a4a', fontSize:'1.2rem'}}>Ocupada (outro)</p>
               </article>
             </section>
             
