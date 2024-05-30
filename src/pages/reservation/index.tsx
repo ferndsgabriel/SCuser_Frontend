@@ -443,79 +443,80 @@ useEffect(() => {
       
       <main className={styles.container}>
         <h1>Reservas</h1>
-        <p className={styles.alert}>
-          Para informações detalhadas sobre a reserva e o espaço do salão de festas, consulte o FAQ na guia{' '}
-          <Link href="/settings"><b>Configurações</b></Link> do sistema.
-        </p>
+        <div className={styles.alert}>
+          <p>Para informações detalhadas sobre a reserva e o espaço do salão de festas, consulte o FAQ na guia{' '}
+          <Link href="/settings"><b>Configurações</b></Link> do sistema.</p>
+        </div>
 
-        <section className={styles.calendarContainer}>
-          <article className={styles.dateInfo}>
-                  <button onClick={() => changeMonth(-1)}disabled={!nextMonthBoolean}><AiOutlineLeft/></button>
-                  <p>{monthString[monthCalendar]} - {yearCalendar}</p>
-                  <button onClick={() => changeMonth(+1)} disabled={nextMonthBoolean}><AiOutlineRight/></button>
-          </article>
-            <table className={styles.calendarArea}>
-              <thead>
-                <tr>
-                  <th>Dom</th>
-                  <th>Seg</th>
-                  <th>Ter</th>
-                  <th>Qua</th>
-                  <th>Qui</th>
-                  <th>Sex</th>
-                  <th>Sáb</th>
-                </tr>
-              </thead>
-              <tbody>
-                {calendar.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
-                      <td key={`${rowIndex}-${cellIndex}`}>
-                        {cell ? (
-                          <button
-                            style={{
-                              backgroundColor: cell.isReserved ? '#51AB7B' : (cell.isReservedNull ? '#405971' : (cell.otherReserved ? '#f14a4a' : '')),
-                              color: cell.isReserved ? 'white' : (cell.isReservedNull ? 'white' : (cell.otherReserved ? 'white' : (cell.daysPast ? 'gray' : ''))),
-                              pointerEvents: cell.isReserved || cell.isReservedNull || cell.daysPast ? 'none' : 'auto',
-                            }}
-                            onClick={() => openModalReservation(cell)}
-                            disabled={cell.isReserved || cell.isReservedNull}
-                          >
-                            {cell.day}
-                          </button>
-                        ) : null}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <article className={styles.legends}>
-              <p style={{color:"#51AB7B", fontSize:'1.2rem'}}>● Aprovada (minha)</p>
-              <p style={{color:'#405971', fontSize:'1.2rem'}}>● Em análise (minha)</p>
-              <p style={{color:'#f14a4a', fontSize:'1.2rem'}}>● Ocupada (outro)</p>
+        <div className={styles.allSections}>
+          <section className={styles.section1}>
+            <article className={styles.dateInfo}>
+                    <button onClick={() => changeMonth(-1)}disabled={!nextMonthBoolean}><AiOutlineLeft/></button>
+                    <p>{monthString[monthCalendar]} - {yearCalendar}</p>
+                    <button onClick={() => changeMonth(+1)} disabled={nextMonthBoolean}><AiOutlineRight/></button>
             </article>
-          </section>
-          
-          {myReservationsList.length > 0?(
-          <section className={styles.myReservations}>
-            <h2>Minhas reservas</h2>
-            <div className={styles.allCards}>
-              {myReservationsList.map((item)=>{
-                return(
-                  <article key={item.id} className={item.reservationStatus? styles.cardTrue : styles.cardNull}>
-                    <span>{formatDate(item.date)} - {formatHours(item.start)} às {formatHours(item.finish)}</span>
-                    <div className={styles.buttons}>
-                      <button onClick={()=>openModalDeleteReservation(item.id)}><AiOutlineClose /></button>
-                      <button onClick={()=>openModalGuest(item.id, item.guest)}><AiOutlineUnorderedList /></button>
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
-          </section>
-          ):null}
-
+              <table className={styles.calendarArea}>
+                <thead>
+                  <tr>
+                    <th>Dom</th>
+                    <th>Seg</th>
+                    <th>Ter</th>
+                    <th>Qua</th>
+                    <th>Qui</th>
+                    <th>Sex</th>
+                    <th>Sáb</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {calendar.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {row.map((cell, cellIndex) => (
+                        <td key={`${rowIndex}-${cellIndex}`}>
+                          {cell ? (
+                            <button
+                              style={{
+                                backgroundColor: cell.isReserved ? '#51AB7B' : (cell.isReservedNull ? '#405971' : (cell.otherReserved ? '#f14a4a' : '')),
+                                color: cell.isReserved ? 'white' : (cell.isReservedNull ? 'white' : (cell.otherReserved ? 'white' : (cell.daysPast ? 'gray' : ''))),
+                                pointerEvents: cell.isReserved || cell.isReservedNull || cell.daysPast ? 'none' : 'auto',
+                              }}
+                              onClick={() => openModalReservation(cell)}
+                              disabled={cell.isReserved || cell.isReservedNull}
+                            >
+                              {cell.day}
+                            </button>
+                          ) : null}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <article className={styles.legends}>
+                <p style={{color:"#51AB7B", fontSize:'1.2rem'}}>● Aprovada (minha)</p>
+                <p style={{color:'#405971', fontSize:'1.2rem'}}>● Em análise (minha)</p>
+                <p style={{color:'#f14a4a', fontSize:'1.2rem'}}>● Ocupada (outro)</p>
+              </article>
+            </section>
+            
+            {myReservationsList.length > 0?(
+            <section className={styles.section2}>
+              <h2>Minhas reservas</h2>
+              <div className={styles.allCards}>
+                {myReservationsList.map((item)=>{
+                  return(
+                    <article key={item.id} className={`${styles.card} ${item.reservationStatus? styles.cardTrue : styles.cardNull}`}>
+                      <span>{formatDate(item.date)} - {formatHours(item.start)} às {formatHours(item.finish)}</span>
+                      <div className={styles.buttons}>
+                        <button onClick={()=>openModalDeleteReservation(item.id)}><AiOutlineClose /></button>
+                        <button onClick={()=>openModalGuest(item.id, item.guest)}><AiOutlineUnorderedList /></button>
+                      </div>
+                    </article>
+                  )
+                })}
+              </div>
+            </section>
+            ):null}
+        </div>
       </main>
       {/* ------------------ modal wait list -------- */}
       <Gmodal isOpen={isOpenWait}
@@ -528,8 +529,8 @@ useEffect(() => {
 
               </div>
               <div className='buttonsModal'>
-                  <button className='true' onClick={handleAwait} autoFocus={true}><span>Entrar</span></button>
-                  <button onClick={closeModalWait} className='false'><span>Cancelar</span></button>      
+                  <button className='buttonSlide' onClick={handleAwait} autoFocus={true}>Entrar</button>
+                  <button onClick={closeModalWait} className='buttonSlide'>Cancelar</button>      
               </div>
             </div>
       </Gmodal>
@@ -569,8 +570,8 @@ useEffect(() => {
               </div>
             </div>
             <div className='buttonsModal'>
-                <button className='true' onClick={handleCreateReservation}><span>Reservar</span></button>
-                <button onClick={closeModalCreateReservation} className='false'><span>Cancelar</span></button>      
+                <button className='buttonSlide' onClick={handleCreateReservation}>Reservar</button>
+                <button onClick={closeModalCreateReservation} className='buttonSlide'>Cancelar</button>      
             </div>
           </div>
       </Gmodal>
@@ -587,8 +588,8 @@ useEffect(() => {
               Deseja confirmar o cancelamento? </p>
             </div>
             <div className='buttonsModal'>
-                <button className='true' onClick={handleDeleteReservation} autoFocus={true}><span>Confirmar</span></button>
-                <button onClick={closeModalDeleteReservation} className='false'><span>Não</span></button>      
+                <button className='buttonSlide' onClick={handleDeleteReservation} autoFocus={true}>Confirmar</button>
+                <button onClick={closeModalDeleteReservation} className='buttonSlide'>Não</button>      
             </div>
           </div>
       </Gmodal>

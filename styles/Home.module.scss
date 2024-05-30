@@ -1,88 +1,98 @@
 .container{
     width: 100%;
-    max-width: 1024px;
     min-height: 100vh;
-    margin: auto;
-    padding: 3.6rem 0.8rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2.4rem;  
+    gap: 2.4rem;
+    padding: 4.2rem 2.4rem;
+
     img{
-      width: 100%;
-      margin: 0 auto;
-      max-width: 900px;
-      margin-bottom: 1.6rem;
+        width: 100%;
+        margin: 0 auto;
+        margin-bottom: 1.6rem;
     }
-  .form {
-      display: flex;
-      align-items: center;
-      gap: 1.6rem;
-      justify-content: center;
-      flex-direction: column;
-      width: 100%;
-    }
-    /* parte de cadastro */
-    .inputsRow {
-      display: grid;
-      grid-template-columns: repeat(2,1fr);
-      grid-template-rows: repeat(2,1fr);
-      width: 100%;
-      gap: 1.6rem;
+    .form{
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+        .inputsRow{
+            display: grid;
+            gap: 1.6rem;
+            grid-template-columns: repeat(2,1fr);
+            grid-template-rows: repeat(2,1fr);
+        }
+        .checkboxArea{
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            justify-content: start;
+            .link{
+                font-weight: bold;
+                display: flex;
+                width: fit-content;
+                align-items: start;
+                transition: all .3s ease;
+                &:hover{
+                    color: var(--Light);
+                }
+                &:focus{
+                    color: var(--Light);
+                }
+            }
+        }
     }
     .othersOptions{
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-        .link{
-          font-size: 1.6rem;
-          font-weight: bold;
-          display: flex;
-          align-self: flex-start;
-          transition: color .5s ease;
-          &:hover{
-              color: var(--Primary-normal);
-          }
-          &:focus{
-            color: var(--Primary-normal);
-          }
-      }
-    }
-
-.checkboxArea{
-  width: 100%;
-  display: flex;
-  gap: 0.8rem;
-  align-items: center;
-    &:hover{
-      color: var(--Primary-normal);
-    }
-    &:focus{
-      color: var(--Primary-normal);
-    }
-  a{
-    font-weight: bold;
-      &:hover{
-        color: var(--Primary-normal);
-      }
-      &:focus{
-        color: var(--Primary-normal);
-      }
-    }
-  }
-}
-
-
-.termos{
-  width: 90%;
-  margin: auto;
-}
-
-@media (max-width:500px){
-    .termos{
-      width: 96%;
-      margin: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        .link, button{
+            font-weight: bold;
+            display: flex;
+            width: fit-content;
+            align-items: start;
+            transition: all .3s ease;
+            &:hover{
+                color: var(--Light);
+            }
+            &:focus{
+                color: var(--Light);
+            }
+        }
     }
 }
 
 
+@media (min-width:768px){
+    .container{
+        max-width: 768px;
+        margin: auto;
+        img{
+            width: 80%;
+        }
+    }
+}
+
+@media (min-width:1280px){
+    .container{
+        max-width: 960px;
+        margin: auto;
+        .othersOptions{
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+    }
+}
+
+@media (min-width:1536px){
+    .container{
+        max-width: 1024px;
+        margin: auto;
+    }
+}
+
+.modalRecovery{
+    background-color: var(--Background);
+}

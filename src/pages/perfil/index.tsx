@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "../../components/header";
 import { AiFillDelete} from "react-icons/ai";
-import { FaSpinner } from "react-icons/fa";
+import { IoMdAdd } from "react-icons/io";
 import {HiPhotograph} from "react-icons/hi"
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { SetupApiClient } from "../../services/api";
@@ -42,7 +42,6 @@ export default function Perfil({userDate}:userPropsInterface){
   const [imagePreview, setImagePreview] = useState(null);
   const [isOpenDeletePhoto, setIsOpenDeletePhoto] = useState (false);
   const [isLoading, setIsLoading] = useState (true);
-  const [spinnerPhoto, setSpinnerPhoto] = useState (false);
 
   async function fetchUserDetails() {
     try {
@@ -83,7 +82,6 @@ export default function Perfil({userDate}:userPropsInterface){
   
 //------------------------------------------------- adicionar foto
   async function HandlePhoto(foto){
-    setSpinnerPhoto(true);
     try{
       if (foto.type === "image/jpeg" || foto.type === "image/png" ){
         const image = foto
@@ -92,12 +90,10 @@ export default function Perfil({userDate}:userPropsInterface){
         await apiClient.put('/photo', data);
         fetchUserDetails();
         window.location.reload();
-        setSpinnerPhoto(false);
       }   
     }catch(error){
       toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
     } 
-    setSpinnerPhoto(false); 
   }
 
 //------------------------------------------------------------
@@ -114,53 +110,63 @@ export default function Perfil({userDate}:userPropsInterface){
         </title>
       </Head>
       <Header/>
+
       <main className={style.container}>
-      <h1>Perfil</h1>
-        <section className={style.sectionPhoto}>    
-              <label className={style.circulo}>
-                <input type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} />          
-                {spinnerPhoto?(
-                  <FaSpinner className={style.svgSpinner}/>
-                ):(
-                  null
-                )}
+        <h1>Perfil</h1>
+        <div className={style.allItens}>
+          <section className={style.section1}>
+            <div className={style.photoArea}>
+              {details.photo?(
+                <img src={details.photo}/>
+              ):(
+                <HiPhotograph/>
+              )}
+            </div>
 
-                <div className={style.perfilContainer}>
-                  {details.photo?(
-                    <img src={details.photo}/>
-                  ):(
-                    <HiPhotograph/>
-                  )}
-                </div>
-
+            <div className={style.btnsPhoto}>
+              <label>
+                <span className="buttonSlide"><span className={style.deletePhotoSpan}>Adicionar foto <IoMdAdd/></span></span>
+                <input name='input' type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} /> 
               </label>
-            {details.photo?(
-              <button onClick={openModalPhotoDelete} className={style.buttonPhoto}>
-                <AiFillDelete/>Deletar foto 
-              </button>
-            ):null}
-        </section>
 
-        <section className={style.info}>
-            <h2>Olá, {details.name} {details.lastname}</h2>    
-            <article>
-              <p>Telefone: {details.phone_number}</p>
-            </article>
-            
-            <article>
-              <p>Torre: {details.apartment.tower.numberTower} - Apartamento: {details.apartment.numberApt}</p>
-            </article>
+              {details.photo?(
+                <span onClick={openModalPhotoDelete} className="buttonSlide">
+                  <span className={style.deletePhotoSpan}>Deletar foto <AiFillDelete/></span>
+                </span>
+              ):null}
+            </div>
 
-            {details.apartment.payment ?(
-              <article style={{'backgroundColor':'#51AB7B'}}>
-                <p>Status: Adimplente </p>
-              </article>
-            ):(
-              <article style={{'backgroundColor':'#f14a4a'}}>
-                <p>Status: Inadimplente</p>
-              </article>
-            )}
-        </section>
+          </section>
+
+            <section className={style.section2}>
+              <h2>Minhas informações</h2>
+              <div className={style.infosArea}>
+                <article className={style.cards}>
+                  <p className={style.p1}>Nome:</p>
+                  <p className={style.p2}>{details.name}</p>
+                </article>
+                <article className={style.cards}>
+                  <p className={style.p1}>Sobrenome:</p>
+                  <p className={style.p2}>{details.lastname}</p>
+                </article>
+                <article className={style.cards}>
+                  <p className={style.p1}>Apartamento:</p>
+                  <p className={style.p2}>Torre {details.apartment.tower.numberTower} - Apartamento {details.apartment.numberApt}</p>
+                </article>
+                {details.apartment.payment ?(
+                <article className={style.cards}>
+                  <p className={style.p1}>Status de pagamento:</p>
+                  <p className={`${style.p2} ${details.apartment.payment? style.adimplente : ''}` }> Adimplente </p>
+                </article>
+                ):(
+                  <article className={style.cards}>
+                    <p className={style.p1}>Status de pagamento:</p>
+                    <p className={`${style.p2} ${!details.apartment.payment? style.inadimplente : ''}` }>Inadimplente </p>
+                  </article>
+                )}
+              </div>
+            </section>
+          </div>
       </main>
 
       <Gmodal isOpen={isOpenDeletePhoto}
@@ -172,9 +178,10 @@ export default function Perfil({userDate}:userPropsInterface){
             <p>Deseja deletar sua foto de perfil?</p>
           </div>
           <div className='buttonsModal'>
-            <button className='true' onClick={handleDeletePhoto}autoFocus={true}><span>Sim</span></button>
-            <button onClick={closeModalPhotoDelete}  className='false'><span>Não</span></button>
+            <button className='buttonSlide' onClick={handleDeletePhoto} autoFocus={true}><span>Deletar</span></button>
+            <button onClick={closeModalPhotoDelete}  className='buttonSlide false'><span>Cancelar</span></button>      
           </div>
+
           </div>
         </Gmodal>
 

@@ -2,9 +2,9 @@ import Head from "next/head";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import Link from "next/link";
-import style from "./styles.module.scss";
+import style from "../../../styles/Home.module.scss";
 import { canSSRGuest } from "../../utils/canSSRGuest";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent,useContext } from "react";
 import { SetupApiClient } from "../../services/api";
 import { toast } from "react-toastify";
 import {AiFillCloseCircle} from 'react-icons/ai';
@@ -12,6 +12,7 @@ import zxcvbn from 'zxcvbn';
 import Router from "next/router";
 import {isEmail} from 'validator';
 import { Gmodal } from "../../components/myModal";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 export default function Recovery(){
 
@@ -19,6 +20,7 @@ const [email, setEmail] = useState ('');
 const [isOpen, setIsOpen] = useState (false);
 const [cod, setCod] = useState ('');
 const [pass, setPass] = useState ('');
+const {dark} = useContext(ThemeContext);
 
 async function handleCodigo (e:FormEvent){
     e.preventDefault();
@@ -89,40 +91,45 @@ async function handleRecovery(e:FormEvent){
             <title>SalãoCondo - Recovery</title>
         </Head>
         <main className={style.container}>
-            <img src="SalãoCondoLight.svg"/>
-                <h1>Recuperar senha</h1>
-                <form className={style.form } onSubmit={handleCodigo}>    
-                    <Input type="email" placeholder="Digite seu email:"
-                    value={email} autoFocus={true}
-                    onChange={(e)=>setEmail(e.target.value)}/>
-                    <Button type="submit">Enviar código</Button>
-                </form>
-                <Link href={'/'}>Fazer login
+            {dark?(
+                <img src="./iconDark.svg" alt="SalãoCondo Logo" />
+            ):(
+                <img src="./iconLight.svg" alt="SalãoCondo Logo" />
+            )}
+            <h1>Recuperar senha</h1>
+            <form className={style.form } onSubmit={handleCodigo}>    
+                <Input type="email" placeholder="Digite seu email:"
+                value={email} autoFocus={true}
+                onChange={(e)=>setEmail(e.target.value)}/>
+                <Button type="submit">Enviar código</Button>
+            </form>
+            <div className={style.othersOptions}>
+                <Link href={'/'} className={style.link}>Fazer login
                 </Link>
+            </div>
         </main>
 
         <Gmodal isOpen={isOpen}
         onClose={closeModal}
-        className={style.modal}>
-        <div className={style.modal}>
-            <button  className={style.buttonclose} onClick={closeModal}>
-                <AiFillCloseCircle size={30}/>
-            </button>
-            <img src="SalãoCondoLight.svg"/>
+        className={style.modalRecovery}>
+            <div className={style.container}>
+                {dark?(
+                <img src="./iconDark.svg" alt="SalãoCondo Logo" />
+                    ):(
+                <img src="./iconLight.svg" alt="SalãoCondo Logo" />
+                )}
 
-            <form className={style.formmodal} onSubmit={handleRecovery}>
-                <Input type="tel" autoFocus={true} placeholder="Digite o seu código:" value={cod} onChange={(e)=>setCod(e.target.value)}
-                />
-                <Input type="password" placeholder="Sua nova senha:" value={pass} onChange={(e)=>setPass(e.target.value)}/>
-                <Button type="submit">Alterar senha</Button>
-            </form>
-
-            <article className={style.buttonsOthersRecovery}>
-                <button onClick={handleCodigo} className={style.buttonLink}>
-                    Reenviar código  
-                </button>
-            </article>
-        </div>   
+                <form className={style.form} onSubmit={handleRecovery}>
+                    <Input type="tel" autoFocus={true} placeholder="Digite o seu código:" value={cod} onChange={(e)=>setCod(e.target.value)}/>
+                    <Input type="password" placeholder="Sua nova senha:" value={pass} onChange={(e)=>setPass(e.target.value)}/>
+                    <Button type="submit">Alterar senha</Button>
+                </form>
+                
+                <div className={style.othersOptions}>
+                    <button onClick={handleCodigo} className={style.link}>Reenviar código</button>
+                    <button className={style.link} onClick={closeModal}>Cancelar</button>
+                </div>
+            </div>   
         </Gmodal>
         </>
     )

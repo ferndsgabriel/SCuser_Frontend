@@ -3,7 +3,7 @@ import  "../../styles/globals.scss";
 import { AuthProvider } from "../contexts/AuthContexts";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { LoadingProvider } from "../contexts/LoadingContexts";
+import ThemeProvider from "../contexts/ThemeContext";
 import NProgress from "nprogress";
 import Router from "next/router";
 import Head from "next/head";
@@ -48,9 +48,9 @@ Router.events.on('routeChangeError', () => NProgress.done());
         theme="light"
       />
       <AuthProvider>
-        <LoadingProvider>
-          <Component {...pageProps} />
-        </LoadingProvider>
+          <ThemeProvider>
+            <Component {...pageProps} />
+          </ThemeProvider> 
       </AuthProvider>
     </>
   );

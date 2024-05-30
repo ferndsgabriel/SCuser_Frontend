@@ -238,13 +238,13 @@ export default function Settings({userProps}: UserInterface){
 
                         <div className={style.buttons}>
                         {!inputPass ?(
-                            <button onClick={changeInputPass}><p>Alterar</p></button>
+                            <button onClick={changeInputPass} className="buttonSlide"><span>Alterar</span></button>
                         ):null}   
 
                         {inputPass ?(
                             <>  
-                                <button type="submit"><p>Salvar</p></button> 
-                                <button onClick={cancelPass}><p>Cancelar</p></button>
+                                <button type="submit" className="buttonSlide">Salvar</button> 
+                                <button onClick={cancelPass}  className="buttonSlide">Cancelar</button>
                             </>
                         ):null}
                         </div>
@@ -253,14 +253,6 @@ export default function Settings({userProps}: UserInterface){
             </section>
 
             <section className={style.section3}>
-                <h2>Reportar</h2>
-                <div className={style.btnReports}>
-                    <button onClick={openModalBug}><p>Bug ou problemas</p></button>
-                    <button onClick={openModalFeedback}><p>Feedback</p></button>
-                </div>
-            </section>
-
-        <section className={style.section4} id="section4">
             <h2>FAQ - Perguntas frequentes</h2>
             <div className={style.questionsArea}>
                 {faq.faq.map((item, index) => {
@@ -274,11 +266,10 @@ export default function Settings({userProps}: UserInterface){
                                     checked={isExpanded}
                                     onChange={() => handleCheckboxChange(item.question)}
                                 />
-                                <span>
-                                    {isExpanded ?(
-                                        <FaAngleUp/>
-                                    ):<FaAngleDown />}
-                                </span>
+                                {isExpanded ?(
+                                    <FaAngleUp/>
+                                ):<FaAngleDown />}
+                                
                             </label>
                             {isExpanded && (
                                 <ul className={style.answer}>
@@ -293,42 +284,49 @@ export default function Settings({userProps}: UserInterface){
             </div>
         </section>
 
-            <section className={style.section5}>
-                <h2>Apagar conta</h2>
-                <button onClick={openModal}>Deletar minha conta <AiTwotoneDelete/></button>
+            <section className={style.section4}>
+                <h2>Reportar</h2>
+                <div className={style.btnReports}>
+                    <button onClick={openModalBug} className="buttonSlide">Bugs ou problemas</button>
+                    <button onClick={openModalFeedback} className=  "buttonSlide">Feedback</button>
+                </div>
             </section>
 
 
+            <section className={style.section5}>
+                <h2>Apagar conta</h2>
+                <button onClick={openModal} className="buttonSlide"><span>Deletar minha conta <AiTwotoneDelete/></span></button>
+            </section>
 
-            <span className={style.logout}>
+            <section className={style.section6}>
                 <h2>Fazer logout</h2>
                 <div className={style.areaButton}>
-                    <button onClick={singOut}><FiLogOut/></button>
+                    <button onClick={singOut} className="buttonSlide"><span>Sair da conta<FiLogOut/></span></button>
                 </div>
-            </span>
+            </section>
         </main>
     
         <Gmodal isOpen={isOpen}
             onClose={closeModal}
             className="modal">
                 <form className="modalContainer" onSubmit={handleDeleteAccount}>
-                <div className="beforeButtons">
-                    <h3>Excluir conta</h3>
-                    <p>Tem certeza de que deseja excluir permanentemente sua conta?</p>
-                    <input type="password" 
-                    placeholder="Digite sua senha"
-                    value={inputDelete} autoFocus={true}
-                    onChange={(e)=>setInputDelete(e.target.value)}
-                    className='inputModal'/>
-                    <div className="modalCheckboxArea">
-                        <input type="checkbox" onChange={(e)=>setCheckBox(e.target.checked)}/>
-                        <p>Excluir minha conta</p>
+                    <div className="beforeButtons">
+                        <h3>Excluir conta</h3>
+                        <p>Tem certeza de que deseja excluir permanentemente sua conta?</p>
+                        <input type="password" 
+                        placeholder="Digite sua senha"
+                        value={inputDelete} autoFocus={true}
+                        onChange={(e)=>setInputDelete(e.target.value)}
+                        className='inputModal'/>
+                        <div className="modalCheckboxArea">
+                            <input type="checkbox" onChange={(e)=>setCheckBox(e.target.checked)}/>
+                            <p>Excluir minha conta</p>
+                        </div>
                     </div>
-                </div>
-                <div className='buttonsModal'>
-                    <button disabled={!check} type="submit" className='true'><span>Deletar</span></button>
-                    <button onClick={closeModal}  className='false'><span>Cancelar</span></button>      
-                </div>
+                    <div className='buttonsModal'>
+                        <button disabled={!check} type="submit" className='buttonSlide'>Deletar</button>
+                        <button onClick={closeModal}  className='buttonSlide' autoFocus={true}>Cancelar</button>      
+                    </div>
                 </form>
             </Gmodal>
 
@@ -348,8 +346,8 @@ export default function Settings({userProps}: UserInterface){
                     maxLength={2000}/>
                 </div>
                 <div className='buttonsModal'>
-                    <button type="submit" className='true'><span>Reportar</span></button>
-                    <button onClick={closeModalBug}  className='false'><span>Cancelar</span></button>      
+                    <button type="submit" className='buttonSlide' autoFocus={true}>Reportar</button>
+                    <button onClick={closeModalBug}  className='buttonSlide'>Cancelar</button>      
                 </div>
                 </form>
             </Gmodal>
@@ -370,8 +368,8 @@ export default function Settings({userProps}: UserInterface){
                     maxLength={2000}/>
                 </div>
                 <div className='buttonsModal'>
-                    <button type="submit" className='true'><span>Reportar</span></button>
-                    <button onClick={closeModalFeedback}  className='false'><span>Cancelar</span></button>      
+                    <button type="submit" className='buttonSlide' autoFocus={true}>Reportar</button>
+                    <button onClick={closeModalFeedback}  className='buttonSlide'>Cancelar</button>      
                 </div>
                 </form>
             </Gmodal>

@@ -5,6 +5,7 @@ import { Button } from "../../components/ui/button";
 import Link from "next/link";
 import { FormEvent, useState, useContext, ChangeEvent, useEffect } from "react";
 import { AuthContext } from "../../contexts/AuthContexts";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { toast } from "react-toastify";
 import { isEmail, isMobilePhone } from 'validator';
 import { cpf as cpfValidator } from 'cpf-cnpj-validator';
@@ -38,7 +39,6 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
   const [optionsTowers, setOptionTowers] = useState<TowersProps []>(Alltowers || null) ;
   const [selectTower, setSelectTower] = useState(0);
   const [selectApt, setSelectApt] = useState(0);
-
   const [apartament_id, setapartament_id] = useState('');
   const [name, setName] = useState(''.toLowerCase());
   const [lastname, setLastname] = useState('');
@@ -47,10 +47,11 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
   const [cpf, setCPF] = useState('');
   const [pass, setPass] = useState('');
   const [phone_number, setPhone_number] = useState ('');
-  const { singUp } = useContext(AuthContext);
   const [loadingPage, setLoadingPage] = useState(true);
   const [checkbox, setCheckbox] = useState(false);
   const [isOpen, setIsOpen] = useState (false);
+  const { singUp } = useContext(AuthContext);
+  const { dark } = useContext(ThemeContext);
   
 
 
@@ -174,8 +175,12 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
       <Head>
         <title>SalãoCondo - Cadastrar</title>
       </Head>
-      <main className={styles.container}>
-        <img src="SalãoCondoLight.svg"/>
+        <main className={styles.container}>
+          {dark?(
+          <img src="./iconDark.svg" alt="SalãoCondo Logo" />
+            ):(
+          <img src="./iconLight.svg" alt="SalãoCondo Logo" />
+        )}
 
           <form className={styles.form} onSubmit={handleRegister}>
             <article className={styles.inputsRow}>
@@ -212,7 +217,7 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
               
               <div className={styles.checkboxArea}>
                 <input type="checkbox" onChange={(e)=>setCheckbox(e.target.checked)}/> 
-                <p>Li e aceito os <a onClick={openModal} tabIndex={1}>termos de contratos</a>.</p>
+                <a onClick={openModal} tabIndex={1} className={styles.link}> Li e aceito os termos de contratos.</a>
               </div>    
               <Button loading={loading} type="submit" disabled={!checkbox}>
                 Cadastrar

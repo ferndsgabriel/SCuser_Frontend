@@ -1,15 +1,17 @@
 import Link from "next/link"
 import styles from "./styles.module.scss"
 import {AiOutlineClose, AiOutlineSchedule, AiOutlineMenu } from "react-icons/ai";
-import { IoHomeOutline } from "react-icons/io5";
+import { IoHomeOutline, IoSunny, IoMoon } from "react-icons/io5";
 import {FiSettings} from "react-icons/fi";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { useRouter} from 'next/router';
 
 export default function Header(){
     const routerActual = useRouter().pathname;
     const [openNav, setOpenNav] = useState(false);
     const navRef = useRef<HTMLDivElement>(null);
+    const {dark, changeThemes} = useContext (ThemeContext);
 
     useEffect(()=>{
         function closeNavWithEsc(e:KeyboardEvent){
@@ -34,7 +36,7 @@ export default function Header(){
         <header className={styles.header}>
             <div className={styles.container}>
                 <Link href={'/reservation'}>
-                    <img src="SalãoCondoHeader.svg" alt={'Logo Svg'}/>
+                    <img src="./iconDark.svg" alt={'Logo Svg'}/>
                 </Link>
 
                 {openNav?(
@@ -49,7 +51,18 @@ export default function Header(){
                 
                 <nav style={openNav?{display:'block'}:{display:''}} ref={navRef}>
                     <ul>
-                        <li>
+                        <li className={styles.liTheme}>   
+                            <label className={`${styles.labelTheme} ${dark? styles.labelDark : styles.labelLight}`}>
+                                {!dark ?(
+                                    <IoSunny className={styles.svgSun}/>
+                                ):(
+                                    <IoMoon className={styles.svgMoon}/>
+                                )}
+                                <input type='checkbox' checked={dark} onChange={(e)=>changeThemes(e.target.checked)}/>
+                            </label>
+                        </li>
+                        
+                        <li className={styles.li}>
                             <Link href={'/reservation'}
                             className={routerActual === '/reservation'?styles.activeNav:''}>
                                 <span>Reservas</span>
@@ -57,7 +70,7 @@ export default function Header(){
                             </Link>
                         </li>  
 
-                        <li>
+                        <li className={styles.li}>
                             <Link href={'/perfil'}
                             className={routerActual === '/perfil'?styles.activeNav:''}>
                                 <span>Perfil</span>
@@ -66,7 +79,7 @@ export default function Header(){
                             </Link>
                         </li>
 
-                        <li>
+                        <li className={styles.li}>
                             <Link href={'/settings'}
                             className={routerActual === '/settings'?styles.activeNav:''}>
                                 <span>Configurações</span>
