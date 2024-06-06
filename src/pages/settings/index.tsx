@@ -3,7 +3,7 @@ import Header from "../../components/header";
 import { Input } from "../../components/ui/input";
 import {FiLogOut} from "react-icons/fi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import {ChangeEvent, FormEvent, useState, useEffect} from "react";
+import {FormEvent, useState, useEffect} from "react";
 import style from './styles.module.scss';
 import {AiTwotoneDelete} from "react-icons/ai";
 import { singOut } from "../../contexts/AuthContexts";
@@ -283,7 +283,7 @@ export default function Settings({userProps}: UserInterface){
                         );
                     })}
                 </div>
-            </section>
+                </section>
 
                 <section className={style.section4}>
                     <h2>Reportar</h2>
