@@ -125,13 +125,13 @@ export default function Perfil({userDate}:userPropsInterface){
 
               <div className={style.btnsPhoto}>
                 <label>
-                  <span className="buttonSlide"><span className={style.deletePhotoSpan}>Adicionar foto <IoMdAdd/></span></span>
+                  <span className="buttonSlide">Adicionar foto <IoMdAdd/></span>
                   <input name='input' type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} /> 
                 </label>
 
                 {details.photo?(
                   <span onClick={openModalPhotoDelete} className="buttonSlide">
-                    <span className={style.deletePhotoSpan}>Deletar foto <AiFillDelete/></span>
+                    Deletar foto <AiFillDelete/>
                   </span>
                 ):null}
               </div>
@@ -181,7 +181,7 @@ export default function Perfil({userDate}:userPropsInterface){
           </div>
           <div className='buttonsModal'>
             <button className='buttonSlide' onClick={handleDeletePhoto} autoFocus={true}><span>Deletar</span></button>
-            <button onClick={closeModalPhotoDelete}  className='buttonSlide false'><span>Cancelar</span></button>      
+            <button onClick={closeModalPhotoDelete}  className='buttonSlide'><span>Cancelar</span></button>      
           </div>
 
           </div>

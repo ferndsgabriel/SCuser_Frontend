@@ -212,7 +212,7 @@ body{
     position: relative;
     overflow: hidden;
     z-index: 1;
-  
+    cursor: pointer;
     &:focus {
       box-shadow: 2px 2px 4px var(--Light, 5%);
     }
