@@ -205,106 +205,108 @@ export default function Settings({userProps}: UserInterface){
             <title>SalãoCondo - Configurações</title>
         </Head>
         <Header/>
-        <main className={style.container}>
-            <h1>Configurações</h1>
-            <section className={style.section1}>
-                <h2>Dados</h2>
-                <div className={style.conteudo1}>
-                    <p>Nome: {userDate.name}</p>
-                    <p>Sobrenome: {userDate.lastname}</p>
-                    <p>Residência: Torre {userDate.apartment.tower.numberTower} - Apartamento {userDate.apartment.numberApt}</p>
-                    <p>Email: {userDate.email}</p>
+        <div className={style.bodyArea}>
+            <main className={style.container}>
+                <h1>Configurações</h1>
+                <section className={style.section1}>
+                    <h2>Dados</h2>
+                    <div className={style.conteudo1}>
+                        <p>Nome: {userDate.name}</p>
+                        <p>Sobrenome: {userDate.lastname}</p>
+                        <p>Residência: Torre {userDate.apartment.tower.numberTower} - Apartamento {userDate.apartment.numberApt}</p>
+                        <p>Email: {userDate.email}</p>
+                    </div>
+                </section>
+
+                <section className={style.section2}>
+                    <h2>Segurança</h2>
+                    <div className={style.conteudo2}>
+                    <p>Alterar senha: </p>
+                        <form className={style.formChangePass} onSubmit={handlePass}>   
+                            <Input placeholder="Digite sua senha atual:"
+                            type="password" 
+                            disabled={!inputPass}
+                            value={oldPass}
+                            onChange={(e)=>setOldPass(e.target.value)}
+                            />
+
+                            <Input placeholder="Sua nova senha:"
+                            type="password"
+                            disabled={!inputPass}
+                            value={newPass}
+                            onChange={(e)=>setNewPass(e.target.value)}
+                            />
+
+                            <div className={style.buttons}>
+                            {!inputPass ?(
+                                <button onClick={changeInputPass} className="buttonSlide"><span>Alterar</span></button>
+                            ):null}   
+
+                            {inputPass ?(
+                                <>  
+                                    <button type="submit" className="buttonSlide">Salvar</button> 
+                                    <button onClick={cancelPass}  className="buttonSlide">Cancelar</button>
+                                </>
+                            ):null}
+                            </div>
+                        </form> 
+                    </div>     
+                </section>
+
+                <section className={style.section3}>
+                <h2>FAQ - Perguntas frequentes</h2>
+                <div className={style.questionsArea}>
+                    {faq.faq.map((item, index) => {
+                        const isExpanded = expandedQuestions[item.question];
+                        return (
+                            <div key={item.question} className={style.cardQuestion}>
+                                <label className={style.labelQuestion}>
+                                    <h4>{item.question}</h4>
+                                    <input
+                                        type="checkbox"
+                                        checked={isExpanded}
+                                        onChange={() => handleCheckboxChange(item.question)}
+                                    />
+                                    {isExpanded ?(
+                                        <FaAngleUp/>
+                                    ):<FaAngleDown />}
+                                    
+                                </label>
+                                {isExpanded && (
+                                    <ul className={style.answer}>
+                                        {item.answers.map((answer, index) => (
+                                            <li key={index}>{answer}</li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </section>
 
-            <section className={style.section2}>
-                <h2>Segurança</h2>
-                <div className={style.conteudo2}>
-                <p>Alterar senha: </p>
-                    <form className={style.formChangePass} onSubmit={handlePass}>   
-                        <Input placeholder="Digite sua senha atual:"
-                        type="password" 
-                        disabled={!inputPass}
-                        value={oldPass}
-                        onChange={(e)=>setOldPass(e.target.value)}
-                        />
-
-                        <Input placeholder="Sua nova senha:"
-                        type="password"
-                        disabled={!inputPass}
-                        value={newPass}
-                        onChange={(e)=>setNewPass(e.target.value)}
-                        />
-
-                        <div className={style.buttons}>
-                        {!inputPass ?(
-                            <button onClick={changeInputPass} className="buttonSlide"><span>Alterar</span></button>
-                        ):null}   
-
-                        {inputPass ?(
-                            <>  
-                                <button type="submit" className="buttonSlide">Salvar</button> 
-                                <button onClick={cancelPass}  className="buttonSlide">Cancelar</button>
-                            </>
-                        ):null}
-                        </div>
-                    </form> 
-                </div>     
-            </section>
-
-            <section className={style.section3}>
-            <h2>FAQ - Perguntas frequentes</h2>
-            <div className={style.questionsArea}>
-                {faq.faq.map((item, index) => {
-                    const isExpanded = expandedQuestions[item.question];
-                    return (
-                        <div key={item.question} className={style.cardQuestion}>
-                            <label className={style.labelQuestion}>
-                                <h4>{item.question}</h4>
-                                <input
-                                    type="checkbox"
-                                    checked={isExpanded}
-                                    onChange={() => handleCheckboxChange(item.question)}
-                                />
-                                {isExpanded ?(
-                                    <FaAngleUp/>
-                                ):<FaAngleDown />}
-                                
-                            </label>
-                            {isExpanded && (
-                                <ul className={style.answer}>
-                                    {item.answers.map((answer, index) => (
-                                        <li key={index}>{answer}</li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                    );
-                })}
-            </div>
-        </section>
-
-            <section className={style.section4}>
-                <h2>Reportar</h2>
-                <div className={style.btnReports}>
-                    <button onClick={openModalBug} className="buttonSlide">Bugs ou problemas</button>
-                    <button onClick={openModalFeedback} className=  "buttonSlide">Feedback</button>
-                </div>
-            </section>
+                <section className={style.section4}>
+                    <h2>Reportar</h2>
+                    <div className={style.btnReports}>
+                        <button onClick={openModalBug} className="buttonSlide">Bugs ou problemas</button>
+                        <button onClick={openModalFeedback} className=  "buttonSlide">Feedback</button>
+                    </div>
+                </section>
 
 
-            <section className={style.section5}>
-                <h2>Apagar conta</h2>
-                <button onClick={openModal} className="buttonSlide"><span>Deletar minha conta <AiTwotoneDelete/></span></button>
-            </section>
+                <section className={style.section5}>
+                    <h2>Apagar conta</h2>
+                    <button onClick={openModal} className="buttonSlide"><span>Deletar minha conta <AiTwotoneDelete/></span></button>
+                </section>
 
-            <section className={style.section6}>
-                <h2>Fazer logout</h2>
-                <div className={style.areaButton}>
-                    <button onClick={singOut} className="buttonSlide"><span>Sair da conta<FiLogOut/></span></button>
-                </div>
-            </section>
-        </main>
+                <section className={style.section6}>
+                    <h2>Fazer logout</h2>
+                    <div className={style.areaButton}>
+                        <button onClick={singOut} className="buttonSlide"><span>Sair da conta<FiLogOut/></span></button>
+                    </div>
+                </section>
+            </main>
+        </div>
     
         <Gmodal isOpen={isOpen}
             onClose={closeModal}

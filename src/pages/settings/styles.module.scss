@@ -1,140 +1,120 @@
-.container{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 2.4rem;
-    padding: 4.2rem 2.4rem;
-    h1{
-        margin-bottom: 1.6rem;
-    }
-
-    .section1{
+.bodyArea{
+    .container{
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 1.6rem;
-        padding-bottom: 1.2rem;
-        border-bottom: 1px solid var(--Primary-normal);
-        .conteudo1{
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
+        gap: 2.4rem;
+        padding: 4.2rem 2.4rem;
+        h1{
+            margin-bottom: 1.6rem;
         }
-    }
 
-    .section2{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem;
-        padding-bottom: 1.2rem;
-        border-bottom: 1px solid var(--Primary-normal);
-        .conteudo2{
+        .section1{
+            width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
-            .formChangePass{
+            gap: 1.6rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid var(--Primary-normal);
+            .conteudo1{
                 display: flex;
                 flex-direction: column;
                 gap: 0.8rem;
-                .buttons{
-                    margin-top: 1.2rem;
-                    display: flex;
-                    gap: 1.6rem;
-                    align-items: center;
-                }
             }
         }
-    }
 
-    .section3{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem;
-        padding-bottom: 1.2rem;
-        border-bottom: 1px solid var(--Primary-normal);
-        .questionsArea{
+        .section2{
+            width: 100%;
             display: flex;
             flex-direction: column;
-            .cardQuestion:nth-child(odd){
-                background-color: var(--Transparente);
-            }
-            .cardQuestion{
+            gap: 1.6rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid var(--Primary-normal);
+            .conteudo2{
                 display: flex;
                 flex-direction: column;
-                gap: 1.2rem;
-                padding: 1.6rem 0.8rem;
-                .labelQuestion{
+                gap: 0.8rem;
+                .formChangePass{
                     display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    cursor: pointer;
-                    h4{
-                        font-size: 1.6rem;
-                    }
-                    input{
-                        display: none;
-                    }
-                    svg{
-                        font-size: 2rem;
+                    flex-direction: column;
+                    gap: 0.8rem;
+                    .buttons{
+                        margin-top: 1.2rem;
+                        display: flex;
+                        gap: 1.6rem;
+                        align-items: center;
                     }
                 }
             }
-            .answer{
-                list-style: square;
-                list-style-position: inside;
-                li{
-                    list-style-position: inside;
-                    font-size: 1.4rem;
-                }
-            }
         }
-    }
-    
-    .section4{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem; 
-        padding-bottom: 1.2rem;
-        border-bottom: 1px solid var(--Primary-normal);
-        .btnReports{
-            display: flex;
-            align-items: center;
-            gap: 1.6rem;
-        }
-    }
 
-    .section5{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem; 
-        align-items: start;
-        padding-bottom: 1.2rem;
-        border-bottom: 1px solid var(--Primary-normal);
-        span{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.6rem;
-            svg{
-                color: var(--White);
-            }
-        }
-    }
-
-    .section6{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem; 
-        align-items: start;
-        .areaButton{
-            display: flex;
+        .section3{
             width: 100%;
-            align-items: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid var(--Primary-normal);
+            .questionsArea{
+                display: flex;
+                flex-direction: column;
+                .cardQuestion:nth-child(odd){
+                    background-color: var(--Transparente);
+                }
+                .cardQuestion{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1.2rem;
+                    padding: 1.6rem 0.8rem;
+                    .labelQuestion{
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        cursor: pointer;
+                        h4{
+                            font-size: 1.6rem;
+                        }
+                        input{
+                            display: none;
+                        }
+                        svg{
+                            font-size: 2rem;
+                        }
+                    }
+                }
+                .answer{
+                    list-style: square;
+                    list-style-position: inside;
+                    li{
+                        list-style-position: inside;
+                        font-size: 1.4rem;
+                    }
+                }
+            }
+        }
+        
+        .section4{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem; 
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid var(--Primary-normal);
+            .btnReports{
+                display: flex;
+                align-items: center;
+                gap: 1.6rem;
+            }
+        }
+
+        .section5{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem; 
+            align-items: start;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid var(--Primary-normal);
             span{
                 display: flex;
                 align-items: center;
@@ -145,26 +125,56 @@
                 }
             }
         }
+
+        .section6{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem; 
+            align-items: start;
+            .areaButton{
+                display: flex;
+                width: 100%;
+                align-items: center;
+                span{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 1.6rem;
+                    svg{
+                        color: var(--White);
+                    }
+                }
+            }
+        }
     }
-}
+}  
 
 @media (min-width:768px){
-    .container{
-        max-width: 768px;
-        margin: auto;
+    .bodyArea{
+        .container{
+            max-width: 768px;
+            margin: auto;
+        }
     }
 }
 
 @media (min-width:1280px){
-    .container{
-        max-width: 960px;
-        margin: auto;
+    .bodyArea{
+        max-width: calc(100% - 360px);
+        margin-left: 360px;
+        .container{
+            max-width: 960px;
+            margin: auto;
+        }
     }
 }
 
 @media (min-width:1536px){
-    .container{
-        max-width: 1024px;
-        margin: auto;
+    .bodyArea{
+        .container{
+            max-width: 1024px;
+            margin: auto;
+        }
     }
 }

@@ -110,64 +110,66 @@ export default function Perfil({userDate}:userPropsInterface){
         </title>
       </Head>
       <Header/>
-
-      <main className={style.container}>
-        <h1>Perfil</h1>
-        <div className={style.allItens}>
-          <section className={style.section1}>
-            <div className={style.photoArea}>
-              {details.photo?(
-                <img src={details.photo}/>
-              ):(
-                <HiPhotograph/>
-              )}
-            </div>
-
-            <div className={style.btnsPhoto}>
-              <label>
-                <span className="buttonSlide"><span className={style.deletePhotoSpan}>Adicionar foto <IoMdAdd/></span></span>
-                <input name='input' type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} /> 
-              </label>
-
-              {details.photo?(
-                <span onClick={openModalPhotoDelete} className="buttonSlide">
-                  <span className={style.deletePhotoSpan}>Deletar foto <AiFillDelete/></span>
-                </span>
-              ):null}
-            </div>
-
-          </section>
-
-            <section className={style.section2}>
-              <h2>Minhas informações</h2>
-              <div className={style.infosArea}>
-                <article className={style.cards}>
-                  <p className={style.p1}>Nome:</p>
-                  <p className={style.p2}>{details.name}</p>
-                </article>
-                <article className={style.cards}>
-                  <p className={style.p1}>Sobrenome:</p>
-                  <p className={style.p2}>{details.lastname}</p>
-                </article>
-                <article className={style.cards}>
-                  <p className={style.p1}>Apartamento:</p>
-                  <p className={style.p2}>Torre {details.apartment.tower.numberTower} - Apartamento {details.apartment.numberApt}</p>
-                </article>
-                {details.apartment.payment ?(
-                <article className={style.cards}>
-                  <p className={style.p1}>Status de pagamento:</p>
-                  <p className={`${style.p2} ${details.apartment.payment? style.adimplente : ''}` }> Adimplente </p>
-                </article>
+      <div className={style.bodyArea}>
+        <main className={style.container}>
+          <h1>Perfil</h1>
+          <div className={style.allItens}>
+            <section className={style.section1}>
+              <div className={style.photoArea}>
+                {details.photo?(
+                  <img src={details.photo}/>
                 ):(
-                  <article className={style.cards}>
-                    <p className={style.p1}>Status de pagamento:</p>
-                    <p className={`${style.p2} ${!details.apartment.payment? style.inadimplente : ''}` }>Inadimplente </p>
-                  </article>
+                  <HiPhotograph/>
                 )}
               </div>
+
+              <div className={style.btnsPhoto}>
+                <label>
+                  <span className="buttonSlide"><span className={style.deletePhotoSpan}>Adicionar foto <IoMdAdd/></span></span>
+                  <input name='input' type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} /> 
+                </label>
+
+                {details.photo?(
+                  <span onClick={openModalPhotoDelete} className="buttonSlide">
+                    <span className={style.deletePhotoSpan}>Deletar foto <AiFillDelete/></span>
+                  </span>
+                ):null}
+              </div>
+
             </section>
-          </div>
-      </main>
+
+              <section className={style.section2}>
+                <h2>Minhas informações</h2>
+                <div className={style.infosArea}>
+                  <article className={style.cards}>
+                    <p className={style.p1}>Nome:</p>
+                    <p className={style.p2}>{details.name}</p>
+                  </article>
+                  <article className={style.cards}>
+                    <p className={style.p1}>Sobrenome:</p>
+                    <p className={style.p2}>{details.lastname}</p>
+                  </article>
+                  <article className={style.cards}>
+                    <p className={style.p1}>Apartamento:</p>
+                    <p className={style.p2}>Torre {details.apartment.tower.numberTower} - Apartamento {details.apartment.numberApt}</p>
+                  </article>
+                  {details.apartment.payment ?(
+                  <article className={style.cards}>
+                    <p className={style.p1}>Status de pagamento:</p>
+                    <p className={`${style.p2} ${details.apartment.payment? style.adimplente : ''}` }> Adimplente </p>
+                  </article>
+                  ):(
+                    <article className={style.cards}>
+                      <p className={style.p1}>Status de pagamento:</p>
+                      <p className={`${style.p2} ${!details.apartment.payment? style.inadimplente : ''}` }>Inadimplente </p>
+                    </article>
+                  )}
+                </div>
+              </section>
+            </div>
+        </main>
+      </div>
+
 
       <Gmodal isOpen={isOpenDeletePhoto}
         onClose={closeModalPhotoDelete}
