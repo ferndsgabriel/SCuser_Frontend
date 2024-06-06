@@ -422,9 +422,7 @@ useEffect(() => {
 
   return (
     <>
-      {isOpenGuestReservation?(
-        null
-      ):<Header/>}
+    <Header/>
       
       <div className={styles.bodyArea}>
         <main className={styles.container}>
