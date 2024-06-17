@@ -11,7 +11,7 @@ import {formatDate, formatHours} from "../../utils/formatted";
 import { AddGuest } from "../../components/modal/Addguest";
 import { Gmodal } from "../../components/myModal";
 import Link from "next/link"
-import { ca } from "date-fns/locale";
+
 
 type MyReservationsProps = {
   date: number;
@@ -27,13 +27,13 @@ type MyReservationsProps = {
 interface CalendarProps {
   myReservations: MyReservationsProps[];
   allReservations: MyReservationsProps[];
-  allNoAvaliation:MyReservationsProps[];
+  allNoAvaliations:MyReservationsProps[];
 }
 
-export default function Reservation({ myReservations, allReservations, allNoAvaliation }: CalendarProps) {
+export default function Reservation({ myReservations, allReservations, allNoAvaliations }: CalendarProps) {
   const [myReservationsList, setMyReservationsList] = useState(myReservations || null);
   const [allReservationsList, setAllReservationsList] = useState(allReservations || null);
-  const [allNoAvaliationList, setAllNoAvaliationList] = useState(allNoAvaliation || null);
+  const [allNoAvaliationList, setAllNoAvaliationList] = useState(allNoAvaliations || null);
   const [loading, setLoading] = useState(true);
   const setupApi = SetupApiClient();
   const [calendar, setCalendar] = useState([]);
@@ -582,7 +582,7 @@ useEffect(() => {
                 <section className={styles.section3}>
                 <h2>Aguardando finalização</h2>
                 <div className={styles.allCards}>
-                  {allNoAvaliation.map((item)=>{
+                  {allNoAvaliations.map((item)=>{
                     return(
                       <article key={item.id} className={styles.card}>
                         <span>{formatDate(item.date)} - {formatHours(item.start)} às {formatHours(item.finish)}</span>
@@ -721,7 +721,7 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
           props: {
             myReservations: response1.data,
             allReservations: response2.data,
-            allNoAvaliation: response3.data
+            allNoAvaliations: response3.data
           }
       };
   } 
@@ -731,7 +731,7 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
           props: {
             myReservations: [],
             allReservations: [],
-            allNoAvaliation:[]
+            allNoAvaliations:[]
           },
       };
   }   
