@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Header from "../../components/header";
 import { Loading } from "../../components/loading";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { SetupApiClient } from "../../services/api";
 import styles from "./styles.module.scss";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineUnorderedList } from "react-icons/ai";
+import { IoIosStar } from "react-icons/io";
 import { toast } from "react-toastify";
 import {formatDate, formatHours} from "../../utils/formatted";
 import { AddGuest } from "../../components/modal/Addguest";
 import { Gmodal } from "../../components/myModal";
 import Link from "next/link"
+import { ca } from "date-fns/locale";
 
 type MyReservationsProps = {
   date: number;
@@ -18,24 +20,20 @@ type MyReservationsProps = {
   cleaningService: boolean;
   guest: null | string;
   reservationStatus: boolean;
-  id:string
-};
-
-type AllReservationsProps = {
-  id: string;
-  date: number;
-  start: number;
-  finish: number;
+  id:string;
+  iWas:boolean
 };
 
 interface CalendarProps {
   myReservations: MyReservationsProps[];
-  allReservations: AllReservationsProps[];
+  allReservations: MyReservationsProps[];
+  allNoAvaliation:MyReservationsProps[];
 }
 
-export default function Reservation({ myReservations, allReservations }: CalendarProps) {
+export default function Reservation({ myReservations, allReservations, allNoAvaliation }: CalendarProps) {
   const [myReservationsList, setMyReservationsList] = useState(myReservations || null);
   const [allReservationsList, setAllReservationsList] = useState(allReservations || null);
+  const [allNoAvaliationList, setAllNoAvaliationList] = useState(allNoAvaliation || null);
   const [loading, setLoading] = useState(true);
   const setupApi = SetupApiClient();
   const [calendar, setCalendar] = useState([]);
@@ -50,6 +48,9 @@ export default function Reservation({ myReservations, allReservations }: Calenda
   const [isOpenDeleteReservation, setIsOpenDeleteReservation] = useState(false);
   const [isOpenGuestReservation, setIsOpenGuestReservation] = useState(false);
   const [guest, setGuest] = useState('');
+  const [isOpenModalIwas, setIsOpenModalIwas] = useState(false);
+  const [rating, setRating] = useState(0);
+  const selectIwasRef = useRef(null);
 
   const [dateValue, setDateValue] = useState<number>(null);
   const [hoursStart, setHoursStart] = useState<number>(9);
@@ -77,8 +78,10 @@ export default function Reservation({ myReservations, allReservations }: Calenda
         const setupApi = SetupApiClient();
         const response = await setupApi.get('/myreservations');
         const response2 = await setupApi.get('/allreservations');
+        const response3 = await setupApi.get("/noavaliation");
         setMyReservationsList(response.data);
         setAllReservationsList(response2.data);
+        setAllNoAvaliationList(response3.data);
         setLoading(false);
     }catch(err){
         setTimeout(refreshDate, 500);
@@ -413,6 +416,79 @@ useEffect(() => {
   }
   //-----------------------------------------------//-----------------------------------------//
 
+  function openModalIwas(id:string){
+    setReservation_id(id);
+    setIsOpenModalIwas(true);
+  }
+  function closeModalIwas(){
+    setReservation_id('');
+    setRating(0);
+    setIsOpenModalIwas(false);
+  }
+
+  const handleClick = (starIndex) => {
+    setRating(starIndex + 1);
+  };
+
+  async function handleAvaliation(e:FormEvent){
+    e.preventDefault();
+    if (rating <=0){
+      toast.warning('Você precisa enviar uma avaliação.');
+      return;
+    }
+    const iWasOrNot = selectIwasRef.current?.value;
+    let iWasBoolean = null;
+
+    if (iWasOrNot === 'Sim, eu estive no evento'){  
+      iWasBoolean = true;
+    }else{
+      iWasBoolean = false;
+    }
+    if (iWasBoolean === null){
+      toast.warning('Erro ao confirmar.');
+      return;
+    }
+    try{
+      await setupApi.put('/avaliation',{
+        iWas:iWasBoolean,
+        rating:rating,
+        reservation_id:reservation_id
+      });
+      toast.success('Reserva finalizada.');
+      closeModalIwas();
+      refreshDate();
+    }catch(error){
+      toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
+    }
+  }
+
+  const renderStars = () => {
+    const stars = [];
+
+    for (let i = 0; i < 5; i++) {
+      let starClass = "star";
+      
+      if (i < rating) {
+        starClass += " filled";
+        console.log(i[i])
+      }
+
+      stars.push(
+        <button
+          key={i}
+          type="button"
+          className={starClass}
+          onClick={(e) => {
+            e.preventDefault();
+            handleClick(i);
+          }}>
+          <IoIosStar />
+        </button>
+      );
+    }
+
+    return stars;
+  };
 
   if (loading){
     return(
@@ -432,7 +508,6 @@ useEffect(() => {
             <Link href="/settings"><b>Configurações</b></Link> do sistema.</p>
           </div>
 
-        
             <section className={styles.section1}>
               <div className={styles.calendarArea}>
                 <article className={styles.dateInfo}>
@@ -485,17 +560,33 @@ useEffect(() => {
             </section>
               
               {myReservationsList.length > 0?(
-              <section className={styles.section2}>
-                <h2>Minhas reservas</h2>
+                <section className={styles.section2}>
+                  <h2>Minhas reservas</h2>
+                  <div className={styles.allCards}>
+                    {myReservationsList.map((item)=>{
+                      return(
+                        <article key={item.id} className={`${styles.card} ${item.reservationStatus? styles.cardTrue : styles.cardNull}`}>
+                          <span>{formatDate(item.date)} - {formatHours(item.start)} às {formatHours(item.finish)}</span>
+                          <div className={styles.buttons}>
+                            <button onClick={()=>openModalDeleteReservation(item.id)}><AiOutlineClose /></button>
+                            <button onClick={()=>openModalGuest(item.id, item.guest)}><AiOutlineUnorderedList /></button>
+                          </div>
+                        </article>
+                      )
+                    })}
+                  </div>
+                </section>
+              ):null}
+
+              {allNoAvaliationList.length > 0?(
+                <section className={styles.section3}>
+                <h2>Aguardando finalização</h2>
                 <div className={styles.allCards}>
-                  {myReservationsList.map((item)=>{
+                  {allNoAvaliation.map((item)=>{
                     return(
-                      <article key={item.id} className={`${styles.card} ${item.reservationStatus? styles.cardTrue : styles.cardNull}`}>
+                      <article key={item.id} className={styles.card}>
                         <span>{formatDate(item.date)} - {formatHours(item.start)} às {formatHours(item.finish)}</span>
-                        <div className={styles.buttons}>
-                          <button onClick={()=>openModalDeleteReservation(item.id)}><AiOutlineClose /></button>
-                          <button onClick={()=>openModalGuest(item.id, item.guest)}><AiOutlineUnorderedList /></button>
-                        </div>
+                          <button onClick={()=>openModalIwas(item.id)}>Finalizar</button>
                       </article>
                     )
                   })}
@@ -522,6 +613,7 @@ useEffect(() => {
             </div>
       </Gmodal>
     {/* ------------------ modal create reservation -------- */}
+
       <Gmodal isOpen={isOpenCreateReservation}
       onClose={closeModalCreateReservation}
       className='modal'>
@@ -587,7 +679,35 @@ useEffect(() => {
       className={styles.modalGuest}>
             <AddGuest id={reservation_id} guest={guest} closeModal={closeModalGuest}/>
       </Gmodal>
+      {/*---------------Modal i was --------- */}
+      <Gmodal isOpen={isOpenModalIwas} onClose={closeModalIwas}
+      className='modal'>
+          <form className="modalContainer" onSubmit={handleAvaliation}>
+            <div className="beforeButtons">
+                <h3>Finalizar e avaliar reserva</h3>
+              <div className='selectsHoursArea'>
+                  <span>Estive presente no evento:</span>
+                  <div className="selectsArea">
+                    <select ref={selectIwasRef}> 
+                      <option>Sim, eu estive no evento</option>
+                      <option>Não, não estive no evento</option>
+                    </select>
+                </div>
+              </div>
+
+                <div className="buttonAvaliation">
+                  {renderStars()}
+                </div>
+              </div>
+            
+            <div className='buttonsModal'>
+                <button className='buttonSlide' type="submit" autoFocus={true}>Confirmar</button>
+                <button onClick={closeModalIwas} type='reset' className='buttonSlide'>Cancelar</button>      
+            </div>
+          </form>
+      </Gmodal>
     </>
+
   );
 }
 
@@ -596,10 +716,12 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
     const SetupApi = SetupApiClient(ctx);
     const response1 = await SetupApi.get("/myreservations");
     const response2 = await SetupApi.get("/allreservations");
+    const response3 = await SetupApi.get("/noavaliation");
       return {
           props: {
             myReservations: response1.data,
-            allReservations: response2.data
+            allReservations: response2.data,
+            allNoAvaliation: response3.data
           }
       };
   } 
@@ -608,7 +730,8 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
       return {
           props: {
             myReservations: [],
-            allReservations: []
+            allReservations: [],
+            allNoAvaliation:[]
           },
       };
   }   

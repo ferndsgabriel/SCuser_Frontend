@@ -155,6 +155,34 @@
                 }
             }
         }
+        .section3{
+            width: 100%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            .allCards{
+                display: grid;
+                grid-template-columns: repeat(1,1fr);
+                gap: 1.6rem;
+                .card{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 1.6rem;
+                    border-radius: 5px;
+                    background-color: var(--Transparente);
+                    box-shadow: 4px 4px 4px var(--Transparente2);
+                    button{
+                        background-color: var(--Primary-normal);
+                        color: var(--White);
+                        padding: 8px 12px;
+                        border-radius: 5px;
+                    }
+                }
+            }
+        }
     }
 }
 

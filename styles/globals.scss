@@ -79,8 +79,8 @@ body{
   //scoolbar
 
   ::selection{
-    background-color: var(--Text);
-    color: var(--Background);
+    background-color: var(--Transparente2);
+    color: var(--Text);
   }
 
   input:-webkit-autofill {
@@ -177,6 +177,29 @@ body{
           color: var(--Text);
           &::placeholder{
             color: var(--Light);
+          }
+        }
+        .buttonAvaliation{
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-top: 24px;
+          width: 100%;
+          justify-content: center;
+          button{
+            svg{
+              font-size: 60px;
+              color: var(--Transparente2);
+              &:hover{
+                color: var(--Primary-normal);
+              }
+            }
+          }
+          .filled{
+            svg{
+              color: var(--Primary-normal);
+            }
+            
           }
         }
       }

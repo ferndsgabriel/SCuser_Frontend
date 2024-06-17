@@ -39,6 +39,7 @@ type AuthProviderProps = {
 }
 
 export const AuthContext = createContext ({} as AuthContextData);
+
 export function singOut(){
     try{
         destroyCookie(undefined, "@SalaoCondo.token");
