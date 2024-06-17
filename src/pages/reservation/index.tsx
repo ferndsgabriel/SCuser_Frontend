@@ -78,7 +78,7 @@ export default function Reservation({ myReservations, allReservations, allNoAval
         const setupApi = SetupApiClient();
         const response = await setupApi.get('/myreservations');
         const response2 = await setupApi.get('/allreservations');
-        const response3 = await setupApi.get("/noavaliation");
+        const response3 = await setupApi.get('/noavaliation');
         setMyReservationsList(response.data);
         setAllReservationsList(response2.data);
         setAllNoAvaliationList(response3.data);

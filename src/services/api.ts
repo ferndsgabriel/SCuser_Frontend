@@ -3,8 +3,8 @@ import { parseCookies } from "nookies";
 import { singOut } from "../contexts/AuthContexts";
 
 
-//export const baseURL = "http://localhost:3333";
-export const baseURL = "https://api.salaocondo.site";
+export const baseURL = "http://localhost:3333";
+//export const baseURL = "https://api.salaocondo.site";
 //export const baseURL = 'https://scbackend.vercel.app';
 
 export const SetupApiClient = (ctx = undefined) =>{
