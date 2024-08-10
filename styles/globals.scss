@@ -4,7 +4,6 @@
     box-sizing: border-box;
     outline: none;
     border: none;
-    
   }
 
 button, a, input {
@@ -19,11 +18,12 @@ button, a, input {
 }
 
 html{
-  font-family: Roboto, Arial, sans-serif;
   font-size: 62.5%;
 }
   
 body{
+  font-family: "SF UI Text", "Helvetica Neue", "Segoe UI", "Oxygen",    "Ubuntu", "Cantarell", "Open Sans", sans-serif;
+  -webkit-font-smoothing: antialiased !important;
   background-color: var(--Background);
   color: var(--Text);
     p, i, span, b{
