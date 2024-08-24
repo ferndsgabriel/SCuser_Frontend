@@ -21,7 +21,7 @@ type MyReservationsProps = {
   guest: null | string;
   reservationStatus: boolean;
   id:string;
-  iWas:boolean
+  isEvaluated :boolean
 };
 
 interface CalendarProps {
@@ -48,9 +48,11 @@ export default function Reservation({ myReservations, allReservations, allNoAval
   const [isOpenDeleteReservation, setIsOpenDeleteReservation] = useState(false);
   const [isOpenGuestReservation, setIsOpenGuestReservation] = useState(false);
   const [guest, setGuest] = useState('');
-  const [isOpenModalIwas, setIsOpenModalIwas] = useState(false);
-  const [rating, setRating] = useState(0);
-  const selectIwasRef = useRef(null);
+  const [isOpenModalAvaliation, setIsOpenModalAvaliation] = useState(false);
+  const [ratingEase, setRatingEase] = useState(0);
+  const [ratingTime, setRatingTime] = useState(0);
+  const [ratingSpace, setRatingSpace] = useState(0);
+  const [ratingHygiene, setRatingHygiene] = useState(0);
 
   const [dateValue, setDateValue] = useState<number>(null);
   const [hoursStart, setHoursStart] = useState<number>(9);
@@ -416,61 +418,48 @@ useEffect(() => {
   }
   //-----------------------------------------------//-----------------------------------------//
 
-  function openModalIwas(id:string){
+  function openModalAvaliation(id:string){
     setReservation_id(id);
-    setIsOpenModalIwas(true);
+    setIsOpenModalAvaliation(true);
   }
-  function closeModalIwas(){
+  function closeModalAvaliation(){
     setReservation_id('');
-    setRating(0);
-    setIsOpenModalIwas(false);
+    setRatingEase(0);
+    setRatingTime(0)
+    setIsOpenModalAvaliation(false);
+    refreshDate();
   }
-
-  const handleClick = (starIndex) => {
-    setRating(starIndex + 1);
-  };
 
   async function handleAvaliation(e:FormEvent){
     e.preventDefault();
-    if (rating <=0){
+    if (ratingEase <=0 ||  ratingSpace <=0 ||  ratingHygiene <= 0 || ratingTime <= 0){
       toast.warning('Você precisa enviar uma avaliação.');
-      return;
-    }
-    const iWasOrNot = selectIwasRef.current?.value;
-    let iWasBoolean = null;
-
-    if (iWasOrNot === 'Sim, eu estive no evento'){  
-      iWasBoolean = true;
-    }else{
-      iWasBoolean = false;
-    }
-    if (iWasBoolean === null){
-      toast.warning('Erro ao confirmar.');
       return;
     }
     try{
       await setupApi.put('/avaliation',{
-        iWas:iWasBoolean,
-        rating:rating,
+        time:ratingTime,
+        space:ratingSpace,
+        hygiene:ratingHygiene,
+        ease:ratingEase,
         reservation_id:reservation_id
       });
-      toast.success('Reserva finalizada.');
-      closeModalIwas();
+      toast.success('Reserva avaliada.');
+      closeModalAvaliation();
       refreshDate();
     }catch(error){
       toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
     }
   }
 
-  const renderStars = () => {
+  const renderStarsEase = () => {
     const stars = [];
 
     for (let i = 0; i < 5; i++) {
       let starClass = "star";
       
-      if (i < rating) {
+      if (i < ratingEase) {
         starClass += " filled";
-        console.log(i[i])
       }
 
       stars.push(
@@ -480,7 +469,88 @@ useEffect(() => {
           className={starClass}
           onClick={(e) => {
             e.preventDefault();
-            handleClick(i);
+            setRatingEase(i + 1);
+          }}>
+          <IoIosStar />
+        </button>
+      );
+    }
+
+    return stars;
+  };
+
+  const renderStarsTime = () => {
+    const stars = [];
+
+    for (let i = 0; i < 5; i++) {
+      let starClass = "star";
+      
+      if (i < ratingTime) {
+        starClass += " filled";
+      }
+
+      stars.push(
+        <button
+          key={i}
+          type="button"
+          className={starClass}
+          onClick={(e) => {
+            e.preventDefault();
+            setRatingTime(i + 1)
+          }}>
+          <IoIosStar />
+        </button>
+      );
+    }
+
+    return stars;
+  };
+
+  const renderStarsSpace = () => {
+    const stars = [];
+
+    for (let i = 0; i < 5; i++) {
+      let starClass = "star";
+      
+      if (i < ratingSpace) {
+        starClass += " filled";
+      }
+
+      stars.push(
+        <button
+          key={i}
+          type="button"
+          className={starClass}
+          onClick={(e) => {
+            e.preventDefault();
+            setRatingSpace(i + 1);
+          }}>
+          <IoIosStar />
+        </button>
+      );
+    }
+
+    return stars;
+  };
+
+  const renderStarsHygiene = () => {
+    const stars = [];
+
+    for (let i = 0; i < 5; i++) {
+      let starClass = "star";
+      
+      if (i < ratingHygiene) {
+        starClass += " filled";
+      }
+
+      stars.push(
+        <button
+          key={i}
+          type="button"
+          className={starClass}
+          onClick={(e) => {
+            e.preventDefault();
+            setRatingHygiene(i + 1)
           }}>
           <IoIosStar />
         </button>
@@ -586,7 +656,7 @@ useEffect(() => {
                     return(
                       <article key={item.id} className={styles.card}>
                         <span>{formatDate(item.date)} - {formatHours(item.start)} às {formatHours(item.finish)}</span>
-                          <button onClick={()=>openModalIwas(item.id)}>Finalizar</button>
+                          <button onClick={()=>openModalAvaliation(item.id)}>Finalizar</button>
                       </article>
                     )
                   })}
@@ -680,29 +750,44 @@ useEffect(() => {
             <AddGuest id={reservation_id} guest={guest} closeModal={closeModalGuest}/>
       </Gmodal>
       {/*---------------Modal i was --------- */}
-      <Gmodal isOpen={isOpenModalIwas} onClose={closeModalIwas}
+      <Gmodal isOpen={isOpenModalAvaliation} onClose={closeModalAvaliation}
       className='modal'>
           <form className="modalContainer" onSubmit={handleAvaliation}>
             <div className="beforeButtons">
                 <h3>Finalizar e avaliar reserva</h3>
-              <div className='selectsHoursArea'>
-                  <span>Estive presente no evento:</span>
-                  <div className="selectsArea">
-                    <select ref={selectIwasRef}> 
-                      <option>Sim, eu estive no evento</option>
-                      <option>Não, não estive no evento</option>
-                    </select>
+
+              <div className="avaliationContainer">
+                <p>Facilidade de Reserva:</p>
+                <div className="buttonAvaliation">
+                  {renderStarsEase()}
                 </div>
               </div>
 
+              <div className="avaliationContainer">
+                <p>Tempo para Aprovação da Reserva:</p>
                 <div className="buttonAvaliation">
-                  {renderStars()}
+                  {renderStarsTime()}
                 </div>
               </div>
+
+              <div className="avaliationContainer">
+                <p>Condição do Espaço:</p>
+                <div className="buttonAvaliation">
+                {renderStarsSpace()}
+                </div>
+              </div>
+
+              <div className="avaliationContainer">
+                <p>Higiene do Espaço:</p>
+                <div className="buttonAvaliation">
+                  {renderStarsHygiene()}
+                </div>
+              </div>
+            </div>
             
             <div className='buttonsModal'>
                 <button className='buttonSlide' type="submit" autoFocus={true}>Confirmar</button>
-                <button onClick={closeModalIwas} type='reset' className='buttonSlide'>Cancelar</button>      
+                <button onClick={closeModalAvaliation} type='reset' className='buttonSlide'>Cancelar</button>      
             </div>
           </form>
       </Gmodal>

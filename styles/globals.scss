@@ -178,29 +178,34 @@ body{
             color: var(--Light);
           }
         }
-        .buttonAvaliation{
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-top: 24px;
+        .avaliationContainer{
           width: 100%;
-          justify-content: center;
-          button{
-            svg{
-              font-size: 60px;
-              color: var(--Transparente2);
-              &:hover{
-                color: var(--Primary-normal);
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          .buttonAvaliation{
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            align-items: center;
+            button{
+              svg{
+                font-size: 3.2rem;
+                color: var(--Transparente2);
+                &:hover{
+                  color: var(--Primary-normal);
+                }
               }
             }
-          }
-          .filled{
-            svg{
-              color: var(--Primary-normal);
+            .filled{
+              svg{
+                color: var(--Primary-normal);
+              }
+              
             }
-            
           }
         }
+
       }
       .buttonsModal{
         background-color: var(--Transparente);
