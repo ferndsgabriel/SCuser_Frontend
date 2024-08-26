@@ -1,9 +1,7 @@
 import styles from "./styles.module.scss";
 import { IoHomeOutline, IoSunny, IoMoon } from "react-icons/io5";
 import {AiOutlineClose, AiOutlineSchedule, AiOutlineMenu, } from "react-icons/ai";
-import { BsPeopleFill } from "react-icons/bs";
 import {FiSettings, FiLogOut } from "react-icons/fi";
-import { MdApartment } from "react-icons/md";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useRouter } from "next/router";
