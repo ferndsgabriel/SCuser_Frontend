@@ -12,8 +12,10 @@ import { SetupApiClient } from "../../services/api";
 import { toast } from "react-toastify";
 import zxcvbn from 'zxcvbn';
 import { Loading } from "../../components/loading";
-import { Gmodal } from "../../components/myModal";
 
+import FeedBackModal from "../../components/modals/modalsSettings/feedback";
+import BugsModal from "../../components/modals/modalsSettings/bugs";
+import DeleteAccountModal from "../../components/modals/modalsSettings/deleteAccount";
 
 type UserPropsItens = {
     cpf: string,
@@ -55,13 +57,9 @@ export default function Settings({userProps}: UserInterface){
     const [oldPass, setOldPass] = useState ('');
     const [newPass, setNewPass] = useState ('');
     const [isOpen, setIsOpen] = useState (false);
-    const [inputDelete, setInputDelete] = useState ('');
     const [loading, setLoading ] = useState(true);
-    const [check, setCheckBox] = useState (false);
     const [isOpenBug, setIsOpenBug] = useState(false);
     const [isOpenFeedback, setIsOpenFeedback] = useState(false);
-    const [textArea, setTextArea] = useState("");
-    const [typeReport, setTypeReport] = useState(0);
 
     const faqData = require ("../../faq.json");
     const faq: FAQData = faqData as FAQData;
@@ -74,17 +72,19 @@ export default function Settings({userProps}: UserInterface){
         });
     };
 
-    async function refreshDate(){
-        try{
-            const response = await SetupApi.get('/me');
-            setUserDate(response.data)
-            setLoading(false);
-        }catch(err){
-            ('Erro ao obter dados do servidor');
-            setTimeout(refreshDate, 500);
-        }
-    }
+
     useEffect(()=>{
+        
+        async function refreshDate(){
+            try{
+                const response = await SetupApi.get('/me');
+                setUserDate(response.data)
+            }catch(err){
+                console.log('Erro ao obter dados do servidor');
+            }finally{
+                setLoading(false);
+            }
+        }
         refreshDate();
     },[]);
     
@@ -114,8 +114,6 @@ export default function Settings({userProps}: UserInterface){
             })
             toast.success("A senha foi alterada com êxito!");
             cancelPass(e);
-            refreshDate();
-
         }catch(error){
             toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
         }
@@ -134,66 +132,23 @@ export default function Settings({userProps}: UserInterface){
 
     function closeModal(){
         setIsOpen(false);
-        setInputDelete('');
-        setCheckBox(false);
-    }
-
-    async function handleDeleteAccount(e:FormEvent){
-        e.preventDefault();
-        try{
-            await SetupApi.delete('/account',{
-                data:{
-                    pass:inputDelete
-                }   
-            })
-            toast.success("Sua conta foi excluída com êxito.");
-            singOut();
-            
-        }catch(error){
-            toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-            return;
-        }
     }
 
     function openModalBug(){
-        setTypeReport(1);
         setIsOpenBug(true);
     }
     function closeModalBug(){
-        setTextArea('');
-        setTypeReport(0);
         setIsOpenBug(false);
     }
 
     function openModalFeedback(){
-        setTypeReport(2);
         setIsOpenFeedback(true);
     }
     function closeModalFeedback(){
-        setTextArea('');
-        setTypeReport(0);
         setIsOpenFeedback(false);
     }
 
-    async function handleReport(e:FormEvent){
-        e.preventDefault();
-        if (!textArea){
-            toast.warning('Reporte o seu problema.');
-            return;
-        }
-        try{
-            await SetupApi.post('/report',{
-                message:textArea,
-                option:typeReport
-            });
-        toast.success('Reporte enviado com sucesso.');
-        closeModalBug();
-        closeModalFeedback();
-        }catch(error){
-            toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-            return; 
-        }
-    }
+
 
     if (loading){
         return <Loading/>;
@@ -201,200 +156,133 @@ export default function Settings({userProps}: UserInterface){
         
     return(
         <>
-        <Head>
-            <title>SalãoCondo - Configurações</title>
-        </Head>
-        <Header/>
-        <div className={style.bodyArea}>
-            <main className={style.container}>
-                <h1>Configurações</h1>
-                <section className={style.section1}>
-                    <h2>Dados</h2>
-                    <div className={style.conteudo1}>
-                        <p>Nome: {userDate.name}</p>
-                        <p>Sobrenome: {userDate.lastname}</p>
-                        <p>Residência: Torre {userDate.apartment.tower.numberTower} - Apartamento {userDate.apartment.numberApt}</p>
-                        <p>Email: {userDate.email}</p>
-                    </div>
-                </section>
-
-                <section className={style.section2}>
-                    <h2>Segurança</h2>
-                    <div className={style.conteudo2}>
-                    <p>Alterar senha: </p>
-                        <form className={style.formChangePass} onSubmit={handlePass}>   
-                            <Input placeholder="Digite sua senha atual:"
-                            type="password" 
-                            disabled={!inputPass}
-                            value={oldPass}
-                            onChange={(e)=>setOldPass(e.target.value)}
-                            />
-
-                            <Input placeholder="Sua nova senha:"
-                            type="password"
-                            disabled={!inputPass}
-                            value={newPass}
-                            onChange={(e)=>setNewPass(e.target.value)}
-                            />
-
-                            <div className={style.buttons}>
-                            {!inputPass ?(
-                                <button onClick={changeInputPass} className="buttonSlide"><span>Alterar</span></button>
-                            ):null}   
-
-                            {inputPass ?(
-                                <>  
-                                    <button type="submit" className="buttonSlide">Salvar</button> 
-                                    <button onClick={cancelPass}  className="buttonSlide">Cancelar</button>
-                                </>
-                            ):null}
-                            </div>
-                        </form> 
-                    </div>     
-                </section>
-
-                <section className={style.section3}>
-                <h2>FAQ - Perguntas frequentes</h2>
-                <div className={style.questionsArea}>
-                    {faq.faq.map((item, index) => {
-                        const isExpanded = expandedQuestions[item.question];
-                        return (
-                            <div key={item.question} className={style.cardQuestion}>
-                                <label className={style.labelQuestion}>
-                                    <h4>{item.question}</h4>
-                                    <input
-                                        type="checkbox"
-                                        checked={isExpanded}
-                                        onChange={() => handleCheckboxChange(item.question)}
-                                    />
-                                    {isExpanded ?(
-                                        <FaAngleUp/>
-                                    ):<FaAngleDown />}
-                                    
-                                </label>
-                                {isExpanded && (
-                                    <ul className={style.answer}>
-                                        {item.answers.map((answer, index) => (
-                                            <li key={index}>{answer}</li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
-                </section>
-
-                <section className={style.section4}>
-                    <h2>Reportar</h2>
-                    <div className={style.btnReports}>
-                        <button onClick={openModalBug} className="buttonSlide">Bugs ou problemas</button>
-                        <button onClick={openModalFeedback} className=  "buttonSlide">Feedback</button>
-                    </div>
-                </section>
-
-
-                <section className={style.section5}>
-                    <h2>Apagar conta</h2>
-                    <button onClick={openModal} className="buttonSlide"><span>Deletar minha conta <AiTwotoneDelete/></span></button>
-                </section>
-
-                <section className={style.section6}>
-                    <h2>Fazer logout</h2>
-                    <div className={style.areaButton}>
-                        <button onClick={singOut} className="buttonSlide"><span>Sair da conta<FiLogOut/></span></button>
-                    </div>
-                </section>
-            </main>
-        </div>
-    
-        <Gmodal isOpen={isOpen}
-            onClose={closeModal}
-            className="modal">
-                <form className="modalContainer" onSubmit={handleDeleteAccount}>
-                    <div className="beforeButtons">
-                        <h3>Excluir conta</h3>
-                        <p>Tem certeza de que deseja excluir permanentemente sua conta?</p>
-                        <input type="password" 
-                        placeholder="Digite sua senha"
-                        value={inputDelete} autoFocus={true}
-                        onChange={(e)=>setInputDelete(e.target.value)}
-                        className='inputModal'/>
-                        <div className="modalCheckboxArea">
-                            <input type="checkbox" onChange={(e)=>setCheckBox(e.target.checked)}/>
-                            <p>Excluir minha conta</p>
+            <Head>
+                <title>SalãoCondo - Configurações</title>
+            </Head>
+            <Header/>
+            <div className={style.bodyArea}>
+                <main className={style.container}>
+                    <h1>Configurações</h1>
+                    <section className={style.section1}>
+                        <h2>Dados</h2>
+                        <div className={style.conteudo1}>
+                            <p>Nome: {userDate.name}</p>
+                            <p>Sobrenome: {userDate.lastname}</p>
+                            <p>Residência: Torre {userDate.apartment.tower.numberTower} - Apartamento {userDate.apartment.numberApt}</p>
+                            <p>Email: {userDate.email}</p>
                         </div>
-                    </div>
-                    <div className='buttonsModal'>
-                        <button disabled={!check} type="submit" className='buttonSlide'>Deletar</button>
-                        <button onClick={closeModal}  className='buttonSlide' autoFocus={true}>Cancelar</button>      
-                    </div>
-                </form>
-            </Gmodal>
+                    </section>
 
-            <Gmodal isOpen={isOpenBug}
+                    <section className={style.section2}>
+                        <h2>Segurança</h2>
+                        <div className={style.conteudo2}>
+                        <p>Alterar senha: </p>
+                            <form className={style.formChangePass} onSubmit={handlePass}>   
+                                <Input placeholder="Digite sua senha atual:"
+                                type="password" 
+                                disabled={!inputPass}
+                                value={oldPass}
+                                onChange={(e)=>setOldPass(e.target.value)}
+                                />
+
+                                <Input placeholder="Sua nova senha:"
+                                type="password"
+                                disabled={!inputPass}
+                                value={newPass}
+                                onChange={(e)=>setNewPass(e.target.value)}
+                                />
+
+                                <div className={style.buttons}>
+                                {!inputPass ?(
+                                    <button onClick={changeInputPass} className="buttonSlide"><span>Alterar</span></button>
+                                ):null}   
+
+                                {inputPass ?(
+                                    <>  
+                                        <button type="submit" className="buttonSlide">Salvar</button> 
+                                        <button onClick={cancelPass}  className="buttonSlide">Cancelar</button>
+                                    </>
+                                ):null}
+                                </div>
+                            </form> 
+                        </div>     
+                    </section>
+
+                    <section className={style.section3}>
+                    <h2>FAQ - Perguntas frequentes</h2>
+                    <div className={style.questionsArea}>
+                        {faq.faq.map((item, index) => {
+                            const isExpanded = expandedQuestions[item.question];
+                            return (
+                                <div key={item.question} className={style.cardQuestion}>
+                                    <label className={style.labelQuestion}>
+                                        <h4>{item.question}</h4>
+                                        <input
+                                            type="checkbox"
+                                            checked={isExpanded}
+                                            onChange={() => handleCheckboxChange(item.question)}
+                                        />
+                                        {isExpanded ?(
+                                            <FaAngleUp/>
+                                        ):<FaAngleDown />}
+                                        
+                                    </label>
+                                    {isExpanded && (
+                                        <ul className={style.answer}>
+                                            {item.answers.map((answer, index) => (
+                                                <li key={index}>{answer}</li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                    </section>
+
+                    <section className={style.section4}>
+                        <h2>Reportar</h2>
+                        <div className={style.btnReports}>
+                            <button onClick={openModalBug} className="buttonSlide">Bugs ou problemas</button>
+                            <button onClick={openModalFeedback} className=  "buttonSlide">Feedback</button>
+                        </div>
+                    </section>
+
+
+                    <section className={style.section5}>
+                        <h2>Apagar conta</h2>
+                        <button onClick={openModal} className="buttonSlide"><span>Deletar minha conta <AiTwotoneDelete/></span></button>
+                    </section>
+
+                    <section className={style.section6}>
+                        <h2>Fazer logout</h2>
+                        <div className={style.areaButton}>
+                            <button onClick={singOut} className="buttonSlide"><span>Sair da conta<FiLogOut/></span></button>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        
+            <DeleteAccountModal 
+            isOpen={isOpen}
+            onClose={closeModal}
+            />
+
+            <BugsModal
+            isOpen={isOpenBug}
             onClose={closeModalBug}
-            className="modal">
-                <form className="modalContainer" onSubmit={handleReport}>
-                <div className="beforeButtons">
-                    <h3>Reportar bug ou problemas</h3>
-                    <p>Reporte um bug no sistema ou solicite ajuda para resolver um problema.</p>
-                    <textarea 
-                    placeholder="Digite seu problema..."
-                    value={textArea} autoFocus={true}
-                    onChange={(e)=>setTextArea(e.target.value)}
-                    className='textAreaModal'
-                    minLength={30}
-                    maxLength={2000}/>
-                </div>
-                <div className='buttonsModal'>
-                    <button type="submit" className='buttonSlide' autoFocus={true}>Reportar</button>
-                    <button onClick={closeModalBug}  className='buttonSlide'>Cancelar</button>      
-                </div>
-                </form>
-            </Gmodal>
-
-            <Gmodal isOpen={isOpenFeedback}
+            />
+            <FeedBackModal
+            isOpen={isOpenFeedback}
             onClose={closeModalFeedback}
-            className="modal">
-                <form className="modalContainer" onSubmit={handleReport}>
-                <div className="beforeButtons">
-                    <h3>Compartilhe seu feedback</h3>
-                    <p>Reporte sugestões de melhorias para o nosso time.</p>
-                    <textarea 
-                    placeholder="Digite seu problema..."
-                    value={textArea} autoFocus={true}
-                    onChange={(e)=>setTextArea(e.target.value)}
-                    className='textAreaModal'
-                    minLength={30}
-                    maxLength={2000}/>
-                </div>
-                <div className='buttonsModal'>
-                    <button type="submit" className='buttonSlide' autoFocus={true}>Reportar</button>
-                    <button onClick={closeModalFeedback}  className='buttonSlide'>Cancelar</button>      
-                </div>
-                </form>
-            </Gmodal>
+            />
         </>
     )
 }
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
-    try {
-        const SetupApi = SetupApiClient(ctx);
-        const response = await SetupApi.get('/me');
-        return {
-            props: {
-                userProps: response.data
-            }
-        };
-    } 
-    catch (error) {
-    console.error('Erro ao obter dados da api');
-        return {
-            props: {
-                userProps: []
-            },
-        };
-    }   
+    return {
+        props: {
+        }
+    };
 });

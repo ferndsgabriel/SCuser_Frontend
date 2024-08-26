@@ -1,15 +1,14 @@
+import Gmodal from "../default";
 import style from "./styles.module.scss";
-import {AiOutlineClose} from "react-icons/ai";                                                                                  
+import {AiOutlineClose} from "react-icons/ai";   
 
-interface TermosProps {
-    buttonAction: () => void;
-}
-export default function Termos({buttonAction}:TermosProps){
+
+export default function TermsModal({isOpen, onClose}){
     return(
-        <>
+        <Gmodal isOpen={isOpen} onClose={onClose}>
             <div className={style.container}>
                 <div className={style.termos}>
-                    <button onClick={buttonAction}>
+                    <button onClick={onClose}>
                         <AiOutlineClose/>
                     </button>
                     <div className={style.textArea}>
@@ -76,6 +75,6 @@ export default function Termos({buttonAction}:TermosProps){
                     </div>
                 </div>
             </div>
-        </>
+        </Gmodal>
     )
 }

@@ -39,11 +39,7 @@ export default function Home() {
             await singIn(data);
         }catch(err){
             setLoading(false);
-        }finally{
-            setLoading(false);
         }
-        
-        
     }
 
     return (
@@ -64,10 +60,13 @@ export default function Home() {
                     <Input placeholder="Digite sua senha:" type="password" value={pass} onChange={(e) => setPass(e.target.value)} />
                     <Button disabled={loading} type="submit">Entrar</Button>
                 </form>
-                <div className={styles.othersOptions}>
-                    <Link href={"/singup"} className={styles.link}>Não tem uma conta? Cadastre-se</Link>
-                    <Link href={"/recovery"} className={styles.link}>Recuperar conta</Link>
-                </div>
+                {!loading &&(
+                    <div className={styles.othersOptions}>
+                        <Link href={"/singup"} className={styles.link}>Não tem uma conta? Cadastre-se</Link>
+                        <Link href={"/recovery"} className={styles.link}>Recuperar conta</Link>
+                    </div>
+                )}
+
             </main>
         </>
     )

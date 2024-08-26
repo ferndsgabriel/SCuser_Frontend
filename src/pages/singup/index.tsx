@@ -13,8 +13,7 @@ import zxcvbn from 'zxcvbn';
 import { canSSRGuest } from "../../utils/canSSRGuest";
 import { SetupApiClient } from "../../services/api";
 import { Loading } from "../../components/loading";
-import { Gmodal } from "../../components/myModal";
-import Termos from "../../components/modal/termos";
+import TermsModal from "../../components/modals/modalTerms";
 import { onlyString } from "../../utils/formatted";
 
 type AptProps = {
@@ -29,14 +28,11 @@ type TowersProps = {
   apartment:[]
 }
 
-interface AptPropsInterface {
-  Alltowers: TowersProps[];
-  AllApts:AptProps[];
-}
 
-export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
-  const [optionsApts, setOptionApts] = useState<AptProps []>(AllApts || null);
-  const [optionsTowers, setOptionTowers] = useState<TowersProps []>(Alltowers || null) ;
+
+export default function Home() {
+  const [optionsApts, setOptionApts] = useState<AptProps []>([]);
+  const [optionsTowers, setOptionTowers] = useState<TowersProps []>([]) ;
   const [selectTower, setSelectTower] = useState(0);
   const [selectApt, setSelectApt] = useState(0);
   const [apartament_id, setapartament_id] = useState('');
@@ -53,17 +49,21 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
   const { singUp } = useContext(AuthContext);
   const { dark } = useContext(ThemeContext);
   
-
+  const api = SetupApiClient();
 
   async function refreshDate(){
     try{
-      const api = SetupApiClient();
-      const response = await api.get('/apts');
+      const [response, response2] = await Promise.all([
+        await api.get('/apts'),
+        await api.get('/towers')
+      ])
       setOptionApts(response.data);
-      setLoadingPage(false);
+      setOptionTowers(response2.data);
+      
     }catch(err){
       console.log('Erro ao obter dados do servidor');
-      setTimeout(refreshDate, 500);
+    }finally{
+      setLoadingPage(false);
     }
   }
 
@@ -215,54 +215,42 @@ export default function Home({ AllApts, Alltowers}: AptPropsInterface) {
               <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Seu e-mail:" type="text" />
               <Input value={pass} onChange={(e) => setPass(e.target.value)} placeholder="Sua senha:" type="password" />
               
-              <div className={styles.checkboxArea}>
-                <input type="checkbox" onChange={(e)=>setCheckbox(e.target.checked)}/> 
-                <a onClick={openModal} tabIndex={1} className={styles.link}> Li e aceito os termos de contratos.</a>
-              </div>    
+              {!loading &&(
+                <div className={styles.checkboxArea}>
+                  <input type="checkbox" onChange={(e)=>setCheckbox(e.target.checked)}/> 
+                  <a onClick={openModal} tabIndex={1} className={styles.link}> Li e aceito os termos de contratos.</a>
+                </div>    
+              )}
+
               <Button loading={loading} type="submit" disabled={!checkbox}>
                 Cadastrar
               </Button>
-          </form>
-          <div className={styles.othersOptions}>
-            <Link href={"/"} className={styles.link}>
-              Fazer login
-            </Link>
-          </div>
+            </form>
+
+          {!loading &&(
+            <div className={styles.othersOptions}>
+              <Link href={"/"} className={styles.link}>
+                Fazer login
+              </Link>
+            </div>
+          )}
+
 
       </main>
 
-      <Gmodal onClose={closedModal}
+      <TermsModal 
+      onClose={closedModal}
       isOpen={isOpen}
-      className={styles.termos}>
-        <Termos buttonAction={closedModal}/>
-      </Gmodal>
+      />
     </>
   );
 }
 
 
 export const getServerSideProps = canSSRGuest(async (ctx) => {
-  try {
-      const SetupApi = SetupApiClient(ctx);
-      const response = await SetupApi.get('/apts');
-      const response2 = await SetupApi.get('/towers');
-      const AllApts = response.data
-      const Alltowers = response2.data
-      console.log(AllApts)
-      return {
-          props: {
-          Alltowers,
-          AllApts
-          },
-      };
-      }catch (error) {
-          console.error('Erro ao obter dados da API');
-      return {
-          props: {
-          Alltowers:[],
-          AllApts:[]
-          },
-      };
-  }
+  return {
+    props: {
+    },
+  };
 });
 

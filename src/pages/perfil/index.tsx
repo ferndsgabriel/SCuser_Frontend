@@ -175,7 +175,8 @@ export default function Perfil(){
 }
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
-    return {
-      props: {},
-    };
+  return {
+      props: {
+      }
+  };
 });
