@@ -213,32 +213,22 @@
 
 @media (min-width:1280px){
     .bodyArea{
-        max-width: calc(100% - 360px);
-        margin-left: 360px;
+        max-width: calc(100% - 26rem);
+        margin-left: 26rem;
         .container{
-            max-width: 960px;
-            margin: auto;
-        }
-    }
-}
-@media (min-width:1536px){
-    .bodyArea{
-        .container{
-            max-width: 1024px;
-            margin: auto;
+            max-width: 100%;
+            .section2{
+                .allCards{
+                    grid-template-columns: repeat(3,1fr);
+                }
+            }
+            .section3{
+                .allCards{
+                    grid-template-columns: repeat(3,1fr);
+                }
+            }
         }
     }
 }
 
-.modalGuest{
-    position: absolute;
-    width: 100%;
-    max-width: 60rem;
-    height: 94vh;
-    max-width: 60rem;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 4px 4px 20px var(--Black);
-    background-color: var(--Background);
-}
+

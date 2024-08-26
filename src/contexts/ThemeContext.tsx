@@ -38,9 +38,9 @@ export default function ThemeProvider({ children }) {
         root.setProperty('--Light', !dark? '#585858':'#9e9e9e');
         root.setProperty('--ButtonColor', !dark? '#161F28':'#ffff');
         root.setProperty('--ButtonText', !dark? '#ffff':'#161F28');
-        root.setProperty('--Primary-normal', '#405971');
-        root.setProperty('--Sucess', '#51AB7B');
-        root.setProperty('--Error','#f14a4a');
+        root.setProperty('--Primary-normal', '#526F84');
+        root.setProperty('--Sucess', '#6D9E80');
+        root.setProperty('--Error','#B25C5C');
         root.setProperty('--Primary-dark','#161F28');
 
     }, [dark]);

@@ -6,10 +6,11 @@ import {HiPhotograph} from "react-icons/hi"
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { SetupApiClient } from "../../services/api";
 import { toast } from "react-toastify";
-import { useState, useEffect} from "react";
+import { useState, useEffect, useCallback} from "react";
 import style from "./styles.module.scss";
 import { Loading } from "../../components/loading";
-import { Gmodal } from "../../components/myModal";
+import DeletePhotoModal from "../../components/modals/modalsPerfil/deletePhoto";
+import { FaSpinner } from "react-icons/fa";
 
 
   type userProps = {
@@ -32,73 +33,65 @@ import { Gmodal } from "../../components/myModal";
         }
     }
   }
-  interface userPropsInterface {
-    userDate:userProps;
-  }
 
-export default function Perfil({userDate}:userPropsInterface){
+
+export default function Perfil(){
   const apiClient = SetupApiClient();
-  const [details,setDetails] = useState(userDate || null);
+  const [details,setDetails] = useState<userProps>();
   const [imagePreview, setImagePreview] = useState(null);
   const [isOpenDeletePhoto, setIsOpenDeletePhoto] = useState (false);
-  const [isLoading, setIsLoading] = useState (true);
+  const [loading, setLoading] = useState (true);
+  const [isAddingPhoto, setIsAddingPhoto] = useState(false);
 
-  async function fetchUserDetails() {
-    try {
-      const response = await apiClient.get('/me');
-      setDetails(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.log('Erro ao obter dados do servidor');
-      setTimeout(fetchUserDetails, 500);
-    }
-  }
 
   useEffect(()=>{
+    async function fetchUserDetails() {
+      if (loading || !isOpenDeletePhoto){
+        try {
+          const response = await apiClient.get('/me');
+          setDetails(response.data);
+        } catch (error) {
+          console.log('Erro ao obter dados do servidor');
+          setTimeout(fetchUserDetails, 500);
+        }finally{
+          setLoading(false);
+        }
+      }
+    }
     fetchUserDetails();
-  },[]);
+  },[loading, isOpenDeletePhoto, HandlePhoto]);
 
   //-------------------------------------------------Deletar foto
-  function openModalPhotoDelete() {
+  
+  const openModalPhotoDelete = useCallback(()=>{
     setIsOpenDeletePhoto(true);
-  }
-  
-  function closeModalPhotoDelete() {
+  },[isOpenDeletePhoto]);
+
+  const closeModalPhotoDelete = useCallback(()=>{
     setIsOpenDeletePhoto(false);
-  }
+  },[isOpenDeletePhoto]);
   
-  async function handleDeletePhoto() {
-    try {
-      await apiClient.put('/photodelete');
-      toast.success('Foto deletada');
-      await fetchUserDetails(); // Se fetchUserDetails é assíncrono, use await aqui
-      setImagePreview(null);
-    } catch (error) {
-      toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-    } finally {
-      closeModalPhotoDelete();
-    }
-  }
+
   
-//------------------------------------------------- adicionar foto
   async function HandlePhoto(foto){
     try{
       if (foto.type === "image/jpeg" || foto.type === "image/png" ){
         const image = foto
+        setIsAddingPhoto(true);
         const data = new FormData();
         data.append('image', image);
         await apiClient.put('/photo', data);
-        fetchUserDetails();
-        window.location.reload();
       }   
     }catch(error){
       toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-    } 
+    }finally{
+      setIsAddingPhoto(false);
+    }
   }
 
 //------------------------------------------------------------
 
-  if (isLoading){
+  if (loading){
     return <Loading/>
   }
 
@@ -122,22 +115,24 @@ export default function Perfil({userDate}:userPropsInterface){
                   <HiPhotograph/>
                 )}
               </div>
-
-              <div className={style.btnsPhoto}>
-                <label>
-                  <span className="buttonSlide">Adicionar foto <IoMdAdd/></span>
-                  <input name='input' type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} /> 
-                </label>
-
-                {details.photo?(
-                  <span onClick={openModalPhotoDelete} className="buttonSlide">
-                    Deletar foto <AiFillDelete/>
-                  </span>
-                ):null}
-              </div>
+              
+              {!isAddingPhoto ? (
+                <div className={style.btnsPhoto}>
+                  <label>
+                    <span className="buttonSlide">Adicionar foto <IoMdAdd/></span>
+                    <input name='input' type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} /> 
+                  </label>
+                  {details.photo &&(
+                    <span onClick={openModalPhotoDelete} className="buttonSlide">
+                      Deletar foto <AiFillDelete/>
+                    </span>
+                  )}
+                </div>
+              ):(
+                <FaSpinner className={style.spin}/>
+              )}
 
             </section>
-
               <section className={style.section2}>
                 <h2>Minhas informações</h2>
                 <div className={style.infosArea}>
@@ -170,43 +165,17 @@ export default function Perfil({userDate}:userPropsInterface){
         </main>
       </div>
 
-
-      <Gmodal isOpen={isOpenDeletePhoto}
-        onClose={closeModalPhotoDelete}
-        className='modal'>
-        <div className='modalContainer'>
-          <div className='beforeButtons'>
-            <h3>Remover foto de perfil</h3>
-            <p>Deseja deletar sua foto de perfil?</p>
-          </div>
-          <div className='buttonsModal'>
-            <button className='buttonSlide' onClick={handleDeletePhoto} autoFocus={true}><span>Deletar</span></button>
-            <button onClick={closeModalPhotoDelete}  className='buttonSlide'><span>Cancelar</span></button>      
-          </div>
-
-          </div>
-        </Gmodal>
-
+      <DeletePhotoModal
+      isOpen={isOpenDeletePhoto}
+      onClose={closeModalPhotoDelete}
+      setImagePreview={setImagePreview}
+      />
     </>
   )
 }
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
-  const apiClient = SetupApiClient(ctx);
-  try {
-    const response = await apiClient.get('/me');
-    const userData = response.data;
     return {
-      props: {
-        userDate: userData,
-      },
+      props: {},
     };
-  } catch (error) {
-    console.error('Erro ao obter dados da api');
-    return {
-      props: {
-        userDate: []
-      },
-    };
-  }
 });

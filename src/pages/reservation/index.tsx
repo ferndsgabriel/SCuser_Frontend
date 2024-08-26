@@ -1,17 +1,17 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Header from "../../components/header";
 import { Loading } from "../../components/loading";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { SetupApiClient } from "../../services/api";
 import styles from "./styles.module.scss";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineUnorderedList } from "react-icons/ai";
-import { IoIosStar } from "react-icons/io";
-import { toast } from "react-toastify";
 import {formatDate, formatHours} from "../../utils/formatted";
-import { AddGuest } from "../../components/modal/Addguest";
-import { Gmodal } from "../../components/myModal";
 import Link from "next/link"
-
+import CreateReservationModal from "../../components/modals/modalsReservation/createReservation";
+import DeleteReservationModal from "../../components/modals/modalsReservation/deleteReservation";
+import WaitListModal from "../../components/modals/modalsReservation/waitList";
+import AvaliationModal from "../../components/modals/modalsReservation/modalAvaliation";
+import AddGuest from "../../components/modals/modalsReservation/addGuest";
 
 type MyReservationsProps = {
   date: number;
@@ -49,17 +49,10 @@ export default function Reservation({ myReservations, allReservations, allNoAval
   const [isOpenGuestReservation, setIsOpenGuestReservation] = useState(false);
   const [guest, setGuest] = useState('');
   const [isOpenModalAvaliation, setIsOpenModalAvaliation] = useState(false);
-  const [ratingEase, setRatingEase] = useState(0);
-  const [ratingTime, setRatingTime] = useState(0);
-  const [ratingSpace, setRatingSpace] = useState(0);
-  const [ratingHygiene, setRatingHygiene] = useState(0);
+
 
   const [dateValue, setDateValue] = useState<number>(null);
-  const [hoursStart, setHoursStart] = useState<number>(9);
-  const [minutesStart, setMinutesStart] = useState<number>(0);
-  const [hoursFinish, setHoursFinish] = useState<number>(10);
-  const [minutesFinish, setMinutesFinish] = useState<number>(0);
-  const [inputClean, setInputClean] = useState (false);
+
 
 
   const monthString = [
@@ -75,23 +68,35 @@ export default function Reservation({ myReservations, allReservations, allNoAval
 
 
   // --------------------------------------------------------/////////
-  async function refreshDate(){
-    try{
-        const setupApi = SetupApiClient();
-        const response = await setupApi.get('/myreservations');
-        const response2 = await setupApi.get('/allreservations');
-        const response3 = await setupApi.get('/noavaliation');
-        setMyReservationsList(response.data);
-        setAllReservationsList(response2.data);
-        setAllNoAvaliationList(response3.data);
-        setLoading(false);
-    }catch(err){
-        setTimeout(refreshDate, 500);
-    }
-  }
+
   useEffect(()=>{
+    async function refreshDate(){
+
+      if (loading || !isOpenCreateReservation
+        || !isOpenDeleteReservation 
+        || !isOpenModalAvaliation 
+        || !isOpenGuestReservation){
+
+        try{
+          const [response, response1, response2] = await Promise.all([
+          await setupApi.get('/myreservations'),
+          await setupApi.get('/allreservations'),
+          await setupApi.get('/noavaliation')
+          ])
+          setMyReservationsList(response.data);
+          setAllReservationsList(response1.data);
+          setAllNoAvaliationList(response2.data);
+          
+        }catch(error){
+            console.log(error);
+        }finally{
+          setLoading(false);
+        }
+      }
+    }
+
     refreshDate();
-  },[]);
+  },[loading, isOpenCreateReservation, isOpenDeleteReservation, isOpenModalAvaliation, isOpenGuestReservation]);
 
   // -----------------------Passar para o formato data minhas datas number --------------------------/////////
 
@@ -239,7 +244,12 @@ useEffect(() => {
     }
   }
 
-  function openModalReservation(cell){
+  function closeModalWait(){
+    setDateValue(null);
+    setIsOpenWait(false);
+  }
+
+  const openModalReservation = useCallback ((cell)=>{
     const dayZero = addZero(cell.day);
     const monthZero = addZero(monthCalendar + 1);
     const valueDate = `${yearCalendar}${monthZero }${dayZero }`;
@@ -249,316 +259,54 @@ useEffect(() => {
     }else if (!cell.isReserved || cell.isReservedNull){
       setIsOpenCreateReservation(true);
     }
-  }
+  },[isOpenCreateReservation]);
 
-  function closeModalWait(){
+  const closeModalCreateReservation = useCallback (()=>{
     setDateValue(null);
-    setIsOpenWait(false);
-  }
-
-  function closeModalCreateReservation(){
-    setDateValue(null);
-    setHoursStart(9);
-    setMinutesStart(0);
-    setHoursFinish(10);
-    setMinutesFinish(0);
-    setInputClean(false);
     setIsOpenCreateReservation(false);
-  }
+  },[isOpenCreateReservation]);
 
-  async function handleAwait(){
-    if (dateValue === null){
-      toast.warning('Data inválida.');
-    }
-    try{
-      await setupApi.post('/list',{
-          date:dateValue
-      });
-      toast.success('Adicionado a lista de espera com sucesso.');
-      refreshDate();
-    }catch(error){
-      toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-    }finally{
-      closeModalWait();
-    }
-  }
-
-  const hoursStartLoop = () => {
-    let x = 9;
-    const finish = 21;
-    let startHoursList = [];
-  
-    for (; x <= finish; x++) {
-      startHoursList.push(
-        <option key={x} value={x}>
-          {x}
-        </option>
-      );
-    }
-  
-    return startHoursList;
-  };
-
-  function changeSelectStartHours(e){
-    const hours = e.target.value;
-    setHoursStart(parseInt(hours));
-  };
-
-  const minutesStartLoop = () => {
-    let x = 0;
-    const finish = 45;
-    let startMinutesList = [];
-  
-    for (; x <= finish; x = x + 15) {
-      startMinutesList.push(
-        <option key={x} value={x}>
-          {x}
-        </option>
-      );
-    }
-
-    return startMinutesList;
-  };
-
-  function changeSelectStarMinutes(e){
-    const minutes = e.target.value;
-    setMinutesStart(parseInt(minutes));
-  };
-
-  const hoursFinishLoop = () => {
-    let x = 10
-    const finish = 22;
-    let startHoursList = [];
-
-    for (; x <= finish; x++) {
-      startHoursList.push(
-        <option key={x} value={x}>
-          {x}
-        </option>
-      );
-    }
-    return startHoursList;
-  }
-
-  function changeSelectFinishHours(e){
-    const hours = e.target.value;
-    setHoursFinish(parseInt(hours));
-  };
-  
-  function changeSelectFinishMinutes(e){
-    const minutes = e.target.value;
-    setMinutesFinish(parseInt(minutes));
-  };
-
-  async function handleCreateReservation(){
-    const start = `${addZero(hoursStart)}${addZero(minutesStart)}`;
-    const finish = `${addZero(hoursFinish)}${addZero(minutesFinish)}`;
-    if (parseInt(finish) <= parseInt(start)){
-      toast.warning('O horário de início da reserva não pode ser posterior ou igual ao término.');
-      return
-    }
-    try{
-      await setupApi.post('/reservations',{
-        date:dateValue,
-        cleaning:inputClean,
-        start:start,
-        finish: finish
-      });
-      toast.success('Reserva solicitada com sucesso.');
-      closeModalCreateReservation();
-      refreshDate();
-    }catch(error){
-      toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-    }
-  }
-  
   //--------------------------Delete reservation -----------------------------------
-
-  function openModalDeleteReservation(id:string){
+  const openModalDeleteReservation = useCallback((id:string)=>{
     setReservation_id(id);
     setIsOpenDeleteReservation(true);
-  }
-  function closeModalDeleteReservation(){
+  },[isOpenDeleteReservation]);
+
+  const closeModalDeleteReservation = useCallback(()=>{
     setReservation_id('');
     setIsOpenDeleteReservation(false);
-  }
+  },[isOpenDeleteReservation]);
 
-  async function handleDeleteReservation(){
-    if (reservation_id === ''){
-      toast.warning('Reserva não encontrada.');
-      return;
-    }
-    try{
-      await setupApi.delete('/reservations',{
-        data:{
-          reservation_id:reservation_id
-        }
-      });
-      toast.success('Reserva cancelada com sucesso.');
-      closeModalDeleteReservation();
-      refreshDate();
-    }catch(error){
-      toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-    }
-  }
 
   //-----------------------------------------------//-----------------------------------------
 
-  function openModalGuest(id:string, guest:string){
+  const openModalGuest = useCallback((id:string, guest:string)=>{
     setGuest(guest);
     setReservation_id(id);
     setIsOpenGuestReservation(true);
-  }
+  },[isOpenGuestReservation]);
 
-  function closeModalGuest(){
+  const closeModalGuest = useCallback(()=>{
     setGuest('');
     setReservation_id('');
-    refreshDate();
     setIsOpenGuestReservation(false);
-  }
+  },[isOpenGuestReservation]);
+
   //-----------------------------------------------//-----------------------------------------//
 
-  function openModalAvaliation(id:string){
+
+  const openModalAvaliation = useCallback ((id:string)=>{
     setReservation_id(id);
     setIsOpenModalAvaliation(true);
-  }
-  function closeModalAvaliation(){
+  },[isOpenModalAvaliation]);
+
+  const closeModalAvaliation = useCallback (()=>{
     setReservation_id('');
-    setRatingEase(0);
-    setRatingTime(0)
     setIsOpenModalAvaliation(false);
-    refreshDate();
-  }
+  },[isOpenModalAvaliation]);
 
-  async function handleAvaliation(e:FormEvent){
-    e.preventDefault();
-    if (ratingEase <=0 ||  ratingSpace <=0 ||  ratingHygiene <= 0 || ratingTime <= 0){
-      toast.warning('Você precisa enviar uma avaliação.');
-      return;
-    }
-    try{
-      await setupApi.put('/avaliation',{
-        time:ratingTime,
-        space:ratingSpace,
-        hygiene:ratingHygiene,
-        ease:ratingEase,
-        reservation_id:reservation_id
-      });
-      toast.success('Reserva avaliada.');
-      closeModalAvaliation();
-      refreshDate();
-    }catch(error){
-      toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-    }
-  }
 
-  const renderStarsEase = () => {
-    const stars = [];
 
-    for (let i = 0; i < 5; i++) {
-      let starClass = "star";
-      
-      if (i < ratingEase) {
-        starClass += " filled";
-      }
-
-      stars.push(
-        <button
-          key={i}
-          type="button"
-          className={starClass}
-          onClick={(e) => {
-            e.preventDefault();
-            setRatingEase(i + 1);
-          }}>
-          <IoIosStar />
-        </button>
-      );
-    }
-
-    return stars;
-  };
-
-  const renderStarsTime = () => {
-    const stars = [];
-
-    for (let i = 0; i < 5; i++) {
-      let starClass = "star";
-      
-      if (i < ratingTime) {
-        starClass += " filled";
-      }
-
-      stars.push(
-        <button
-          key={i}
-          type="button"
-          className={starClass}
-          onClick={(e) => {
-            e.preventDefault();
-            setRatingTime(i + 1)
-          }}>
-          <IoIosStar />
-        </button>
-      );
-    }
-
-    return stars;
-  };
-
-  const renderStarsSpace = () => {
-    const stars = [];
-
-    for (let i = 0; i < 5; i++) {
-      let starClass = "star";
-      
-      if (i < ratingSpace) {
-        starClass += " filled";
-      }
-
-      stars.push(
-        <button
-          key={i}
-          type="button"
-          className={starClass}
-          onClick={(e) => {
-            e.preventDefault();
-            setRatingSpace(i + 1);
-          }}>
-          <IoIosStar />
-        </button>
-      );
-    }
-
-    return stars;
-  };
-
-  const renderStarsHygiene = () => {
-    const stars = [];
-
-    for (let i = 0; i < 5; i++) {
-      let starClass = "star";
-      
-      if (i < ratingHygiene) {
-        starClass += " filled";
-      }
-
-      stars.push(
-        <button
-          key={i}
-          type="button"
-          className={starClass}
-          onClick={(e) => {
-            e.preventDefault();
-            setRatingHygiene(i + 1)
-          }}>
-          <IoIosStar />
-        </button>
-      );
-    }
-
-    return stars;
-  };
 
   if (loading){
     return(
@@ -666,131 +414,43 @@ useEffect(() => {
           
         </main>
       </div>
-      {/* ------------------ modal wait list -------- */}
-      <Gmodal isOpen={isOpenWait}
+
+      <WaitListModal
+      isOpen={isOpenWait}
       onClose={closeModalWait}
-      className='modal'>
-            <div className="modalContainer">
-              <div className="beforeButtons">
-                  <h3>Lista de espera</h3>
-                  <p>Você gostaria de se inscrever na lista de espera? Em caso de cancelamento da reserva, você será notificado por meio de SMS e e-mail.</p>
+      dateValue={dateValue}
+      />
+      {/* ------------------ modal wait list -------- */}
 
-              </div>
-              <div className='buttonsModal'>
-                  <button className='buttonSlide' onClick={handleAwait} autoFocus={true}>Entrar</button>
-                  <button onClick={closeModalWait} className='buttonSlide'>Cancelar</button>      
-              </div>
-            </div>
-      </Gmodal>
-    {/* ------------------ modal create reservation -------- */}
-
-      <Gmodal isOpen={isOpenCreateReservation}
+      <CreateReservationModal
+      isOpen={isOpenCreateReservation}
       onClose={closeModalCreateReservation}
-      className='modal'>
-          <div className="modalContainer">
-            <div className="beforeButtons">
-                <h3>Criar reserva</h3>
-                <p>Você gostaria de criar uma reserva para o dia {formatDate(dateValue)}?</p>
-                <div className='selectsHoursArea'>
-                  <span>das</span>
-                  <div className="selectsArea">
-                    <select onChange={changeSelectStartHours} value={hoursStart} autoFocus={true}> 
-                      {hoursStartLoop()}
-                    </select>
-                    <span>:</span>
-                    <select onChange={changeSelectStarMinutes} value={minutesStart}>
-                      {minutesStartLoop()}
-                    </select>
-                  </div>
-                  <span>às</span>
-                  <div className="selectsArea">
-                    <select onChange={changeSelectFinishHours} value={hoursFinish}> 
-                      {hoursFinishLoop()}
-                    </select>
-                    <span>:</span>
-                    <select onChange={changeSelectFinishMinutes} value={minutesFinish}>
-                      {minutesStartLoop()}
-                    </select>
-                </div>
-              </div>
-              <div className="modalCheckboxArea">
-                <input type="checkbox" onChange={(e)=>setInputClean(e.target.checked)}/>
-                <p>Serviço de limpeza (R$80,00).</p>
-              </div>
-            </div>
-            <div className='buttonsModal'>
-                <button className='buttonSlide' onClick={handleCreateReservation}>Reservar</button>
-                <button onClick={closeModalCreateReservation} className='buttonSlide'>Cancelar</button>      
-            </div>
-          </div>
-      </Gmodal>
+      dateValue={dateValue}
+      />
+      {/* ------------------ modal create reservation -------- */}
+      
 
-      {/* ------------------ modal delete resevation -------- */}
-      <Gmodal isOpen={isOpenDeleteReservation}
+      <DeleteReservationModal
+      isOpen={isOpenDeleteReservation}
       onClose={closeModalDeleteReservation}
-      className='modal'>
-          <div className="modalContainer">
-            <div className="beforeButtons">
-                <h3>Cancelar reserva</h3>
-                <p><b>Observação: </b>Cancelamentos de reservas aprovadas com menos de 2 dias de
-              antecedência da data do evento estão sujeitos a uma taxa de R$ 100,00.
-              Deseja confirmar o cancelamento? </p>
-            </div>
-            <div className='buttonsModal'>
-                <button className='buttonSlide' onClick={handleDeleteReservation} autoFocus={true}>Confirmar</button>
-                <button onClick={closeModalDeleteReservation} className='buttonSlide'>Não</button>      
-            </div>
-          </div>
-      </Gmodal>
+      reservation_id={reservation_id}
+      />
+      {/* ------------------ modal delete resevation -------- */}
 
-      {/* ------------------ modal guest -------- */}
-      <Gmodal isOpen={isOpenGuestReservation}
+      <AddGuest
+      isOpen={isOpenGuestReservation}
       onClose={closeModalGuest}
-      className={styles.modalGuest}>
-            <AddGuest id={reservation_id} guest={guest} closeModal={closeModalGuest}/>
-      </Gmodal>
-      {/*---------------Modal i was --------- */}
-      <Gmodal isOpen={isOpenModalAvaliation} onClose={closeModalAvaliation}
-      className='modal'>
-          <form className="modalContainer" onSubmit={handleAvaliation}>
-            <div className="beforeButtons">
-                <h3>Finalizar e avaliar reserva</h3>
-
-              <div className="avaliationContainer">
-                <p>Facilidade de Reserva:</p>
-                <div className="buttonAvaliation">
-                  {renderStarsEase()}
-                </div>
-              </div>
-
-              <div className="avaliationContainer">
-                <p>Tempo para Aprovação da Reserva:</p>
-                <div className="buttonAvaliation">
-                  {renderStarsTime()}
-                </div>
-              </div>
-
-              <div className="avaliationContainer">
-                <p>Condição do Espaço:</p>
-                <div className="buttonAvaliation">
-                {renderStarsSpace()}
-                </div>
-              </div>
-
-              <div className="avaliationContainer">
-                <p>Higiene do Espaço:</p>
-                <div className="buttonAvaliation">
-                  {renderStarsHygiene()}
-                </div>
-              </div>
-            </div>
-            
-            <div className='buttonsModal'>
-                <button className='buttonSlide' type="submit" autoFocus={true}>Confirmar</button>
-                <button onClick={closeModalAvaliation} type='reset' className='buttonSlide'>Cancelar</button>      
-            </div>
-          </form>
-      </Gmodal>
+      guest={guest}
+      id={reservation_id}
+      />
+      {/* ------------------ modal guest -------- */}
+      
+      <AvaliationModal
+      isOpen={isOpenModalAvaliation}
+      onClose={closeModalAvaliation}
+      reservation_id={reservation_id}
+      />
+      {/*---------------Modal avaliation --------- */}
     </>
 
   );

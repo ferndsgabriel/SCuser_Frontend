@@ -38,6 +38,7 @@
                     display: flex;
                     flex-direction: column;
                     gap: 0.8rem;
+                    max-width: 56rem;
                     .buttons{
                         margin-top: 1.2rem;
                         display: flex;
@@ -58,6 +59,7 @@
             .questionsArea{
                 display: flex;
                 flex-direction: column;
+                max-width: 100rem;
                 .cardQuestion:nth-child(odd){
                     background-color: var(--Transparente);
                 }
@@ -161,20 +163,11 @@
 
 @media (min-width:1280px){
     .bodyArea{
-        max-width: calc(100% - 360px);
-        margin-left: 360px;
+        max-width: calc(100% - 26rem);
+        margin-left: 26rem;
         .container{
-            max-width: 960px;
-            margin: auto;
+            max-width: 100%;
         }
     }
 }
 
-@media (min-width:1536px){
-    .bodyArea{
-        .container{
-            max-width: 1024px;
-            margin: auto;
-        }
-    }
-}

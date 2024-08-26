@@ -51,7 +51,7 @@ export default function Header (){
             <nav className={styles.navBar} ref={navRef}>
                 <div className={styles.imgAndButton}>
                     <Link href={'/reservation'}>
-                        <img src="./iconDark.svg" alt="icon"/>
+                        <img src="./IconMiniWhite.svg" alt="icon"/>
                     </Link>
                     <button onClick={handleCloseNav}><AiOutlineClose/></button>
                 </div>

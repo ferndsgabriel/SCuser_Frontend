@@ -66,6 +66,9 @@
             }
           }
         }
+        .spin{
+          animation:  spin 1s infinite ;
+        }
       }
 
       .section2{
@@ -123,11 +126,10 @@
 
 @media (min-width:1280px){
   .bodyArea{
-    max-width: calc(100% - 360px);
-    margin-left: 360px;
+    max-width: calc(100% - 26rem);
+    margin-left: 26rem;
     .container{
-      max-width: 960px;
-      margin: auto;
+      max-width: 100%;
       .allItens{
         flex-direction: row;
         justify-content: space-between;
@@ -151,11 +153,12 @@
   }
 }
 
-@media (min-width:1536px){
-  .bodyArea{
-    .container{
-      max-width: 1024px;
-      margin: auto;
-    }
+
+@keyframes spin{
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
   }
 }
