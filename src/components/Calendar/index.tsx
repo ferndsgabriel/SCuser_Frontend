@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
-function CalendarComponent({ myReservationsList, allReservationsList, setDateValue }) {
+export default function CalendarComponent({ myReservationsList, allReservationsList }) {
     const [myReservationsDateTrue, setMyReservationsDateTrue] = useState([]);
     const [myReservationsDateNull, setMyReservationsDateNull] = useState([]);
     const [allReservationsDate, setAllReservationsDate] = useState([]);
@@ -131,23 +131,7 @@ function CalendarComponent({ myReservationsList, allReservationsList, setDateVal
     }
 
     const functionGetDate = (cell) => {
-        const dayZero = addZero(cell.day);
-        const monthZero = addZero(monthCalendar + 1);
-        const valueDate = `${yearCalendar}${monthZero}${dayZero}`;
 
-        const date = parseInt(valueDate);
-
-        if (cell && cell.otherReserved) {
-            setDateValue ({
-                isBusy: true,
-                date: date
-            });
-        } else if (!cell.isReserved || cell.isReservedNull) {
-            setDateValue ({
-                isBusy: false,
-                date: date
-            });
-        }
     }
 
     return (
@@ -203,4 +187,3 @@ function CalendarComponent({ myReservationsList, allReservationsList, setDateVal
         </section>
     )
 }
-export {CalendarComponent}
