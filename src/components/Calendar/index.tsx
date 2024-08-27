@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
-export default function CalendarComponent({ myReservationsList, allReservationsList, setDateValue }) {
+function CalendarComponent({ myReservationsList, allReservationsList, setDateValue }) {
     const [myReservationsDateTrue, setMyReservationsDateTrue] = useState([]);
     const [myReservationsDateNull, setMyReservationsDateNull] = useState([]);
     const [allReservationsDate, setAllReservationsDate] = useState([]);
@@ -203,3 +203,4 @@ export default function CalendarComponent({ myReservationsList, allReservationsL
         </section>
     )
 }
+export {CalendarComponent}
