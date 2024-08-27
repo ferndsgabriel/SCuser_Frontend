@@ -20,10 +20,17 @@
                 }
             }
         }
-        .calendarArea{
+        .calendarSection{
             width: 100%;
-            max-width: 56rem;
-            margin: auto;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid var(--Primary-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .calendarContainer{
+                width: 100%;
+                max-width: 56rem;
+            }
         }
         .section2{
             width: 100%;
