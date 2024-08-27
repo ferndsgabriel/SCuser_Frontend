@@ -12,7 +12,7 @@ import DeleteReservationModal from "../../components/modals/modalsReservation/de
 import WaitListModal from "../../components/modals/modalsReservation/waitList";
 import AvaliationModal from "../../components/modals/modalsReservation/modalAvaliation";
 import AddGuest from "../../components/modals/modalsReservation/addGuest";
-import CalendarComponent from "../../components/calendar";
+
 import Head from "next/head";
 
 type ReservationsProps = {
@@ -171,13 +171,7 @@ export default function Reservation() {
             <Link href="/settings"><b>Configurações</b></Link> do sistema.</p>
           </div>
 
-          <section className={styles.calendarArea}> 
-            <CalendarComponent
-            myReservationsList={myReservationsList}
-            allReservationsList={allReservationsList}
-            setDateValue={setCalendarDate}
-            />
-          </section>
+
 
               
               {myReservationsList.length > 0?(
