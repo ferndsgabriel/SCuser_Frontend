@@ -13,6 +13,7 @@ import WaitListModal from "../../components/modals/modalsReservation/waitList";
 import AvaliationModal from "../../components/modals/modalsReservation/modalAvaliation";
 import AddGuest from "../../components/modals/modalsReservation/addGuest";
 import Calendar from "../../components/calendar";
+import Head from "next/head";
 
 type ReservationsProps = {
   date: number;
@@ -156,7 +157,11 @@ export default function Reservation() {
 
   return (
     <>
-    <Header/>
+      <Head>
+        <title>SalãoCondo - Reservas</title>
+      </Head>
+      
+      <Header/>
       
       <div className={styles.bodyArea}>
         <main className={styles.container}>
