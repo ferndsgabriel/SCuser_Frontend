@@ -176,7 +176,7 @@ export default function Reservation() {
             <Calendar
             allReservationsList={allReservationsList}
             myReservationsList={myReservationsList}
-            setDateValue={setDateValue}
+            setCalendarDate={setCalendarDate}
             />
             </div>
           </section>
