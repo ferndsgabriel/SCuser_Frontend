@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
-export default function CalendarComponent({ myReservationsList, allReservationsList }) {
+export default function Calendar({ myReservationsList, allReservationsList, setDateValue }) {
+
     const [myReservationsDateTrue, setMyReservationsDateTrue] = useState([]);
     const [myReservationsDateNull, setMyReservationsDateNull] = useState([]);
     const [allReservationsDate, setAllReservationsDate] = useState([]);
@@ -131,59 +132,73 @@ export default function CalendarComponent({ myReservationsList, allReservationsL
     }
 
     const functionGetDate = (cell) => {
+        const dayZero = addZero(cell.day);
+        const monthZero = addZero(monthCalendar + 1);
+        const valueDate = `${yearCalendar}${monthZero}${dayZero}`;
 
+        const date = parseInt(valueDate);
+
+        if (cell && cell.otherReserved) {
+            setDateValue ({
+                isBusy: true,
+                date: date
+            });
+        } else if (!cell.isReserved || cell.isReservedNull) {
+            setDateValue ({
+                isBusy: false,
+                date: date
+            });
+        }
     }
 
     return (
-        <section className={styles.section1}>
-            <div className={styles.calendarArea}>
-                <article className={styles.dateInfo}>
-                    <button onClick={() => changeMonth(-1)} disabled={!nextMonthBoolean}><AiOutlineLeft /></button>
-                    <p>{monthString[monthCalendar]} - {yearCalendar}</p>
-                    <button onClick={() => changeMonth(+1)} disabled={nextMonthBoolean}><AiOutlineRight /></button>
-                </article>
-                <table className={styles.calendar}>
-                    <thead>
-                        <tr>
-                            <th>Dom</th>
-                            <th>Seg</th>
-                            <th>Ter</th>
-                            <th>Qua</th>
-                            <th>Qui</th>
-                            <th>Sex</th>
-                            <th>Sáb</th>
+        <section className={styles.calendarArea}>
+            <article className={styles.dateInfo}>
+                <button onClick={() => changeMonth(-1)} disabled={!nextMonthBoolean}><AiOutlineLeft /></button>
+                <p>{monthString[monthCalendar]} - {yearCalendar}</p>
+                <button onClick={() => changeMonth(+1)} disabled={nextMonthBoolean}><AiOutlineRight /></button>
+            </article>
+            <table className={styles.calendar}>
+                <thead>
+                    <tr>
+                        <th>Dom</th>
+                        <th>Seg</th>
+                        <th>Ter</th>
+                        <th>Qua</th>
+                        <th>Qui</th>
+                        <th>Sex</th>
+                        <th>Sáb</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {calendar.map((row, rowIndex) => (
+                        <tr key={rowIndex}>
+                            {row.map((cell, cellIndex) => (
+                                <td key={`${rowIndex}-${cellIndex}`}>
+                                    {cell ? (
+                                        <button
+                                            style={{
+                                                backgroundColor: cell.isReserved ? '#51AB7B' : (cell.isReservedNull ? '#405971' : (cell.otherReserved ? '#f14a4a' : '')),
+                                                color: cell.isReserved || cell.isReservedNull || cell.otherReserved ? 'white' : (cell.daysPast ? 'gray' : ''),
+                                                pointerEvents: cell.isReserved || cell.isReservedNull || cell.daysPast ? 'none' : 'auto',
+                                            }}
+                                            onClick={() => functionGetDate(cell)}
+                                            disabled={cell.isReserved || cell.isReservedNull}
+                                        >
+                                            {cell.day}
+                                        </button>
+                                    ) : null}
+                                </td>
+                            ))}
                         </tr>
-                    </thead>
-                    <tbody>
-                        {calendar.map((row, rowIndex) => (
-                            <tr key={rowIndex}>
-                                {row.map((cell, cellIndex) => (
-                                    <td key={`${rowIndex}-${cellIndex}`}>
-                                        {cell ? (
-                                            <button
-                                                style={{
-                                                    backgroundColor: cell.isReserved ? '#51AB7B' : (cell.isReservedNull ? '#405971' : (cell.otherReserved ? '#f14a4a' : '')),
-                                                    color: cell.isReserved || cell.isReservedNull || cell.otherReserved ? 'white' : (cell.daysPast ? 'gray' : ''),
-                                                    pointerEvents: cell.isReserved || cell.isReservedNull || cell.daysPast ? 'none' : 'auto',
-                                                }}
-                                                onClick={() => functionGetDate(cell)}
-                                                disabled={cell.isReserved || cell.isReservedNull}
-                                            >
-                                                {cell.day}
-                                            </button>
-                                        ) : null}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <article className={styles.legends}>
-                    <p style={{ color: "#51AB7B", fontSize: '1.2rem' }}>Aprovada (minha)</p>
-                    <p style={{ color: '#405971', fontSize: '1.2rem' }}>Em análise (minha)</p>
-                    <p style={{ color: '#f14a4a', fontSize: '1.2rem' }}>Ocupada (outro)</p>
-                </article>
-            </div>
+                    ))}
+                </tbody>
+            </table>
+            <article className={styles.legends}>
+                <p style={{ color: "#51AB7B", fontSize: '1.2rem' }}>Aprovada (minha)</p>
+                <p style={{ color: '#405971', fontSize: '1.2rem' }}>Em análise (minha)</p>
+                <p style={{ color: '#f14a4a', fontSize: '1.2rem' }}>Ocupada (outro)</p>
+            </article>
         </section>
     )
 }
