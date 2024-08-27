@@ -13,7 +13,7 @@ import WaitListModal from "../../components/modals/modalsReservation/waitList";
 import AvaliationModal from "../../components/modals/modalsReservation/modalAvaliation";
 import AddGuest from "../../components/modals/modalsReservation/addGuest";
 import Head from "next/head";
-import Calendar from "../../components/calendar";
+import Calendar from "../../components/calendarReservation";
 
 type ReservationsProps = {
   date: number;
