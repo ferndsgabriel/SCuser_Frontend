@@ -5,7 +5,6 @@ import { IoSend, IoChatbubbleEllipsesOutline, IoCheckmarkDoneSharp, IoCheckmarkS
 import { IoConnection } from "../../utils/ioConnection";
 import { AuthContext } from "../../contexts/AuthContexts";
 import DateConverter from "../../utils/dateConverter";
-import Draggable from 'react-draggable';
 
 interface MessageProps {
   content: string;
