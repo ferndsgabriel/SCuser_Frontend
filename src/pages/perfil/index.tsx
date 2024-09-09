@@ -103,11 +103,12 @@ export default function Perfil(){
           SalãoCondo - Perfil
         </title>
       </Head>
+      <Chat/>
       <Header/>
       <div className={style.bodyArea}>
       
         <main className={style.container}>
-        <Chat/>
+        
           <h1>Perfil</h1>
           <div className={style.allItens}>
             <section className={style.section1}>

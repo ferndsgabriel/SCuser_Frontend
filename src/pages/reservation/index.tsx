@@ -14,6 +14,7 @@ import AvaliationModal from "../../components/modals/modalsReservation/modalAval
 import AddGuest from "../../components/modals/modalsReservation/addGuest";
 import Head from "next/head";
 import Calendar from "../../components/calendarReservation";
+import Chat from "../../components/chat";
 
 type ReservationsProps = {
   date: number;
@@ -161,6 +162,7 @@ export default function Reservation() {
         <title>SalãoCondo - Reservas</title>
       </Head>
       
+      <Chat/>
       <Header/>
       
       <div className={styles.bodyArea}>
