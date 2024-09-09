@@ -12,6 +12,7 @@ import { SetupApiClient } from "../../services/api";
 import { toast } from "react-toastify";
 import zxcvbn from 'zxcvbn';
 import { Loading } from "../../components/loading";
+import Chat from "../../components/chat";
 
 import FeedBackModal from "../../components/modals/modalsSettings/feedback";
 import BugsModal from "../../components/modals/modalsSettings/bugs";
@@ -159,6 +160,8 @@ export default function Settings({userProps}: UserInterface){
             <Head>
                 <title>SalãoCondo - Configurações</title>
             </Head>
+            <Chat/>
+
             <Header/>
             <div className={style.bodyArea}>
                 <main className={style.container}>

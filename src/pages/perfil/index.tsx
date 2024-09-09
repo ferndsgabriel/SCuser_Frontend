@@ -11,6 +11,7 @@ import style from "./styles.module.scss";
 import { Loading } from "../../components/loading";
 import DeletePhotoModal from "../../components/modals/modalsPerfil/deletePhoto";
 import { FaSpinner } from "react-icons/fa";
+import Chat from "../../components/chat";
 
 
   type userProps = {
@@ -104,7 +105,9 @@ export default function Perfil(){
       </Head>
       <Header/>
       <div className={style.bodyArea}>
+      
         <main className={style.container}>
+        <Chat/>
           <h1>Perfil</h1>
           <div className={style.allItens}>
             <section className={style.section1}>

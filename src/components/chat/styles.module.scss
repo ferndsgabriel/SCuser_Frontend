@@ -1,0 +1,182 @@
+.buttonOpen{
+    width: 100%;
+    max-width: 6rem;
+    aspect-ratio: 1/1;
+    position: fixed;
+    z-index: 99;
+    right: 12px;
+    bottom: 12px;
+    background-color: var(--Primary-normal);
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 8px 1px var(--Black);
+    &:hover{
+        background-color: var(--Primary-dark);
+    }
+    svg{
+        font-size: 3.2rem;
+        color: var(--White);
+    }
+    .alerts{
+        background-color: var(--Error);
+        aspect-ratio: 1/1;
+        position: absolute;
+        width: 2.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        border-radius: 100%;
+        right: 0;
+        span{
+            font-weight: bold;
+            color: var(--White);
+        }
+    }
+}
+
+.container{
+    box-shadow: 2px 2px 8px 1px var(--Black);
+    width: 100%;
+    max-width: 40rem;
+    position: fixed;
+    z-index: 99;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0px;
+    height: fit-content;
+    background-color: var(--White);
+    border-radius: 15px 15px 0px 0px;
+    overflow: hidden;
+    ::-webkit-scrollbar{
+        width: 0px;
+        background-color: transparent;
+    }
+    .header{
+        width: 100%;
+        background-color: var(--Primary-normal);
+        display: flex;
+        align-items: start;
+        justify-content: space-between; 
+        padding: 1.6rem 1.2rem;
+        border-bottom: solid 1px var(--Transparente2);
+
+        .userArea{
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            img{
+                width: 100%;
+                max-width: 3.6rem;
+                padding: 2px;
+                aspect-ratio: 1/1;
+                background-color: var(--Primary-dark);
+                border-radius: 100%;
+            }
+            span{
+                font-weight: 500;
+                color: var(--White);
+            }
+        }
+        svg{
+            color: var(--White);
+        }
+    }
+    .body{
+        width: 100%;
+        height:50rem;
+        padding: 1.2rem;
+        border-bottom: 1px solid var(--Transparente);
+        display: flex;
+        flex-direction:column;
+        justify-content: start;
+        gap: 1.2rem;
+        list-style: none;
+        overflow-y: scroll;
+        li{
+            width: fit-content;
+            background-color: var(--Transparente);
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            gap: 0.4rem;
+            .content{
+                font-size: 1.6rem;
+            }
+            .dateAndMark{
+                display: flex;
+                align-items: center;
+                gap: 0.2rem;
+                p, svg{
+                    font-size: 1rem;
+                    letter-spacing: 1px;
+                    opacity: 0.5;
+                }
+                svg{
+                    font-size: 1.4rem;
+                }
+            }
+        }
+        .waiting{
+            opacity: 0.8;
+        }
+        .fromUser{
+            align-self: flex-end;
+            background-color: var(--Primary-normal);
+            color: var(--White);
+        }
+        .fromAdmin{
+            align-self: start;
+        }
+        span{
+            font-size: 1rem;
+            opacity: 0.7;
+            letter-spacing: 0.2rem;
+            float: right;
+        }
+    }
+
+    .send{
+        display: flex;
+        justify-items: center;
+        justify-content: space-between;
+        padding: 1.2rem;
+        gap: 2.4rem;
+        input{
+            width: 100%;
+            font-size: 1.4rem;
+            height: 4.2rem;
+        }
+        button{
+            background-color: var(--Primary-normal);
+            height: 36px;
+            aspect-ratio: 1/1;
+            border-radius: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            &:disabled{
+                cursor:not-allowed;
+                opacity: 0.8;
+            }
+            svg{
+                color: var(--White);
+                font-size: 1.4rem;
+            }
+        }
+    }
+}
+
+@media (min-width:768px){
+    .container{
+        left:unset;
+        right: 12px;
+        transform: translateX(0%);
+    }
+}

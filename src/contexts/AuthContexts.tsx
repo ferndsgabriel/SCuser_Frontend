@@ -1,8 +1,9 @@
-import {createContext, ReactNode, useState} from "react";
+import {createContext, ReactNode, useEffect, useState} from "react";
 import {destroyCookie, setCookie, parseCookies} from "nookies"
 import Router from "next/router";
 import { api } from "../services/apiClient";
 import { toast } from "react-toastify";
+import { Loading } from "../components/loading";
 
 
 type AuthContextData = {
@@ -14,11 +15,21 @@ type AuthContextData = {
 }
 
 type UserProps = {
-    id:string;
+    id: string;
     name: string;
-    lastname: string;
+    lastname:string;
     email: string;
-    phone_number:string
+    photo:string | null; 
+    phone_number: string;
+    apartment_id:string;
+    apartment: {
+        numberApt: string;
+        tower_id: string;
+        payment: boolean
+        tower: {
+            numberTower: string;
+        }
+    }
 }
 
 type CredentialProps = {
@@ -54,6 +65,7 @@ export function singOut(){
 export function AuthProvider ({children}:AuthProviderProps){
     const [user, setUser] = useState<UserProps>();
     const isAuthenticated = !!user;
+    const [isLoading, setIsLoading] = useState(true);
 
     async function singIn({email, pass}:CredentialProps) {
         try{
@@ -61,20 +73,16 @@ export function AuthProvider ({children}:AuthProviderProps){
                 pass:pass,
                 email:email,
             })
-            const {id, name, lastname, token, phone_number} = response.data
+
+            const {token} = response.data;
+            const {userData} = response.data
+
+            console.log(response.data)
             setCookie (undefined, "@SalaoCondo.token", token,{
                 maxAge:60*60*24*30,
-                path:"/", //quais caminhos terão acesso ao cookies, se
-                //deixarmos barra, vai ser todos
+                path:"/",
             });
-            
-            setUser({
-                id,
-                name,
-                lastname,
-                email,
-                phone_number
-            });
+            setUser(userData);
             api.defaults.headers['Authorization'] = `Bearer ${token}`
             Router.push("/reservation");
             
@@ -95,12 +103,31 @@ export function AuthProvider ({children}:AuthProviderProps){
                 pass: pass,
                 phone_number:phone_number
             })
-            Router.push("/congrations")
+            Router.push("/congrations");
             return response.data.id
         }catch(error){
             toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
             return;
         }
+    }
+
+    useEffect(()=>{
+        async function getItens() {
+            try {
+                const response = await api('/me');
+                setUser(response.data);
+            } catch (error) {
+                console.log(error);
+                singOut();
+            }finally{
+                setIsLoading(false);
+            }
+        }
+        getItens();
+    },[]);
+
+    if (isLoading){
+        return <Loading/>
     }
 
     return(

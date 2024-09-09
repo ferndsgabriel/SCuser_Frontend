@@ -16,6 +16,7 @@ export function canSSRAuth<P>(fn: GetServerSideProps<P>) {
         },
       };
     }
+
     try {
       return await fn(ctx);
     } catch (err) {
