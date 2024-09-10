@@ -30,6 +30,7 @@ export default function Recovery(){
             return
         }
         const AptClient = SetupApiClient();
+        setLoadingButton(true);
         try{
             await AptClient.post('/cod',{
                 email:email
@@ -39,7 +40,9 @@ export default function Recovery(){
         }catch(error){{
             toast.info('Se o endereço de email informado estiver cadastrado, você receberá um código de recuperação em breve.');
             openModal();
-        }}
+        }}finally{
+            setLoadingButton(false);
+        }
     }
 
     function openModal(){

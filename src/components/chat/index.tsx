@@ -25,10 +25,9 @@ function Chat() {
   const { user } = useContext(AuthContext);
   const apartmentId = user?.apartment_id;
   const [alerts, setAlerts] = useState(0);
-  const [dragging, setDragging] = useState(false);
   const bodyRef = useRef<HTMLUListElement>(null);
   const isOpenRef = useRef(isOpen);
-  const [isDraggable, setIsDraggable] = useState(false);
+
 
   useEffect(() => {
     isOpenRef.current = isOpen;
@@ -46,24 +45,34 @@ function Chat() {
     });
 
     io.on('newMessage', (data) => {
-      if (isOpenRef.current) {
-        io.emit('deliverMessageUser', { id: apartmentId });
-      }
-      setMessages((prev) => {
-        const messageExists = prev.some((msg) =>
-          msg.waiting && msg.date?.getTime() === new Date(data.date).getTime()
-        );
+      const messageFor = (data.conversation.apartment_id);
 
-        if (messageExists) {
-          return prev.map((msg) =>
-            msg.waiting && msg.date?.getTime() === new Date(data.date).getTime()
-              ? { ...msg, ...data, waiting: false }
-              : msg
-          );
-        } else {
-          return [...prev, data];
+      if (messageFor === apartmentId) {
+        if (isOpenRef.current) {
+          io.emit('deliverMessageUser', { id: apartmentId });
         }
-      });
+        setMessages((prev) => {
+          const messageExists = prev.some((msg) =>
+            msg.waiting && msg.date?.getTime() === new Date(data.date).getTime()
+          );
+  
+          if (messageExists) {
+            return prev.map((msg) =>
+              msg.waiting && msg.date?.getTime() === new Date(data.date).getTime()
+                ? { ...msg, ...data, waiting: false }
+                : msg
+            );
+          } else {
+            if (Notification.permission === 'granted') {      
+              new Notification("Um morador te enviou uma mensagem:", {
+                body:data.content,
+                icon: './Icon.svg'
+              });
+            }
+            return [...prev, data];
+          }
+        });
+      } 
     });
 
     io.on('messageDeliveredUser', (data) => {
@@ -74,7 +83,7 @@ function Chat() {
           )
         );
       } else {
-        console.error('Error: unexpected data format for messageDeliveredUser event');
+        console.error('error');
       }
     });
 
@@ -125,17 +134,22 @@ function Chat() {
       setText('');
     }
   }
+  
   useEffect(() => {
-    const handleResize = () => {
-      setIsDraggable(window.matchMedia("(max-width: 768px)").matches);
+    const requestNotificationPermission = async () => {
+      if (Notification.permission === 'default') {
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            console.log('Permissão de notificação concedida.');
+          }
+        } catch (error) {
+          console.error('Erro ao solicitar permissão de notificação:', error);
+        }
+      }
     };
-
-    handleResize(); 
-    window.addEventListener("resize", handleResize); 
-
-    return () => {
-      window.removeEventListener("resize", handleResize); 
-    };
+  
+    requestNotificationPermission();
   }, []);
 
   return (
@@ -187,7 +201,6 @@ function Chat() {
           </article>
         </>
       ) : (
-        <>
           <button className={styles.buttonOpen} onClick={() => setIsOpen(true)}>
             <IoChatbubbleEllipsesOutline />
             {alerts > 0 && (
@@ -196,7 +209,6 @@ function Chat() {
               </div>
             )}
           </button>
-        </>
       )}
     </>
   );

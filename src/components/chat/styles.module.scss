@@ -50,6 +50,9 @@
     background-color: var(--White);
     border-radius: 15px 15px 0px 0px;
     overflow: hidden;
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
+    word-break: break-all; 
     ::-webkit-scrollbar{
         width: 0px;
         background-color: transparent;
@@ -98,15 +101,20 @@
         li{
             width: fit-content;
             background-color: var(--Transparente);
-            padding: 0.6rem 1.2rem;
+            padding: 0.8rem;
             border-radius: 5px;
-            max-width: 80%;
+            max-width: 90%;
             display: flex;
             flex-direction: column;
             align-items: end;
             gap: 0.4rem;
             .content{
                 font-size: 1.6rem;
+                text-align: start;
+                width: 100%;
+                word-wrap: break-word; 
+                overflow-wrap: break-word; 
+                hyphens: auto; 
             }
             .dateAndMark{
                 display: flex;
