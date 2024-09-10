@@ -64,7 +64,7 @@ function Chat() {
             );
           } else {
             if (Notification.permission === 'granted') {      
-              new Notification("Um morador te enviou uma mensagem:", {
+              new Notification("Mensagem de administrador:", {
                 body:data.content,
                 icon: './Icon.svg'
               });
