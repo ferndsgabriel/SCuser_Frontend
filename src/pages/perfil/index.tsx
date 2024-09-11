@@ -6,61 +6,22 @@ import {HiPhotograph} from "react-icons/hi"
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { SetupApiClient } from "../../services/api";
 import { toast } from "react-toastify";
-import { useState, useEffect, useCallback} from "react";
+import { useState, useCallback, useContext} from "react";
+import { AuthContext } from "../../contexts/AuthContexts";
 import style from "./styles.module.scss";
-import { Loading } from "../../components/loading";
 import DeletePhotoModal from "../../components/modals/modalsPerfil/deletePhoto";
 import { FaSpinner } from "react-icons/fa";
 import Chat from "../../components/chat";
 
 
-  type userProps = {
-    cpf: string,
-    id: string,
-    name: string,
-    lastname: string,
-    email: string,
-    photo: null | string,
-    accountStatus: boolean,
-    phone_number: string,
-    apartment_id: string,
-    apartment: {
-        numberApt: string,
-        tower_id: string,
-        payment: boolean,
-        payday: Date,
-        tower: {
-            numberTower:string
-        }
-    }
-  }
-
 
 export default function Perfil(){
   const apiClient = SetupApiClient();
-  const [details,setDetails] = useState<userProps>();
-  const [imagePreview, setImagePreview] = useState(null);
   const [isOpenDeletePhoto, setIsOpenDeletePhoto] = useState (false);
-  const [loading, setLoading] = useState (true);
   const [isAddingPhoto, setIsAddingPhoto] = useState(false);
+  const {user} = useContext(AuthContext);
+  const [imagePreview, setImagePreview] = useState(user.photo || null);
 
-
-  useEffect(()=>{
-    async function fetchUserDetails() {
-      if (loading || !isOpenDeletePhoto){
-        try {
-          const response = await apiClient.get('/me');
-          setDetails(response.data);
-        } catch (error) {
-          console.log('Erro ao obter dados do servidor');
-          setTimeout(fetchUserDetails, 500);
-        }finally{
-          setLoading(false);
-        }
-      }
-    }
-    fetchUserDetails();
-  },[loading, isOpenDeletePhoto, HandlePhoto]);
 
   //-------------------------------------------------Deletar foto
   
@@ -74,27 +35,31 @@ export default function Perfil(){
   
 
   
-  async function HandlePhoto(foto){
-    try{
-      if (foto.type === "image/jpeg" || foto.type === "image/png" ){
-        const image = foto
+  async function HandlePhoto(foto: File): Promise<void> {
+    try {
+      if (foto.type === "image/jpeg" || foto.type === "image/png") {
+        const image = foto;
         setIsAddingPhoto(true);
+        
         const data = new FormData();
         data.append('image', image);
+  
+        const processedPhotoURL = URL.createObjectURL(image);
+  
         await apiClient.put('/photo', data);
-      }   
-    }catch(error){
-      toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-    }finally{
+
+        setImagePreview(processedPhotoURL);
+      }
+    } catch (error) {
+      toast.warning(error.response?.data?.error || 'Erro desconhecido');
+    } finally {
       setIsAddingPhoto(false);
     }
   }
+  
 
 //------------------------------------------------------------
 
-  if (loading){
-    return <Loading/>
-  }
 
   return(
     <>
@@ -113,8 +78,8 @@ export default function Perfil(){
           <div className={style.allItens}>
             <section className={style.section1}>
               <div className={style.photoArea}>
-                {details.photo?(
-                  <img src={details.photo}/>
+                {imagePreview ?(
+                  <img src={imagePreview}/>
                 ):(
                   <HiPhotograph/>
                 )}
@@ -126,7 +91,7 @@ export default function Perfil(){
                     <span className="buttonSlide">Adicionar foto <IoMdAdd/></span>
                     <input name='input' type="file" accept=".jpg, .jpeg, .png" onChange={(e) => HandlePhoto(e.target.files[0])} /> 
                   </label>
-                  {details.photo &&(
+                  {user.photo &&(
                     <span onClick={openModalPhotoDelete} className="buttonSlide">
                       Deletar foto <AiFillDelete/>
                     </span>
@@ -142,25 +107,25 @@ export default function Perfil(){
                 <div className={style.infosArea}>
                   <article className={style.cards}>
                     <p className={style.p1}>Nome:</p>
-                    <p className={style.p2}>{details.name}</p>
+                    <p className={style.p2}>{`${user.name} ${user.lastname}`}</p>
                   </article>
                   <article className={style.cards}>
-                    <p className={style.p1}>Sobrenome:</p>
-                    <p className={style.p2}>{details.lastname}</p>
+                    <p className={style.p1}>Torre</p>
+                    <p className={style.p2}>Torre {user.apartment.tower.numberTower}</p>
                   </article>
                   <article className={style.cards}>
                     <p className={style.p1}>Apartamento:</p>
-                    <p className={style.p2}>Torre {details.apartment.tower.numberTower} - Apartamento {details.apartment.numberApt}</p>
+                    <p className={style.p2}>Apartamento {user.apartment.numberApt}</p>
                   </article>
-                  {details.apartment.payment ?(
+                  {user.apartment.payment ?(
                   <article className={style.cards}>
                     <p className={style.p1}>Status de pagamento:</p>
-                    <p className={`${style.p2} ${details.apartment.payment? style.adimplente : ''}` }> Adimplente </p>
+                    <p className={`${style.p2} ${user.apartment.payment? style.adimplente : ''}` }> Adimplente </p>
                   </article>
                   ):(
                     <article className={style.cards}>
                       <p className={style.p1}>Status de pagamento:</p>
-                      <p className={`${style.p2} ${!details.apartment.payment? style.inadimplente : ''}` }>Inadimplente </p>
+                      <p className={`${style.p2} ${!user.apartment.payment? style.inadimplente : ''}` }>Inadimplente </p>
                     </article>
                   )}
                 </div>

@@ -16,7 +16,7 @@ export default function Header (){
     const navRef = useRef<HTMLDivElement>(null);
     const routerActual = useRouter().pathname;
     const {changeThemes, dark} = useContext(ThemeContext);
-    const {singOut} = useContext(AuthContext);
+    const {signOut} = useContext(AuthContext);
 
     function handleOpenNav(){
         setIsOpenNav(true);
@@ -92,7 +92,7 @@ export default function Header (){
                         </li>  
                 </ul>
 
-                <button className={styles.logout} onClick={singOut}>Sair<FiLogOut /></button>
+                <button className={styles.logout} onClick={signOut}>Sair<FiLogOut /></button>
             </nav>
 
             <span className={styles.breakArea}></span>

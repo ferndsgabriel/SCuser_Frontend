@@ -1,11 +1,11 @@
 import Gmodal from "../../default";
-import { FormEvent, useEffect, useState, ChangeEvent } from "react";
+import { FormEvent, useEffect, useState, ChangeEvent, useContext } from "react";
 import { toast } from "react-toastify";
 import { SetupApiClient } from "../../../../services/api";
-import { singOut } from "../../../../contexts/AuthContexts";
+import { AuthContext } from "../../../../contexts/AuthContexts";
 
 export default function DeleteAccountModal({isOpen, onClose}){
-
+    const {signOut} = useContext(AuthContext);
     const [loadingModal, setLoadingModal] = useState(false);
     const setupApi = SetupApiClient();
     const [inputDelete, setInputDelete] = useState ('');
@@ -13,6 +13,8 @@ export default function DeleteAccountModal({isOpen, onClose}){
 
     async function handleDeleteAccount(e:FormEvent){
         e.preventDefault();
+
+        setLoadingModal(true);
         try{
             await setupApi.delete('/account',{
                 data:{
@@ -20,11 +22,13 @@ export default function DeleteAccountModal({isOpen, onClose}){
                 }   
             })
             toast.success("Sua conta foi excluída com êxito.");
-            singOut();
+            signOut();
             
         }catch(error){
             toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
             return;
+        }finally{
+            setLoadingModal(false);
         }
     }
 

@@ -46,7 +46,7 @@ export default function Home() {
   const [loadingPage, setLoadingPage] = useState(true);
   const [checkbox, setCheckbox] = useState(false);
   const [isOpen, setIsOpen] = useState (false);
-  const { singUp } = useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
   const { dark } = useContext(ThemeContext);
   
   const api = SetupApiClient();
@@ -148,7 +148,7 @@ export default function Home() {
       phone_number
     };
 
-    await singUp(data);
+    await signUp(data);
     setLoading(false);
   }
 

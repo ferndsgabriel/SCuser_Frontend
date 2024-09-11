@@ -9,9 +9,9 @@ import { Loading } from "../components/loading";
 type AuthContextData = {
     user: UserProps;
     isAuthenticated: boolean;
-    singIn: (credentials: CredentialProps) =>Promise<void>;
-    singOut:()=>void
-    singUp:(Credentials: SingUpProps ) =>Promise<void>;
+    signIn: (credentials: CredentialProps) =>Promise<void>;
+    signOut:()=>void
+    signUp:(Credentials: SignUpProps ) =>Promise<void>;
 }
 
 type UserProps = {
@@ -36,7 +36,7 @@ type CredentialProps = {
     email: string;
     pass: string;
 }
-type SingUpProps = {
+type SignUpProps = {
     email:string;
     cpf:string | number;
     name: string;
@@ -51,15 +51,7 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext ({} as AuthContextData);
 
-export function singOut(){
-    try{
-        destroyCookie(undefined, "@SalaoCondo.token");
-        Router.push('/')
 
-    }catch{
-        console.log('Error ao deslogar')
-    }
-}
 
 
 export function AuthProvider ({children}:AuthProviderProps){
@@ -67,7 +59,39 @@ export function AuthProvider ({children}:AuthProviderProps){
     const isAuthenticated = !!user;
     const [isLoading, setIsLoading] = useState(true);
 
-    async function singIn({email, pass}:CredentialProps) {
+    async function signOut(){
+        try{
+            destroyCookie(undefined, "@SalaoCondo.token");
+            Router.push('/');
+        }catch{
+            console.log('Error ao deslogar')
+        }
+    }
+
+    useEffect(()=>{
+        async function getItens() {
+            try {
+                const response = await api('/me');
+                setUser(response.data);
+
+                const sessionToken = response.data.sessionToken;
+
+                const sessionStorage = localStorage.getItem('@SalaoCondo.sessionToken');
+                const sessionParse = sessionStorage ? JSON.parse(sessionStorage ) : '';
+                
+                if ( sessionParse !== sessionToken){
+                    signOut();
+                }
+            } catch (error) {
+                signOut();
+            }finally{
+                setIsLoading(false);
+            }
+        }
+        getItens();
+    },[]);
+
+    async function signIn({email, pass}:CredentialProps) {
         try{
             const response = await api.post("/session",{
                 pass:pass,
@@ -75,9 +99,12 @@ export function AuthProvider ({children}:AuthProviderProps){
             })
 
             const {token} = response.data;
-            const {userData} = response.data
+            const {userData} = response.data;
+            const sessionToken = userData.sessionToken;
 
-            console.log(response.data)
+            const sessionParse = JSON.stringify(sessionToken);
+            localStorage.setItem('@SalaoCondo.sessionToken', sessionParse);
+
             setCookie (undefined, "@SalaoCondo.token", token,{
                 maxAge:60*60*24*30,
                 path:"/",
@@ -92,7 +119,7 @@ export function AuthProvider ({children}:AuthProviderProps){
         }
     }
 
-    async function singUp ({name, lastname, apartament_id, cpf, email, pass, phone_number}:SingUpProps){
+    async function signUp ({name, lastname, apartament_id, cpf, email, pass, phone_number}:SignUpProps){
         try{
             const response = await api.post('/user',{
                 name:name,
@@ -111,28 +138,15 @@ export function AuthProvider ({children}:AuthProviderProps){
         }
     }
 
-    useEffect(()=>{
-        async function getItens() {
-            try {
-                const response = await api('/me');
-                setUser(response.data);
-            } catch (error) {
-                console.log(error);
-                singOut();
-            }finally{
-                setIsLoading(false);
-            }
-        }
-        getItens();
-    },[]);
 
+    
     if (isLoading){
         return <Loading/>
     }
 
     return(
         <AuthContext.Provider 
-        value={{user, isAuthenticated, singIn,singOut,singUp}}>
+        value={{user, isAuthenticated, signIn,signOut,signUp}}>
             {children}
         </AuthContext.Provider>
     );

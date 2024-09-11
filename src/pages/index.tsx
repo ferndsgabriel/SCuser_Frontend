@@ -14,12 +14,11 @@ export default function Home() {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
     const [loading, setLoading] = useState(false);
-    const { singIn } = useContext(AuthContext);
+    const { signIn } = useContext(AuthContext);
     const { dark } = useContext(ThemeContext);
 
     async function handleLogin(event: FormEvent) {
         event.preventDefault();
-        setLoading(true);
         if (email === "" && pass === "") {
             return;
         }
@@ -35,8 +34,10 @@ export default function Home() {
             email: email.trim(),
             pass
         };
+
+        setLoading(true);
         try{
-            await singIn(data);
+            await signIn(data);
         }catch(err){
             console.log(err)
         }finally{
