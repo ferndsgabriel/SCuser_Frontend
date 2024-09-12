@@ -21,10 +21,10 @@ type ReservationsProps = {
   start: number;
   finish: number;
   cleaningService: boolean;
-  guest: null | string;
   reservationStatus: boolean;
   id:string;
-  isEvaluated :boolean
+  isEvaluated :boolean,
+  GuestList:[]
 };
 
 interface CalendarProps {
@@ -42,7 +42,7 @@ export default function Reservation() {
   const [reservation_id, setReservation_id] = useState('');
   const [isOpenDeleteReservation, setIsOpenDeleteReservation] = useState(false);
   const [isOpenGuestReservation, setIsOpenGuestReservation] = useState(false);
-  const [guest, setGuest] = useState('');
+  const [guest, setGuest] = useState([]);
   const [isOpenModalAvaliation, setIsOpenModalAvaliation] = useState(false);
   const [dateValue, setDateValue] = useState<number>(null);
   const [calendarDate, setCalendarDate] = useState<CalendarProps>();
@@ -124,14 +124,14 @@ export default function Reservation() {
   },[isOpenDeleteReservation]);
   //--------------------------Delete reservation -----------------------------------
 
-  const openModalGuest = useCallback((id:string, guest:string)=>{
+  const openModalGuest = useCallback((id:string, guest:[])=>{
     setGuest(guest);
     setReservation_id(id);
     setIsOpenGuestReservation(true);
   },[isOpenGuestReservation]);
 
   const closeModalGuest = useCallback(()=>{
-    setGuest('');
+    setGuest([]);
     setReservation_id('');
     setIsOpenGuestReservation(false);
   },[isOpenGuestReservation]);
@@ -194,7 +194,7 @@ export default function Reservation() {
                           <span>{formatDate(item.date)} - {formatHours(item.start)} às {formatHours(item.finish)}</span>
                           <div className={styles.buttons}>
                             <button onClick={()=>openModalDeleteReservation(item.id)}><AiOutlineClose /></button>
-                            <button onClick={()=>openModalGuest(item.id, item.guest)}><AiOutlineUnorderedList /></button>
+                            <button onClick={()=>openModalGuest(item.id, item.GuestList)}><AiOutlineUnorderedList /></button>
                           </div>
                         </article>
                       )

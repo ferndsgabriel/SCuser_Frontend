@@ -10,10 +10,16 @@ import Gmodal from "../../default";
 
 
 
-export default function  AddGuest ({id, guest, onClose, isOpen}){
-    const guestList = guest || null;
-    const reservation_id = id;
-    const [list, setList] = useState([]);
+interface GuestProps{
+    name: string;
+    rg:string;
+    reservation_id?:string
+    id:string | null;
+}
+
+export default function  Addname ({id, guest, onClose, isOpen}){
+    const [list, setList] = useState<GuestProps[]>([]);
+    const [listDelete, setListDelete] = useState<GuestProps[]>([]);
     const [loading, setLoading] = useState(true);
     const [inputName, setInputName] = useState('');
     const [inputRG, setInputRG] = useState('');
@@ -25,66 +31,113 @@ export default function  AddGuest ({id, guest, onClose, isOpen}){
         if (isOpen){
             setLoading(true);
             try{
-                setList(guestList.split(','))
+                setList(guest);
             }catch(error){
                 setList([]);
             }finally{
                 setLoading(false);
             }
+        }else{
+            setInputName('');
+            setInputRG('');
         }
-    },[isOpen]);
+    },[isOpen, onClose]);
 
-    function handleRemove(index) {
+    function handleRemove(index:number) {
         setList(list.filter((item, i) => i !== index));
+        setListDelete((prev)=>[...prev, list[index]]);
     }
+
     
-    function handleAdd(e:FormEvent){
+    function handleAdd(e: FormEvent) {
         e.preventDefault();
-        if (!inputName || inputName.length < 3 || !inputRG ){
+    
+        if (!inputName || inputName.length < 3 || !inputRG) {
             toast.warning('Por favor, preencha os campos corretamente.');
             return;
         }
-
-        if (!onlyString(inputName.trim())){
-            toast.warning('Nome inválido.');
-            return
-        }
-        const withMask = inputRG.replace(/\D/g, '');
-            
-        if (withMask.length !== 4) {
-            toast.warning('Por favor, insira exatamente 5 dígitos do RG.');
+    
+        const nameWithoutSpecialChars = /^[a-zA-Z\s]+$/;
+        if (!nameWithoutSpecialChars.test(inputName)) {
+            toast.warning('O nome não pode conter caracteres especiais ou números.');
             return;
         }
-
-        if (list.length >= 20){
+    
+        const withMask = inputRG.replace(/\D/g, '');
+        if (withMask.length !== 4) {
+            toast.warning('Por favor, insira exatamente 4 dígitos do RG.');
+            return;
+        }
+    
+        if (list.length >= 20) {
             toast.warning('Limite máximo de convidados: 20.');
             return;
         }
-        
-        const addGuest = `${inputName.trim()}    -    XX.XXX-${inputRG}`;
+    
+        const addGuest = {
+            name: inputName.trim(),
+            rg: inputRG,
+            id: null,
+        };
+    
         setList([...list, addGuest]);
         setInputName('');
         setInputRG('');
         inputNameRef.current?.focus();
     }
+    
 
     async function handleGuest(){
-        const slice = list.join(',');
 
-        setButtonModal(true);
-        try{
-            await apiClient.put('/guest',{
-                reservation_id:reservation_id,
-                guest:slice
+
+        const withoutId = list.filter((item)=>{
+            return item.id == null;
+        });
+
+        const deleteItens = listDelete
+        .filter((item) => item.id != null)
+        .map((item) => item.id); 
+    
+
+        const promises = [];
+
+
+        if (withoutId.length > 0) {
+            const createGuestPromise = apiClient.put('/guest', {
+                createGuest: {
+                    reservation_id: id,
+                    Guest: withoutId,
+                },
             });
-            toast.success('Lista adicionada com sucesso.');
+            promises.push(createGuestPromise); 
+        }
+        
+        if (deleteItens.length > 0) {
+            const deleteGuestPromise = apiClient.delete('/guest', {
+                data: {
+                    deleteGuest: { Guest: deleteItens },
+                },
+            });
+            promises.push(deleteGuestPromise); 
+        }
+        
+        setButtonModal(true);
+        if (promises.length > 0) {
+            try {
+                const [response, response2] = await Promise.all(promises);
+                toast.success('Lista atualizada com sucesso.');
+                onClose();
+            } catch (error) {
+                toast.warning(error.response?.data?.error || 'Erro desconhecido');
+            }finally{
+                setButtonModal(false);
+            }
+        }else{
             onClose();
-        }catch(error){
-            toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-        }finally{
             setButtonModal(false);
         }
-    }
+        
+    }        
 
     return(
         <>
@@ -109,7 +162,7 @@ export default function  AddGuest ({id, guest, onClose, isOpen}){
                                     {list.map((item, index)=>{
                                         return(
                                             <li key={index} onClick={()=>handleRemove(index)}>
-                                                <span>{index + 1} - {item}</span>
+                                                <span>{index + 1}: {item.name} - {item.rg}</span>
                                                 <button onClick={()=>handleRemove(index)}><AiOutlineClose /></button>
                                             </li>
                                         )
@@ -119,7 +172,7 @@ export default function  AddGuest ({id, guest, onClose, isOpen}){
                                     {!buttonModal &&(
                                         <button onClick={onClose}>Cancelar</button>
                                     )}
-                                    <button onClick={handleGuest} disabled={buttonModal}>Salvar</button>
+                                    <button onClick={handleGuest} disabled={buttonModal} >Salvar</button>
                                 </div>
                             </div>
                         </div>
