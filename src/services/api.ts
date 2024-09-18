@@ -3,7 +3,7 @@ import { parseCookies } from "nookies";
 import {destroyCookie} from "nookies";
 import Router from "next/router";
 
-export const baseURL = process.env.NEXT_PUBLIC_BASE_URL ;
+export const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 async function signOut(){
     try{

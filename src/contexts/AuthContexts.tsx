@@ -92,11 +92,12 @@ export function AuthProvider ({children}:AuthProviderProps){
     },[]);
 
     async function signIn({email, pass}:CredentialProps) {
-        try{
-            const response = await api.post("/session",{
-                pass:pass,
-                email:email,
-            })
+
+
+        const response = await api.post("/session",{
+            pass:pass,
+            email:email,
+        }).then((response)=>{
 
             const {token} = response.data;
             const {userData} = response.data;
@@ -112,11 +113,10 @@ export function AuthProvider ({children}:AuthProviderProps){
             setUser(userData);
             api.defaults.headers['Authorization'] = `Bearer ${token}`
             Router.push("/reservation");
-            
-        }
-        catch(error){
+        }).catch((error)=>{
             toast.warning(error.response && error.response.data.error || 'Erro desconhecido');
-        }
+        })
+
     }
 
     async function signUp ({name, lastname, apartament_id, cpf, email, pass, phone_number}:SignUpProps){
